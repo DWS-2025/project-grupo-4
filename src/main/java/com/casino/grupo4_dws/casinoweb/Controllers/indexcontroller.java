@@ -12,5 +12,10 @@ public class indexcontroller {
         // Devuelve el nombre del archivo HTML que se debe mostrar
         return "inicio"; // Esto busca 'src/main/resources/templates/inicio.html'
     }
+    @GetMapping("/NJuegos")
+    public String mostrarJuegos() {
+        return "NJuegos"; // Página NJuegos.html
+    }
 }
+
 

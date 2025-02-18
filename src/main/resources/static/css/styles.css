@@ -7,15 +7,15 @@ ul{list-style-type:none;}
 
 .headline{font:12px/14px "Trebuchet MS", Arial, Helvetica, sans-serif; color:#fffdbf; font-weight:bold}
 
-#container{width:775px; position:relative; margin:0 auto;}
+#container{width:400px; position:relative; margin:0px auto;}
 
 /* HEADER */
 
-#header{width:775px; height:318px; position:relative; background:url(../images/b_header.jpg) 0 0 no-repeat}
+#header{width:100%; height:318px; position:relative; background:url(../images/b_header.jpg) 0 0 no-repeat}
 #header img#logo{position:absolute; top:99px; left:553px}
 #header img#slogan{position:absolute; top:132px; left:315px}
 
-#header ul.menu{position:absolute; top:0; left:55px; width:690px}
+#header ul.menu{position:absolute; top:0; left:55px; width:400px}
 #header ul.menu li{height:49px; margin-right:22px; float:left}
 #header ul.menu li a{height:49px; display:block; text-indent:-20000px; }
 #header ul.menu li a:hover{height:49px;}
@@ -38,12 +38,62 @@ ul{list-style-type:none;}
 
 #header ul.menu li.line{width:1px; background:url(../images/linem.gif) 0 0 no-repeat}
 
+
+.golden-button {
+    touch-action: manipulation;
+    display: inline-block;
+    outline: none;
+    font-family: inherit;
+    font-size: 1em;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 0.3em;
+    height: 2.75em;
+    line-height: 2.5em;
+    text-transform: uppercase;
+    padding: 0 1em;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(110, 80, 20, 0.4),
+    inset 0 -2px 5px 1px rgba(139, 66, 8, 1),
+    inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
+    background-image: linear-gradient(
+            160deg,
+            #a54e07,
+            #b47e11,
+            #fef1a2,
+            #bc881b,
+            #a54e07
+    );
+    border: 1px solid #a55d07;
+    color: rgb(120, 50, 5);
+    text-shadow: 0 2px 2px rgba(250, 227, 133, 1);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-size: 100% 100%;
+    background-position: center;
+}
+
+.golden-button:focus,
+.golden-button:hover {
+    background-size: 150% 150%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23),
+    inset 0 -2px 5px 1px #b17d10, inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
+    border: 1px solid rgba(165, 93, 7, 0.6);
+    color: rgba(120, 50, 5, 0.8);
+}
+
+.golden-button:active {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(110, 80, 20, 0.4),
+    inset 0 -2px 5px 1px #b17d10, inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
+}
+
+
+
 /* CONTENT */
 
-#content{width:775px; position:relative; clear:both;}
+#content{width:100%; position:relative; clear:both;}
 
-#leftPan{width:445px; float:left; margin:4px 34px 0 42px; display:inline}
-#rightPan{width:207px; float:left; margin:4px 0 0 0;}
+#leftPan{width:650px; float:left; margin:4px 34px 0 200px; display:inline}
+#rightPan{width:400px; float:left; margin:4px 0 0 -200px;}
 
 #welcome {margin-bottom:10px}
 #welcome h2{height:23px; position:relative; background:url(../images/h_welcome.gif) 0 0 no-repeat; margin-bottom:13px}
@@ -68,7 +118,7 @@ ul{list-style-type:none;}
 
 /* FOOTER */
 
-#footer{width:775px; height:59px; clear:both; background:url(../images/b_footer.gif) 0 0 repeat-x }
+#footer{width:100%; height:59px; clear:both; background:url(../images/b_footer.gif) 0 0 repeat-x }
 #footer p{padding: 15px 0 0 0; font:11px/16px Tahoma, sans-serif; font-weight:normal; text-align:center; color:#fffdb9;}
 #footer p a{font:11px/16px Tahoma, sans-serif; font-weight:normal; color:#fffdb9; text-decoration:none; padding: 0 3px }
 #footer p a:hover{text-decoration:underline; color:#fff}
