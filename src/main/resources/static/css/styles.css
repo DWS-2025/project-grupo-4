@@ -1,0 +1,74 @@
+/* CSS Document */
+body{padding:0px; margin:0px; background:#661208; color:#FFF; font:10px/14px Tahoma, Geneva, sans-serif;}
+div, p, ul, h2, h3, h4, img{padding:0px; margin:0px;}
+ul{list-style-type:none;}
+
+.clear {clear: both; margin: 0px; height:0}
+
+.headline{font:12px/14px "Trebuchet MS", Arial, Helvetica, sans-serif; color:#fffdbf; font-weight:bold}
+
+#container{width:775px; position:relative; margin:0 auto;}
+
+/* HEADER */
+
+#header{width:775px; height:318px; position:relative; background:url(../images/b_header.jpg) 0 0 no-repeat}
+#header img#logo{position:absolute; top:99px; left:553px}
+#header img#slogan{position:absolute; top:132px; left:315px}
+
+#header ul.menu{position:absolute; top:0; left:55px; width:690px}
+#header ul.menu li{height:49px; margin-right:22px; float:left}
+#header ul.menu li a{height:49px; display:block; text-indent:-20000px; }
+#header ul.menu li a:hover{height:49px;}
+
+#header ul.menu li.btn_1 a{width:103px; background:url(../images/btn_1.gif) 0 24px no-repeat; }
+#header ul.menu li.btn_1 a:hover{width:103px; background:url(../images/btn_1_over.gif) 0 24px no-repeat;}
+
+#header ul.menu li.btn_2 a{width:103px; background:url(../images/btn_2.gif) 0 24px no-repeat; }
+#header ul.menu li.btn_2 a:hover{width:103px; background:url(../images/btn_2_over.gif) 0 24px no-repeat;}
+
+#header ul.menu li.btn_3 a{width:107px; background:url(../images/btn_3.gif) 0 24px no-repeat; }
+#header ul.menu li.btn_3 a:hover{width:107px; background:url(../images/btn_3_over.gif) 0 24px no-repeat;}
+
+#header ul.menu li.btn_4 a{width:82px; background:url(../images/btn_4.gif) 0 24px no-repeat; }
+#header ul.menu li.btn_4 a:hover{width:82px; background:url(../images/btn_4_over.gif) 0 24px no-repeat;}
+
+#header ul.menu li.btn_5{margin-right:0}
+#header ul.menu li.btn_5 a{width:89px; background:url(../images/btn_5.gif) 0 24px no-repeat; }
+#header ul.menu li.btn_5 a:hover{width:89px; background:url(../images/btn_5_over.gif) 0 24px no-repeat;}
+
+#header ul.menu li.line{width:1px; background:url(../images/linem.gif) 0 0 no-repeat}
+
+/* CONTENT */
+
+#content{width:775px; position:relative; clear:both;}
+
+#leftPan{width:445px; float:left; margin:4px 34px 0 42px; display:inline}
+#rightPan{width:207px; float:left; margin:4px 0 0 0;}
+
+#welcome {margin-bottom:10px}
+#welcome h2{height:23px; position:relative; background:url(../images/h_welcome.gif) 0 0 no-repeat; margin-bottom:13px}
+#welcome img{float:left;}
+#welcome p{float:left; width:320px; padding-top:5px}
+
+#popular h2{height:23px; position:relative; background:url(../images/h_games.gif) 0 0 no-repeat; margin-bottom:22px}
+.popularItem{width:205px; float:left}
+.popularItem img{float:left; margin-right:11px;}
+.popularItem p{float:left; width:135px; padding-top:3px}
+.popularItem#l1, .popularItem#l2{margin:0 18px 22px 5px}
+
+#how h2{height:23px; position:relative; background:url(../images/h_how.gif) 0 0 no-repeat; margin-bottom:13px}
+#how img{margin:0 0 15px 1px}
+#how p{margin: 0 0 10px 7px}
+#how ul {margin-left:13px; clear:both;}
+#how ul li{font:10px/14px Tahoma, Geneva, sans-serif; background:url(../images/bullet1.gif) 0 5px no-repeat; padding-left:20px; height:24px;}
+#how ul li a{color:#fffdb9; text-decoration:underline;}
+#how ul li a:hover{color:#fff; text-decoration:none;}
+
+.clear#end{height:15px}
+
+/* FOOTER */
+
+#footer{width:775px; height:59px; clear:both; background:url(../images/b_footer.gif) 0 0 repeat-x }
+#footer p{padding: 15px 0 0 0; font:11px/16px Tahoma, sans-serif; font-weight:normal; text-align:center; color:#fffdb9;}
+#footer p a{font:11px/16px Tahoma, sans-serif; font-weight:normal; color:#fffdb9; text-decoration:none; padding: 0 3px }
+#footer p a:hover{text-decoration:underline; color:#fff}
