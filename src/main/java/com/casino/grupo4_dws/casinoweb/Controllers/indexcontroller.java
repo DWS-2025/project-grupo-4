@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class indexcontroller {
 
     // Este método maneja las solicitudes a la URL '/inicio'
-    @GetMapping("/inicio")
+    @GetMapping("/")
     public String mostrarInicio() {
         // Devuelve el nombre del archivo HTML que se debe mostrar
         return "inicio"; // Esto busca 'src/main/resources/templates/inicio.html'
