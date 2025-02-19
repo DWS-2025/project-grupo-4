@@ -16,6 +16,9 @@ public class indexcontroller {
     public String mostrarJuegos() {
         return "NJuegos"; // Página NJuegos.html
     }
+
+    @GetMapping("/login")
+    public String mostrarLogin() {return "login";}
 }
 
 

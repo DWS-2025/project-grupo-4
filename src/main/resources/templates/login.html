@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Panel de Login</title>
+        <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+
+    <header>
+        <h1>Entra y demuestra que no solo el crupier puede hacer magia</h1>
+    </header>
+        <main>
+            <form action="login.php" method="POST">
+                <label for="user">Usuario:</label>
+                <input type="text" id="user" name="user" required>
+                <br>
+
+                <label for="pass">Contraseña:</label>
+                <input type="password" id="pass" name="pass" required>
+                <br>
+
+                <!-- Contenedor para el botón -->
+                <div class="button-container">
+                    <!-- Aquí va el botón 'golden-button' -->
+                    <button type="submit" class="golden-button">Iniciar sesión</button>
+                </div>
+            </form>
+        </main>
+        <div id="footer">
+            <p>
+                Copyright &copy; Casino La Miel | Design by Rústico González</p>
+        </div>
+
+    </body>
+</html>
