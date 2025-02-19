@@ -1,0 +1,140 @@
+:root {
+  --btn-bg: #313030;
+  --btn-color: white;
+  --btn-border: solid 4px white;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Black Ops One', sans-serif;
+}
+
+
+body {
+  background-image: url("https://n1md7.github.io/slot-game/img/background.webp");
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(6px);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+.gold {
+  color: gold !important;
+}
+
+.green {
+  color: green;
+}
+
+div.modal-footer,
+div.modal-body,
+div.modal-header {
+  background-color: #000000de;
+  color: white;
+}
+
+.lil-gui {
+  --background-color: #000000A0;
+  --text-color: white;
+  --title-background-color: #000000D3;
+  --title-text-color: white;
+}
+
+.lil-gui.autoPlace {
+  right: 0;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  position: fixed;
+  z-index: -1;
+}
+
+#slot {
+  border: 4px solid #343a40;
+  max-width: 100%;
+  height: auto;
+  box-sizing: content-box;
+  border-radius: 40px;
+}
+
+.winner-display {
+  color: #FFD700;
+  font-size: 28px;
+  border-radius: 20px;
+  border: 0;
+  font-weight: bold;
+  overflow: hidden;
+  padding: 8px 16px;
+}
+
+#spin-manual {
+  background-color: #9a0102;
+  color: wheat;
+  border: 4px solid #dc3545;
+  border-radius: 40px;
+  padding: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+}
+
+.bet-action-btn {
+  border-radius: 50%;
+  border: solid 4px #343a40;
+  background-color: var(--btn-bg);
+  color: wheat;
+}
+
+#spin-auto, #pay-table {
+  background-color: var(--btn-bg);
+  color: wheat;
+  border: 4px solid #343a40;
+  border-radius: 40px;
+  padding: 4px 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.controls .left {
+  font-size: 20px;
+}
+
+.controls .middle {
+  width: 250px;
+}
+
+button:hover {
+  opacity: 0.8 !important;
+  box-shadow: 0 0 10px 0 #000000;
+}
+
+button:active {
+  background-color: #afaeae !important;
+}
+
+#pay-table-modal {
+  position: fixed;
+  margin: auto;
+  left: 0;
+  right: 0;
+}
+
+table tr td {
+  text-align: center;
+  vertical-align: middle;
+}
