@@ -95,6 +95,38 @@ ul{list-style-type:none;}
 #leftPan{width:650px; float:left; margin:4px 34px 0 200px; display:inline}
 #rightPan{width:400px; float:left; margin:4px 0 0 -200px;}
 
+
+
+#TitulosJuegos{width:100%;float:left; margin:0 0 0 450px;}
+#TitulosJuegos h1{text-align: left; margin-left: 60px;}
+#TitulosJuegos p{text-align: left; margin-left: -45px;margin-bottom: 10px;}
+#TitulosJuegos img{text-align: right; margin-left: 61px;}
+
+
+
+
+#IzquierdaJuegos{width:300px; float:left; margin:4px 34px 0 150px;}
+#IzquierdaJuegos h2{text-align: left; margin-left: 130px;margin-bottom: 10px;}
+#IzquierdaJuegos p{text-align: center; margin-left: 0;}
+#IzquierdaJuegos img{text-align: right; margin-left: 57px;}
+#IzquierdaJuegos button{margin-left: 122px;}
+
+
+
+#CentroJuegos{width:300px; float:left; margin:4px 34px 0 -30px;}
+#CentroJuegos h2{text-align: left; margin-left: 130px;margin-bottom: 10px;}
+#CentroJuegos p{text-align: center; margin-left: 0;}
+#CentroJuegos img{text-align: right; margin-left: 57px;}
+#CentroJuegos button{margin-left: 122px;}
+
+
+
+#DerechaJuegos{width:200px; float:left; margin:4px 34px 0 20px;}
+#DerechaJuegos h2{text-align: left; margin-left: 75px;margin-bottom: 10px;}
+#DerechaJuegos p{text-align: center; margin-left: 0;}
+#DerechaJuegosJuegos img{text-align: left; margin-left:0;}
+#DerechaJuegos button{margin-left: 75px;}
+
 #welcome {margin-bottom:10px}
 #welcome h2{height:23px; position:relative; background:url(../images/h_welcome.gif) 0 0 no-repeat; margin-bottom:13px}
 #welcome img{float:left;}

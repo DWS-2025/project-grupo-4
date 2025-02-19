@@ -8,14 +8,10 @@ public class indexcontroller {
 
     // Este método maneja las solicitudes a la URL '/inicio'
     @GetMapping("/")
-    public String mostrarInicio() {
-        // Devuelve el nombre del archivo HTML que se debe mostrar
-        return "inicio"; // Esto busca 'src/main/resources/templates/inicio.html'
-    }
+    public String mostrarInicio() {return "inicio";}
+
     @GetMapping("/NJuegos")
-    public String mostrarJuegos() {
-        return "NJuegos"; // Página NJuegos.html
-    }
+    public String mostrarJuegos() {return "NJuegos";}
 
     @GetMapping("/login")
     public String mostrarLogin() {return "login";}
@@ -25,6 +21,11 @@ public class indexcontroller {
 
     @GetMapping("/slots")
     public String mostrarSlots() {return "slots";}
- }
+
+    @GetMapping("/crash")
+    public String mostrarCrash() {return "crash";}
+}
+
+
 
 
