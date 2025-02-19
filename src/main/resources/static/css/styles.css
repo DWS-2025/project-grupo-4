@@ -1,4 +1,7 @@
 /* CSS Document */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
 body{padding:0px; margin:0px; background:#661208; color:#FFF; font:10px/14px Tahoma, Geneva, sans-serif;}
 div, p, ul, h2, h3, h4, img{padding:0px; margin:0px;}
 ul{list-style-type:none;}
@@ -103,8 +106,6 @@ ul{list-style-type:none;}
 #TitulosJuegos img{text-align: right; margin-left: 61px;}
 
 
-
-
 #IzquierdaJuegos{width:300px; float:left; margin:4px 34px 0 150px;}
 #IzquierdaJuegos h2{text-align: left; margin-left: 130px;margin-bottom: 10px;}
 #IzquierdaJuegos p{text-align: center; margin-left: 0;}
@@ -148,9 +149,65 @@ ul{list-style-type:none;}
 
 .clear#end{height:15px}
 
-/* LOGIN */
+/* TITULO ELEGANTE */
 
+.gold-text {
+    text-align: center;
+    font-size: 60px;
+    font-family: 'Cinzel Decorative', serif;
+    font-style: italic;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+    line-height: 1.2; /* Evita cortes */
+    padding: 10px 0; /* Espacio extra */
+    text-align: center;
 
+    background: linear-gradient(
+            178deg,
+            #f7e8cb 0%,
+            #fce494 38%,
+            #7d5b36 76%,
+            #5b5228 100%
+    ); /* W3C */
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gold-text-container {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Por si acaso */
+    width: 100%;
+}
+
+.gold-text:after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-shadow: 0px -2px #5b5228, 0px 2px 2px #fce494;
+    z-index: -1;
+    width: 100%;
+}
+
+.gold-text:before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.35;
+    background: url(https://i.stack.imgur.com/8Jeyb.png);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 1;
+    width: 100%;
+}
 
 /* FOOTER */
 
