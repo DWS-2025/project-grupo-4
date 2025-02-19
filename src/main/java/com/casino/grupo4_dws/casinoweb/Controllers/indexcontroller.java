@@ -19,6 +19,12 @@ public class indexcontroller {
 
     @GetMapping("/login")
     public String mostrarLogin() {return "login";}
-}
+
+    @GetMapping("/rule")
+    public String mostrarRule() {return "rule";}
+
+    @GetMapping("/slots")
+    public String mostrarSlots() {return "slots";}
+ }
 
 
