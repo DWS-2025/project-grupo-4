@@ -1,46 +1,107 @@
 /* CSS Document */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.cdnfonts.com/css/casino');
 
-body{padding:0px; margin:0px; background:#661208; color:#FFF; font:10px/14px Tahoma, Geneva, sans-serif;}
-div, p, ul, h2, h3, h4, img{padding:0px; margin:0px;}
-ul{list-style-type:none;}
+body {
+    padding: 0;
+    margin: 0;
+    background: #661208;
+    color: #FFF;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-top: 0;
+}
 
-.clear {clear: both; margin: 0px; height:0}
+div, p, ul, h2, h3, h4, img {
+    padding: 0;
+    margin: 0;
+}
 
-.headline{font:12px/14px "Trebuchet MS", Arial, Helvetica, sans-serif; color:#fffdbf; font-weight:bold}
+ul {
+    list-style-type: none;
+}
 
-#container{width:400px; position:relative; margin:0px auto;}
+.clear {
+    clear: both;
+    margin: 0;
+    height: 0;
+}
+
+.headline {
+    font: 16px "Trebuchet MS", Arial, Helvetica, sans-serif;
+    color: #fffdbf;
+    font-weight: bold;
+}
+
+#container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
 
 /* HEADER */
+#header {
+    width: 100%;
+    height: auto;
+    position: relative;
+    background: url(../images/b_header.jpg) 0 0 no-repeat;
+    background-size: cover;
+}
 
-#header{width:100%; height:318px; position:relative; background:url(../images/b_header.jpg) 0 0 no-repeat}
-#header img#logo{position:absolute; top:99px; left:553px}
-#header img#slogan{position:absolute; top:132px; left:315px}
+#header img#logo {
+    position: absolute;
+    top: 99px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-#header ul.menu{position:absolute; top:0; left:55px; width:400px}
-#header ul.menu li{height:49px; margin-right:22px; float:left}
-#header ul.menu li a{height:49px; display:block; text-indent:-20000px; }
-#header ul.menu li a:hover{height:49px;}
+#header img#slogan {
+    position: absolute;
+    top: 132px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-#header ul.menu li.btn_1 a{width:103px; background:url(../images/btn_1.gif) 0 24px no-repeat; }
-#header ul.menu li.btn_1 a:hover{width:103px; background:url(../images/btn_1_over.gif) 0 24px no-repeat;}
+.navbar {
+    background: rgba(252, 192, 2, 0.73);
+    padding: 10px 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
 
-#header ul.menu li.btn_2 a{width:103px; background:url(../images/btn_2.gif) 0 24px no-repeat; }
-#header ul.menu li.btn_2 a:hover{width:103px; background:url(../images/btn_2_over.gif) 0 24px no-repeat;}
+.menu {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    font-family: 'Casino', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+}
 
-#header ul.menu li.btn_3 a{width:107px; background:url(../images/btn_3.gif) 0 24px no-repeat; }
-#header ul.menu li.btn_3 a:hover{width:107px; background:url(../images/btn_3_over.gif) 0 24px no-repeat;}
+.menu li {
+    margin: 5px;
+}
 
-#header ul.menu li.btn_4 a{width:82px; background:url(../images/btn_4.gif) 0 24px no-repeat; }
-#header ul.menu li.btn_4 a:hover{width:82px; background:url(../images/btn_4_over.gif) 0 24px no-repeat;}
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
 
-#header ul.menu li.btn_5{margin-right:0}
-#header ul.menu li.btn_5 a{width:89px; background:url(../images/btn_5.gif) 0 24px no-repeat; }
-#header ul.menu li.btn_5 a:hover{width:89px; background:url(../images/btn_5_over.gif) 0 24px no-repeat;}
-
-#header ul.menu li.line{width:1px; background:url(../images/linem.gif) 0 0 no-repeat}
-
+.nav-link:hover {
+    background: #f5a700;
+}
 
 .golden-button {
     touch-action: manipulation;
@@ -58,6 +119,8 @@ ul{list-style-type:none;}
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(110, 80, 20, 0.4),
     inset 0 -2px 5px 1px rgba(139, 66, 8, 1),
     inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
+    margin-left: 5px;
+    margin-right: 5px;
     background-image: linear-gradient(
             160deg,
             #a54e07,
@@ -89,66 +152,274 @@ ul{list-style-type:none;}
     inset 0 -2px 5px 1px #b17d10, inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
 }
 
-
-
 /* CONTENT */
+#content {
+    display: flex;
+    justify-content: center; /* Centra los paneles horizontalmente */
+    gap: 20px; /* Espacio entre los paneles */
+    max-width: 1200px; /* Ancho máximo del contenido */
+    margin: 0 auto; /* Centra el contenido en la página */
+    padding: 20px; /* Espacio interno para evitar que el contenido toque los bordes */
+}
 
-#content{width:100%; position:relative; clear:both;}
+#leftPan {
+    flex: 1; /* Ocupa el espacio disponible */
+    max-width: 650px; /* Ancho máximo del leftPan */
+}
 
-#leftPan{width:650px; float:left; margin:4px 34px 0 200px; display:inline}
-#rightPan{width:400px; float:left; margin:4px 0 0 -200px;}
+#rightPan {
+    flex: 1; /* Ocupa el espacio disponible */
+    max-width: 400px; /* Ancho máximo del rightPan */
+}
 
+#TitulosJuegos {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
+#TitulosJuegos h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
 
-#TitulosJuegos{width:100%;float:left; margin:0 0 0 450px;}
-#TitulosJuegos h1{text-align: left; margin-left: 60px;}
-#TitulosJuegos p{text-align: left; margin-left: -45px;margin-bottom: 10px;}
-#TitulosJuegos img{text-align: right; margin-left: 61px;}
+#TitulosJuegos p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
 
+#TitulosJuegos img {
+    max-width: 100%;
+    height: auto;
+}
 
-#IzquierdaJuegos{width:300px; float:left; margin:4px 34px 0 150px;}
-#IzquierdaJuegos h2{text-align: left; margin-left: 130px;margin-bottom: 10px;}
-#IzquierdaJuegos p{text-align: center; margin-left: 0;}
-#IzquierdaJuegos img{text-align: right; margin-left: 57px;}
-#IzquierdaJuegos button{margin-left: 122px;}
+#IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
+#IzquierdaJuegos h2, #CentroJuegos h2, #DerechaJuegos h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
 
+#IzquierdaJuegos img, #CentroJuegos img, #DerechaJuegos img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
 
-#CentroJuegos{width:300px; float:left; margin:4px 34px 0 -30px;}
-#CentroJuegos h2{text-align: left; margin-left: 130px;margin-bottom: 10px;}
-#CentroJuegos p{text-align: center; margin-left: 0;}
-#CentroJuegos img{text-align: right; margin-left: 57px;}
-#CentroJuegos button{margin-left: 122px;}
+#IzquierdaJuegos p, #CentroJuegos p, #DerechaJuegos p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
 
+#IzquierdaJuegos button, #CentroJuegos button, #DerechaJuegos button {
+    margin: 0 auto;
+}
 
+#grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+    gap: 20px; /* Espacio entre los juegos */
+    margin-top: 20px;
+}
 
-#DerechaJuegos{width:200px; float:left; margin:4px 34px 0 20px;}
-#DerechaJuegos h2{text-align: left; margin-left: 75px;margin-bottom: 10px;}
-#DerechaJuegos p{text-align: center; margin-left: 0;}
-#DerechaJuegosJuegos img{text-align: left; margin-left:0;}
-#DerechaJuegos button{margin-left: 75px;}
+.game-section {
+    background: #8a1f1f;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-#welcome {margin-bottom:10px}
-#welcome h2{height:23px; position:relative; background:url(../images/h_welcome.gif) 0 0 no-repeat; margin-bottom:13px}
-#welcome img{float:left;}
-#welcome p{float:left; width:320px; padding-top:5px}
+.game-section h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
 
-#popular h2{height:23px; position:relative; background:url(../images/h_games.gif) 0 0 no-repeat; margin-bottom:22px}
-.popularItem{width:205px; float:left}
-.popularItem img{float:left; margin-right:11px;}
-.popularItem p{float:left; width:135px; padding-top:3px}
-.popularItem#l1, .popularItem#l2{margin:0 18px 22px 5px}
+.game-section img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
 
-#how h2{height:23px; position:relative; background:url(../images/h_how.gif) 0 0 no-repeat; margin-bottom:13px}
-#how img{margin:0 0 15px 1px}
-#how p{margin: 0 0 10px 7px}
-#how ul {margin-left:13px; clear:both;}
-#how ul li{font:10px/14px Tahoma, Geneva, sans-serif; background:url(../images/bullet1.gif) 0 5px no-repeat; padding-left:20px; height:24px;}
-#how ul li a{color:#fffdb9; text-decoration:underline;}
-#how ul li a:hover{color:#fff; text-decoration:none;}
+.game-section p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
 
-.clear#end{height:15px}
+.game-section button {
+    margin: 0 auto;
+}
 
+/* FOOTER */
+.footer {
+    background: #651208;
+    padding: 15px 0;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #fabe02;
+}
+/* Inicio de sesión */
+.form {
+    background-color: #fff;
+    display: block;
+    padding: 1rem;
+    max-width: 350px;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+    color: #000;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input-container input, .form button {
+    outline: none;
+    border: 1px solid #e5e7eb;
+    margin: 8px 0;
+}
+
+.input-container input {
+    background-color: #fff;
+    padding: 1rem;
+    padding-right: 3rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    width: 300px;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.input-container span {
+    display: grid;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    place-content: center;
+}
+
+.input-container span svg {
+    color: #9CA3AF;
+    width: 1rem;
+    height: 1rem;
+}
+
+.submit {
+    display: block;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    background-color: #4F46E5;
+    color: #ffffff;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    width: 100%;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+}
+
+.signup-link {
+    color: #6B7280;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-align: center;
+}
+
+.signup-link a {
+    text-decoration: underline;
+}
+/* Boton logout*/
+.Btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    margin-top: 15px;
+    margin-left: 15px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background-color: rgb(255, 65, 65);
+}
+
+/* plus sign */
+.sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign svg {
+    width: 17px;
+}
+
+.sign svg path {
+    fill: white;
+}
+/* text */
+.text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 600;
+    transition-duration: .3s;
+}
+/* hover effect on button width */
+.Btn:hover {
+    width: 125px;
+    border-radius: 40px;
+    transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+}
+/* hover effect button's text */
+.Btn:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 0px;
+}
+/* button click effect*/
+.Btn:active {
+    transform: translate(2px ,2px);
+}
 /* TITULO ELEGANTE */
 
 .gold-text {
@@ -182,6 +453,7 @@ ul{list-style-type:none;}
     align-items: center;
     text-align: center; /* Por si acaso */
     width: 100%;
+    padding: 5px 0;
 }
 
 .gold-text:after {
@@ -209,9 +481,33 @@ ul{list-style-type:none;}
     width: 100%;
 }
 
-/* FOOTER */
+/* MEDIA QUERIES PARA DISEÑO RESPONSIVO */
+@media (min-width: 768px) {
+    #leftPan, #rightPan {
+        width: 48%;
+    }
 
-#footer{width:100%; height:59px; clear:both; background:url(../images/b_footer.gif) 0 0 repeat-x }
-#footer p{padding: 15px 0 0 0; font:11px/16px Tahoma, sans-serif; font-weight:normal; text-align:center; color:#fffdb9;}
-#footer p a{font:11px/16px Tahoma, sans-serif; font-weight:normal; color:#fffdb9; text-decoration:none; padding: 0 3px }
-#footer p a:hover{text-decoration:underline; color:#fff}
+    #IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+        width: 100%;
+    }
+}
+
+@media (min-width: 1024px) {
+    #leftPan {
+        width: 30%;
+    }
+
+    #rightPan {
+        width: 68%;
+    }
+
+    #IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+        width: 48%;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    #DerechaJuegos {
+        width: 100%;
+    }
+}
