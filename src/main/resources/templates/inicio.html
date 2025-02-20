@@ -3,48 +3,47 @@
 <head>
     <title>Online Casino</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!-- Ruta corregida al archivo CSS dentro de 'static' -->
     <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
+<div class="gold-text-container">
+    <div class="gold-text">
+        <h1>Online Casino</h1>
+    </div>
+</div>
 <div id="container">
-
+    <nav class="navbar">
         <ul class="menu">
-            <a href="/">
-                <button role="button" class="golden-button">
-                    <span class="golden-text">Inicio</span>
-                </button>
-            </a>
-            <a href="/NJuegos">
-                <button role="button" class="golden-button">
-                    <span class="golden-text">Nuestros juegos</span>
-                </button>
-            </a>
-            <a href="/login">
-                <button role="button" class="golden-button">
-                    <span class="golden-text">login</span>
-                </button>
-            </a>
-            <a href="/admin">
-                <button role="button" class="golden-button">
-                    <span class="golden-text">ADMIN PANEL</span>
-                </button>
-            </a>
-            <a href="/socials">
-                <button role="button" class="golden-button">
-                    <span class="golden-text">R.sociales</span>
-                </button>
-            </a>
+            <button role="button" class="golden-button" onclick="location.href='/'">
+                <span class="golden-text">INICIO</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+                <span class="golden-text">NUESTROS JUEGOS</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/rewards'">
+                <span class="golden-text">RECOMPENSAS</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/login'">
+                <span class="golden-text">LOGIN</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/register'">
+                <span class="golden-text">REGISTER</span>
+            </button>
         </ul>
-        <!-- Ruta corregida de las imágenes dentro de 'static/images' -->
+    </nav>
+    <!-- Ruta corregida de las imágenes dentro de 'static/images' -->
+    <center>
         <img src="/images/borje_saul.jpg" alt="Logo" width="190" height="190" id="logo"/>
         <img src="/images/vino.jpg" alt="Slogan" width="190" height="190" id="slogan"/>
-    </div>
+    </center>
+</div>
+<center>
     <div id="content">
         <div id="leftPan">
             <div id="welcome">
                 <h2></h2>
-                <img src="/images/crupier.jpg" width="100" height="85" alt="" />
+                <img src="/images/crupier.jpg" width="300" height="255" alt="" />
                 <p><span class="headline">El casino online ya está aquí!</span><br />
                     Ahora puedes satisfacer tus ganas de más desde la comodidad de tu sofá! Apuesta el dinero de la pensión de tu madre ya!</p>
                 <div class="clear"></div>
@@ -53,7 +52,7 @@
                 <h2></h2>
                 <div class="popularItem" id="l1"> <img src="/images/neymar.jpg" width="57" height="57" alt="" />
                     <p><span class="headline">Tus ídolos también juegan! </span><br />
-                       Puede que neymar nunca ganase un mundial, pero si que es un claro GANADOR cuando se trata de la tricolor. </p>
+                        Puede que neymar nunca ganase un mundial, pero si que es un claro GANADOR cuando se trata de la tricolor. </p>
                     <div class="clear"></div>
                 </div>
                 <div class="popularItem" id="r1"> <img src="/images/meci%20y%20cristiano.jpg" width="57" height="57" alt="" />
@@ -75,10 +74,10 @@
         </div>
         <div class="clear" id="end"></div>
     </div>
-    <div id="footer">
-        <p>
-            Copyright &copy; Casino La Miel | Design by Rústico González</p>
-    </div>
+</center>
+<footer class="footer">
+    <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
+</footer>
 </div>
 </body>
 </html>

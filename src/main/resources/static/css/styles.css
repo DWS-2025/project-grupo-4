@@ -9,7 +9,6 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    margin-top: 0;
 }
 
 div, p, ul, h2, h3, h4, img {
@@ -37,7 +36,7 @@ ul {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 20px;
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -351,7 +350,7 @@ ul {
 .signup-link a {
     text-decoration: underline;
 }
-/* Boton logout*/
+/* From Uiverse.io by TomMussard */
 .Btn {
     display: flex;
     align-items: center;
@@ -364,8 +363,6 @@ ul {
     position: relative;
     overflow: hidden;
     transition-duration: .3s;
-    margin-top: 15px;
-    margin-left: 15px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
     background-color: rgb(255, 65, 65);
 }
@@ -453,7 +450,6 @@ ul {
     align-items: center;
     text-align: center; /* Por si acaso */
     width: 100%;
-    padding: 5px 0;
 }
 
 .gold-text:after {
