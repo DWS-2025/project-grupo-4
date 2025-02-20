@@ -350,7 +350,7 @@ ul {
 .signup-link a {
     text-decoration: underline;
 }
-/* From Uiverse.io by TomMussard */
+/* Botón de logout */
 .Btn {
     display: flex;
     align-items: center;
@@ -362,6 +362,8 @@ ul {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    margin-top: 15px;
+    margin-left: 15px;
     transition-duration: .3s;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
     background-color: rgb(255, 65, 65);
