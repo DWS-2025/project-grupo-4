@@ -79,6 +79,10 @@ public class indexcontroller {
         return "slots"; // Página slots.html
     }
 
+    @GetMapping("/prizes")
+    public String goPrizes() {
+        return "prizes"; // Página prizes.html
+    }
 }
 
 
