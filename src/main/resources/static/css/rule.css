@@ -1,0 +1,151 @@
+* {
+  box-sizing: border-box;
+  outline: none;
+  user-select: none;
+}
+.red {
+  background: linear-gradient(red,darkred);
+}
+.black {
+  background: linear-gradient(#434343,black);
+}
+.green {
+  background: linear-gradient(green,darkgreen);
+}
+.box {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  line-height: 50px;
+  text-align: center;
+  font-size: 36px;
+  color: white;
+}
+.roulette {
+  margin: 0 auto;
+  height: 50px;
+  width: 800px;
+  position: relative;
+  border: 2px solid black;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.arrow {
+  background-color: yellow;
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  left: 399px; /* 800/2 - width/2 */
+}
+#result {
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+}
+#result .box {
+  width: 100%;
+  height: 100%;
+  font-size: 72px;
+  line-height: 100px;
+}
+
+input {
+  background: linear-gradient(white,#bbb);
+  clear: both;
+  border: none;
+  outline: none;
+  padding: 10px;
+  text-align: center;
+  width: 250px;
+}
+.bet {
+  float: left;
+  width: 33.33%;
+}
+.betBtn {
+  width: 100%;
+  padding: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  border: none;
+  color: white;
+}
+.betText {
+  width: 100%;
+  border: 1px solid black;
+  margin: 1px;
+  position: relative;
+  display: block;
+  padding: 8px 15px;
+  background-color: #ebebeb;
+  margin: 1px;
+}
+.name {
+  display: inline-block;
+  width: 250px;
+}
+.redBtn {
+  background: linear-gradient(red,darkred);
+}
+.greenBtn {
+  background: linear-gradient(green,darkgreen);
+}
+.blackBtn {
+  background: linear-gradient(#434343,black)
+}
+
+body {
+  background:
+linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+background-color: #131313;
+background-size: 20px 20px;
+}
+#money {
+  color: white;
+  font-size: 24px;
+}
+#history {
+  text-align: center;
+  overflow: auto;
+}
+#history .box {
+  width: 25px;
+  height: 25px;
+  font-size: 16px;
+  line-height: 25px;
+}
+.progress {
+  background-color: lightblue;
+  height: 2px;
+  margin: 0 auto;
+}
+#rouletteContainer {
+  width: 75%;
+}
+#chat {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 25%;
+  border: 2px solid white;
+}
+.chat-msg {
+  background-color: #111;
+  margin: 2px;
+  padding: 2px;
+  border: none;
+  color: #999 !important;
+}
+.chat-msg:nth-child(2n) {
+  background-color: #333 !important;
+}
+.username {
+  color: lightblue;
+  font-weight: 900;
+}
