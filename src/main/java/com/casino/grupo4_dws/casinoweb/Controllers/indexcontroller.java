@@ -69,7 +69,15 @@ public class indexcontroller {
         return "register";
     }
 
+    @GetMapping("/rule")
+    public String goRule() {
+        return "rule"; // Página rule.html
+    }
 
+    @GetMapping("/slots")
+    public String goSlots() {
+        return "slots"; // Página slots.html
+    }
 
 }
 
