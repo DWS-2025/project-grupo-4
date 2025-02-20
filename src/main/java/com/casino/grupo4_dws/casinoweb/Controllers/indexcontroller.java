@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 public class indexcontroller {
 
@@ -80,10 +82,11 @@ public class indexcontroller {
     }
 
     @GetMapping("/prizes")
-    public String goPrizes() {
-        return "prizes"; // Página prizes.html
+    public String showPrizes(Model model) {
+        return "prizes"; // Se renderiza prizes.html
     }
 }
+
 
 
 

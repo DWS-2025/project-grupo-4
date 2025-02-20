@@ -1,2 +1,137 @@
-<div id="root">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prizes</title>
+    <link rel="stylesheet" href="/css/prizes.css">
+    <style>
+        /* Estilo para ocultar elementos */
+        .hidden {
+            display: none;
+        }
+
+        /* Estilos para las vistas grid/list */
+        .grid-view .ph-product-card {
+            display: inline-block;
+            width: 30%;
+            margin: 10px;
+        }
+
+        .list-view .ph-product-card {
+            display: block;
+            margin: 10px 0;
+        }
+
+        /* Estilo básico para hacer que las tarjetas sean clickeables */
+        .ph-product-card {
+            cursor: pointer;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .toggleables {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Controles de vista -->
+<div class="toggleables">
+    <button class="toggle-grid">Grid / List</button>
+    <button class="toggle-size">Homepage / DP</button>
+    <button class="toggle-compare">Toggle compare</button>
+    <button class="toggle-ribbon">Toggle ribbon</button>
+    <button class="toggle-subscribe">Toggle subscribe</button>
+    <button class="toggle-features">Toggle features</button>
+    <button class="toggle-previous">Toggle discount</button>
 </div>
+
+<!-- Productos -->
+<ul class="ph-product-card__wrapper list-view">
+    <li class="ph-product-card">
+        <div class="ph-product-card__top">
+            <div class="ph-product-card__top-image">
+                <div class="ph-product-card__compare">
+                    <input type="checkbox">
+                    <label>Compare</label>
+                </div>
+                <div class="ph-product-card__ribbon">50% discount</div>
+                <img class="ph-product-card__image" src="https://images.philips.com/is/image/PhilipsConsumer/HX9924_03-IMS-nl_NL?wid=300&hei=300&$jpglarge$">
+            </div>
+            <div class="ph-product-card__top-content">
+                <a href="#card" class="ph-product-card__title">I am a product title</a>
+                <div class="ph-product-card__ctn ph-body-copy-03">XX12345</div>
+                <div class="ph-product-card__subscription">Replace &amp; Refresh</div>
+            </div>
+        </div>
+        <div class="ph-product-card__bottom">
+            <div class="ph-product-card__prices">
+                <div class="ph-product-card__previous-price">&euro; 229.99</div>
+                <div class="ph-product-card__current-price ph-bold">&euro; 159.99</div>
+            </div>
+            <div class="ph-product-card__ctas">
+                <a href="#buyme" class="ph-product-card__main-cta">Add to cart</a>
+                <a href="#viewproduct" class="ph-product-card__secondary-cta ph-link">View Product</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Puedes seguir añadiendo más tarjetas de producto aquí -->
+</ul>
+
+<script>
+    // Toggle Grid/List View
+    document.querySelector('.toggle-grid').addEventListener('click', function() {
+        let wrapper = document.querySelector('.ph-product-card__wrapper');
+        if (wrapper.classList.contains('list-view')) {
+            wrapper.classList.remove('list-view');
+            wrapper.classList.add('grid-view');
+        } else {
+            wrapper.classList.remove('grid-view');
+            wrapper.classList.add('list-view');
+        }
+    });
+
+    // Toggle Compare Elements
+    document.querySelector('.toggle-compare').addEventListener('click', function() {
+        const compareElements = document.querySelectorAll('.ph-product-card__compare');
+        compareElements.forEach(function(el) {
+            el.classList.toggle('hidden');
+        });
+    });
+
+    // Toggle Ribbon
+    document.querySelector('.toggle-ribbon').addEventListener('click', function() {
+        const ribbons = document.querySelectorAll('.ph-product-card__ribbon');
+        ribbons.forEach(function(el) {
+            el.classList.toggle('hidden');
+        });
+    });
+
+    // Toggle Subscription
+    document.querySelector('.toggle-subscribe').addEventListener('click', function() {
+        const subscriptions = document.querySelectorAll('.ph-product-card__subscription');
+        subscriptions.forEach(function(el) {
+            el.classList.toggle('hidden');
+        });
+    });
+
+    // Toggle Features
+    document.querySelector('.toggle-features').addEventListener('click', function() {
+        const features = document.querySelectorAll('.ph-product-card__features');
+        features.forEach(function(el) {
+            el.classList.toggle('hidden');
+        });
+    });
+
+    // Toggle Discount
+    document.querySelector('.toggle-previous').addEventListener('click', function() {
+        const previousPrices = document.querySelectorAll('.ph-product-card__previous-price');
+        previousPrices.forEach(function(el) {
+            el.classList.toggle('hidden');
+        });
+    });
+</script>
+</body>
+</html>
