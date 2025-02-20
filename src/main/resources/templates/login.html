@@ -1,68 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Login</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
-</head>
-<body>
-<div class="gold-text-container">
-    <div class="gold-text">
-        <h1>Online Casino</h1>
-    </div>
-</div>
-<div id="container">
-    <nav class="navbar">
-        <ul class="menu">
-            <button role="button" class="golden-button" onclick="location.href='/'">
-                <span class="golden-text">INICIO</span>
-            </button>
-            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
-                <span class="golden-text">NUESTROS JUEGOS</span>
-            </button>
-            <button role="button" class="golden-button" onclick="location.href='/rewards'">
-                <span class="golden-text">RECOMPENSAS</span>
-            </button>
-            <button role="button" class="golden-button" onclick="location.href='/login'">
-                <span class="golden-text">LOGIN</span>
-            </button>
-            <button role="button" class="golden-button" onclick="location.href='/register'">
-                <span class="golden-text">REGISTER</span>
-            </button>
-        </ul>
-    </nav>
-</div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Panel de Login</title>
+        <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
 
-<form class="form" action="/login" method="post">
-    <p class="form-title">Sign in to your account</p>
-    <div class="input-container">
-        <input placeholder="Enter username" type="text" name="loginUsername">
-        <span>
-            <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
-            </svg>
-          </span>
-    </div>
-    <div class="input-container">
-        <input placeholder="Enter password" type="password" name="loginPassword">
+    <header>
+        <h1>Entra y demuestra que no solo el crupier puede hacer magia</h1>
+    </header>
+        <main>
+            <form action="login.php" method="POST">
+                <label for="user">Usuario:</label>
+                <input type="text" id="user" name="user" required>
+                <br>
 
-        <span>
-            <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
-              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
-            </svg>
-          </span>
-    </div>
-    <button class="submit" type="submit" value="submit">
-        Sign in
-    </button>
+                <label for="pass">Contraseña:</label>
+                <input type="password" id="pass" name="pass" required>
+                <br>
 
-    <p class="signup-link">
-        No account?
-        <a href="/register">Sign up</a>
-    </p>
-</form>
+                <!-- Contenedor para el botón -->
+                <div class="button-container">
+                    <!-- Aquí va el botón 'golden-button' -->
+                    <button type="submit" class="golden-button">Iniciar sesión</button>
+                </div>
+            </form>
+        </main>
+        <div id="footer">
+            <p>
+                Copyright &copy; Casino La Miel | Design by Rústico González</p>
+        </div>
 
-</body>
+    </body>
 </html>
