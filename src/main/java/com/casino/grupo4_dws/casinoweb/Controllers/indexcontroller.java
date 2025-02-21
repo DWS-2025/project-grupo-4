@@ -35,6 +35,15 @@ public class indexcontroller {
         }
         return "staticLoggedIn/loggedGames";
     }
+    @GetMapping("/prizes")
+    public String showPrizes(Model model, HttpSession session) {
+        String loginUsername = (String) session.getAttribute("loginUsername");
+        model.addAttribute("name",loginUsername);
+        if (loginUsername == null || loginUsername.trim().isEmpty()){
+            return "prizes";
+        }
+        return "staticLoggedIn/loggedPrizes";
+    }
 
     @GetMapping("/crash")
     public String goCrash() {
@@ -81,10 +90,6 @@ public class indexcontroller {
         return "slots"; // Página slots.html
     }
 
-    @GetMapping("/prizes")
-    public String showPrizes(Model model) {
-        return "prizes"; // Se renderiza prizes.html
-    }
 }
 
 

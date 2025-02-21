@@ -68,11 +68,14 @@ ul {
     padding: 10px 0;
     border-radius: 5px;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center; /* Centra los botones horizontalmente */
+    width: 100%; /* Asegura que la barra ocupe todo el ancho disponible */
 }
 
 .menu {
     display: flex;
-    justify-content: center;
+    justify-content: space-around; /* Distribuye los botones de manera uniforme */
     list-style: none;
     font-family: 'Casino', sans-serif;
     font-size: 1.8rem;
@@ -82,11 +85,14 @@ ul {
     text-align: center;
     padding: 0;
     margin: 0;
-    flex-wrap: wrap;
+    width: 100%; /* Asegura que el menú ocupe todo el ancho disponible */
+    flex-wrap: wrap; /* Permite que los botones se envuelvan en pantallas pequeñas */
 }
 
 .menu li {
     margin: 5px;
+    flex: 1; /* Hace que cada botón ocupe el mismo espacio */
+    min-width: 150px; /* Establece un ancho mínimo para cada botón */
 }
 
 .nav-link {
