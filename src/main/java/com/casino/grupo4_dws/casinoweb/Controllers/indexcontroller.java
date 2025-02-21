@@ -1,6 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.Controllers;
 
 
+import com.casino.grupo4_dws.casinoweb.services.GameManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,11 @@ import java.util.List;
 
 @Controller
 public class indexcontroller {
+    private final GameManager Services;
+
+    public indexcontroller(GameManager services) {
+        Services = services;
+    }
 
     // Este método maneja las solicitudes a la URL '/'
 
