@@ -1,137 +1,108 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <title>Our Games</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prizes</title>
-    <link rel="stylesheet" href="/css/prizes.css">
-    <style>
-        /* Estilo para ocultar elementos */
-        .hidden {
-            display: none;
-        }
-
-        /* Estilos para las vistas grid/list */
-        .grid-view .ph-product-card {
-            display: inline-block;
-            width: 30%;
-            margin: 10px;
-        }
-
-        .list-view .ph-product-card {
-            display: block;
-            margin: 10px 0;
-        }
-
-        /* Estilo básico para hacer que las tarjetas sean clickeables */
-        .ph-product-card {
-            cursor: pointer;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-
-        .toggleables {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
-<!-- Controles de vista -->
-<div class="toggleables">
-    <button class="toggle-grid">Grid / List</button>
-    <button class="toggle-size">Homepage / DP</button>
-    <button class="toggle-compare">Toggle compare</button>
-    <button class="toggle-ribbon">Toggle ribbon</button>
-    <button class="toggle-subscribe">Toggle subscribe</button>
-    <button class="toggle-features">Toggle features</button>
-    <button class="toggle-previous">Toggle discount</button>
+<div class="gold-text-container">
+    <div class="gold-text">
+        <h1>Casino La Miel</h1>
+    </div>
 </div>
+<div id="container">
+    <nav class="navbar">
+        <ul class="menu">
+            <button role="button" class="golden-button" onclick="location.href='/'">
+                <span class="golden-text">INICIO</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+                <span class="golden-text">NUESTROS JUEGOS</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/rewards'">
+                <span class="golden-text">RECOMPENSAS</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/login'">
+                <span class="golden-text">LOGIN</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/register'">
+                <span class="golden-text">REGISTER</span>
+            </button>
+        </ul>
+    </nav>
 
-<!-- Productos -->
-<ul class="ph-product-card__wrapper list-view">
-    <li class="ph-product-card">
-        <div class="ph-product-card__top">
-            <div class="ph-product-card__top-image">
-                <div class="ph-product-card__compare">
-                    <input type="checkbox">
-                    <label>Compare</label>
-                </div>
-                <div class="ph-product-card__ribbon">50% discount</div>
-                <img class="ph-product-card__image" src="https://images.philips.com/is/image/PhilipsConsumer/HX9924_03-IMS-nl_NL?wid=300&hei=300&$jpglarge$">
-            </div>
-            <div class="ph-product-card__top-content">
-                <a href="#card" class="ph-product-card__title">I am a product title</a>
-                <div class="ph-product-card__ctn ph-body-copy-03">XX12345</div>
-                <div class="ph-product-card__subscription">Replace &amp; Refresh</div>
-            </div>
+    <header>
+        <div id="TitulosJuegos">
+            <h1>Nuestros juegos</h1>
+            <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots</p>
+            <img src="/images/rick_dinero.jpg" alt="rick" width=681 height=511 id="rick"/>
         </div>
-        <div class="ph-product-card__bottom">
-            <div class="ph-product-card__prices">
-                <div class="ph-product-card__previous-price">&euro; 229.99</div>
-                <div class="ph-product-card__current-price ph-bold">&euro; 159.99</div>
-            </div>
-            <div class="ph-product-card__ctas">
-                <a href="#buyme" class="ph-product-card__main-cta">Add to cart</a>
-                <a href="#viewproduct" class="ph-product-card__secondary-cta ph-link">View Product</a>
-            </div>
+    </header>
+
+    <main>
+        <div id="grid-container">
+            <section class="game-section">
+                <h2>Iphone</h2>
+                <img src="/images/iphone16.jpg" alt="crash" width="190" height="190" id="crash">
+                <p>Un emocionante juego para darnos todo tu dinero, o hincharte como un cerdo</p>
+                <a href="crash">
+                    <button role="button" class="golden-button">
+                        <span class="golden-text">Crash</span>
+                    </button>
+                </a>
+            </section>
+
+            <section class="game-section">
+                <h2>Crocs del rayo</h2>
+                <img src="/images/crocs_rayo.jpg" alt="ruleta" width="190" height="190" id="ruleta">
+                <p>Como en los casinos de las vegas, solo que aqui no ofrecemos bebidas gratis</p>
+                <a href="/rule">
+                    <button role="button" class="golden-button">
+                        <span class="golden-text">Ruleta</span>
+                    </button>
+                </a>
+            </section>
+
+            <section class="game-section">
+                <h2>Viaje a albacete para 2 personas</h2>
+                <img src="/images/albacete.jpg" alt="slots" width="190" height="190" id="slots">
+                <p>Te sentirás como tu tío ernesto, con un carajillo y 100 pavos menos en la cuenta. Pero, ¿Y si sí?</p>
+                <a href="/slots">
+                    <button role="button" class="golden-button">
+                        <span class="golden-text">Slots</span>
+                    </button>
+                </a>
+            </section>
+            <section class="game-section">
+                <h2>AWP Dragon Lore</h2>
+                <img src="/images/awp_lore.png" alt="slots" width="190" height="190" id="slots">
+                <p>Te sentirás como tu tío ernesto, con un carajillo y 100 pavos menos en la cuenta. Pero, ¿Y si sí?</p>
+                <a href="/slots">
+                    <button role="button" class="golden-button">
+                        <span class="golden-text">Slots</span>
+                    </button>
+                </a>
+            </section>
+            <section class="game-section">
+                <h2>Conoce a chiquibai</h2>
+                <img src="/images/chiquibai.jpg" alt="slots" width="190" height="190" id="slots">
+                <p>Te sentirás como tu tío ernesto, con un carajillo y 100 pavos menos en la cuenta. Pero, ¿Y si sí?</p>
+                <a href="/slots">
+                    <button role="button" class="golden-button">
+                        <span class="golden-text">Slots</span>
+                    </button>
+                </a>
+            </section>
         </div>
-    </li>
+    </main>
+    </main>
 
-    <!-- Puedes seguir añadiendo más tarjetas de producto aquí -->
-</ul>
-
-<script>
-    // Toggle Grid/List View
-    document.querySelector('.toggle-grid').addEventListener('click', function() {
-        let wrapper = document.querySelector('.ph-product-card__wrapper');
-        if (wrapper.classList.contains('list-view')) {
-            wrapper.classList.remove('list-view');
-            wrapper.classList.add('grid-view');
-        } else {
-            wrapper.classList.remove('grid-view');
-            wrapper.classList.add('list-view');
-        }
-    });
-
-    // Toggle Compare Elements
-    document.querySelector('.toggle-compare').addEventListener('click', function() {
-        const compareElements = document.querySelectorAll('.ph-product-card__compare');
-        compareElements.forEach(function(el) {
-            el.classList.toggle('hidden');
-        });
-    });
-
-    // Toggle Ribbon
-    document.querySelector('.toggle-ribbon').addEventListener('click', function() {
-        const ribbons = document.querySelectorAll('.ph-product-card__ribbon');
-        ribbons.forEach(function(el) {
-            el.classList.toggle('hidden');
-        });
-    });
-
-    // Toggle Subscription
-    document.querySelector('.toggle-subscribe').addEventListener('click', function() {
-        const subscriptions = document.querySelectorAll('.ph-product-card__subscription');
-        subscriptions.forEach(function(el) {
-            el.classList.toggle('hidden');
-        });
-    });
-
-    // Toggle Features
-    document.querySelector('.toggle-features').addEventListener('click', function() {
-        const features = document.querySelectorAll('.ph-product-card__features');
-        features.forEach(function(el) {
-            el.classList.toggle('hidden');
-        });
-    });
-
-    // Toggle Discount
-    document.querySelector('.toggle-previous').addEventListener('click', function() {
-        const previousPrices = document.querySelectorAll('.ph-product-card__previous-price');
-        previousPrices.forEach(function(el) {
-            el.classList.toggle('hidden');
-        });
-    });
-</script>
+    <footer class="footer">
+        <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
+    </footer>
+</div>
 </body>
 </html>

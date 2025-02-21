@@ -1,4 +1,4 @@
-var usernameList = ['Raul Santamaría', 'Misael Marriaga', 'Perez Pelo', 'Joaquin Arias'];
+var usernameList = ['Raul Santamaría', 'Misael Marriaga', 'Perez Pelo', 'Joaquin Arias','Hortelano Haro','Caceres Taladriz','Angelines Castro','David Ortega','Manuel Rubio','Roman Efremov','Isabel Bazaga','Redchuk Cisterna','David Jesús Nieves','Javi Martínez'  ];
 var number = 0;
 var amount = 5;
 
