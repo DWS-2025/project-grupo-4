@@ -32,6 +32,7 @@ public class Game {
     public String getImage() {
         return image;
     }
+
     public int getChance() {
         return chance;
     }
