@@ -1,4 +1,4 @@
-package com.casino.grupo4_dws.casinoweb;
+package com.casino.grupo4_dws.casinoweb.model;
 
 public class Prize {
     private String title;

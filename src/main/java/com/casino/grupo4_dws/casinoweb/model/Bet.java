@@ -1,13 +1,20 @@
-package com.casino.grupo4_dws.casinoweb;
+package com.casino.grupo4_dws.casinoweb.model;
 
 public class Bet {
-    private int amount;
+    private int input;
+    private int output;
 
-    public int GetAmount() {
-        return amount;
+    public int getInput() {
+        return input;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setInput(int amount) {
+        this.input = amount;
+    }
+    public int getOutput() {
+        return output;
+    }
+    public void setOutput(int amount) {
+        this.output = amount;
     }
 }
