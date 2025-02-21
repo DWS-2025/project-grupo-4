@@ -2,7 +2,7 @@ package com.casino.grupo4_dws.casinoweb.model;
 
 import java.util.Random;
 
-public class game {
+public class Game {
     private int id;
     private String title;
     private String description;
@@ -11,7 +11,7 @@ public class game {
     private int min_input;
     private int multiplier;
 
-    public game (int id, String title, String description, String image, int chance, int min_input, int multiplier) {
+    public Game(int id, String title, String description, String image, int chance, int min_input, int multiplier) {
         this.id = id;
         this.title = title;
         this.description = description;
