@@ -1,4 +1,4 @@
-package com.casino.grupo4_dws.casinoweb.Controllers;
+package com.casino.grupo4_dws.casinoweb.controllers;
 
 
 import com.casino.grupo4_dws.casinoweb.services.GameManager;
@@ -7,10 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
 
 @Controller
 public class indexcontroller {
