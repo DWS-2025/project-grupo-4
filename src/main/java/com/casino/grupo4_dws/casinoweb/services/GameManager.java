@@ -19,8 +19,13 @@ public class GameManager {
 
     @PostConstruct
     private void startGames(){
-        Game TirarDado = new Game(1, "Dado", "Tira un dado de seis caras!", "", 16,0,6);
+        Game TirarDado = new Game(1, "Dado", "Tira un dado de seis caras y prueba tu suerte!", "/images/dice.jpg", 16, 0, 6);
+        Game Ruleta = new Game(2, "Ruleta", "Apuesta a tu número favorito y gira la ruleta!", "/images/roulette.jpg", 20, 1, 36);
+        Game Blackjack = new Game(3, "Blackjack", "Juega contra el crupier y llega lo más cerca posible a 21!", "/images/blackjack.jpg", 25, 5, 2);
+        
         addGame(TirarDado);
+        addGame(Ruleta);
+        addGame(Blackjack);
     }
 
     public void addGame(Game game){

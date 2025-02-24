@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Our Games</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -73,6 +74,17 @@
                 <a href="/slots">
                     <button role="button" class="golden-button">
                         <span class="golden-text">Slots</span>
+                    </button>
+                </a>
+            </section>
+
+            <section class="game-section" th:each="game : ${games}">
+                <h2 th:text="${game.title}">Nombre del juego</h2>
+                <img th:src="${game.image}" th:alt="${game.title}" width="190" height="190">
+                <p th:text="${game.description}">Descripción</p>
+                <a th:href="@{/{gameTitle}(gameTitle=${game.title})}">
+                    <button role="button" class="golden-button">
+                        <span class="golden-text" th:text="${game.title}">Jugar</span>
                     </button>
                 </a>
             </section>

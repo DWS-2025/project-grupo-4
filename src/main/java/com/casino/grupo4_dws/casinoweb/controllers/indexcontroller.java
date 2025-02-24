@@ -33,6 +33,7 @@ public class indexcontroller {
     public String mostrarJuegos(Model model, HttpSession session) {
         String loginUsername = (String) session.getAttribute("loginUsername");
         model.addAttribute("name",loginUsername);
+        model.addAttribute("games", Services.getGameList());
         if (loginUsername == null || loginUsername.trim().isEmpty()){
             return "NJuegos";
         }
