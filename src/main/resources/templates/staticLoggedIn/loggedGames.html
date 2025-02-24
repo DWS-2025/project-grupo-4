@@ -8,6 +8,10 @@
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
+<div class="user-info">
+    <p>Usuario: <span th:text="${user.getUserName()}">Usuario</span></p>
+    <p>Dinero: <span th:text="${user.getMoney()}">Dinero</span></p>
+</div>
 <div class="gold-text-container">
     <div class="gold-text">
         <h1>Casino La Miel</h1>
@@ -37,7 +41,7 @@
     <header>
         <div id="TitulosJuegos">
             <h1>Nuestros Juegos</h1>
-            <h2>Disfruta <span th:text="${name}">Usuario</span> </h2>
+            <h2>Disfruta <span th:text="${user.getUserName()}">Usuario</span> </h2>
             <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots</p>
             <img src="/images/luigiapuestas.jpg" alt="Luigi" width=681 height=511 id="Luigi"/>
         </div>

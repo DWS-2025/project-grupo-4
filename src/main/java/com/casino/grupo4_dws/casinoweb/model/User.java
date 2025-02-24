@@ -6,21 +6,21 @@ import org.springframework.web.context.annotation.SessionScope;
 @Component
 @SessionScope
 public class User {
-    private int userName;
-    private int password;
+    private String userName;
+    private String password;
     private int money;
     private boolean isadmin;
 
-    public int getUserName() {
+    public String getUserName() {
         return userName;
     }
-    public void setUserName(int userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
     public int getMoney() {

@@ -108,6 +108,18 @@ ul {
     background: #f5a700;
 }
 
+.user-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #891f1f;
+    padding: 10px;
+    border: 1px solid #d1ad02;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
 .golden-button {
     touch-action: manipulation;
     display: inline-block;
