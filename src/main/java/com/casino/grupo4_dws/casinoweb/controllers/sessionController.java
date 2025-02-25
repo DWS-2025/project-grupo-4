@@ -8,56 +8,16 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class indexcontroller {
+public class sessionController {
     @Autowired
     private User user;
-    private final GameManager Services;
-
-    @Autowired
-    public indexcontroller(GameManager services) {
-        Services = services;
-    }
-
-    @GetMapping("/")
-    public String inicio(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "inicio";
-        }
-        model.addAttribute("user", user);
-        return "staticLoggedIn/loggedMain";
-    }
-
-    @GetMapping("/NJuegos")
-    public String mostrarJuegos(Model model, HttpSession session) {
-        model.addAttribute("games", Services.getGameList());
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "NJuegos";
-        }
-        model.addAttribute("user", user);
-        return "staticLoggedIn/loggedGames";
-    }
-
-    @GetMapping("/prizes")
-    public String showPrizes(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "prizes";
-        }
-        model.addAttribute("user", user);
-        return "staticLoggedIn/loggedPrizes";
-    }
-
-    @GetMapping("/crash")
-    public String goCrash() {
-        return "crash"; // Página crash.html
-    }
 
     @GetMapping("/login")
     public String loadLoginPage() {
@@ -93,7 +53,6 @@ public class indexcontroller {
 
         String urlAnterior = request.getHeader("Referer");
         session.setAttribute("urlAntesDeLogout", urlAnterior);
-        session.removeAttribute("loginUsername");
         return "redirect:/logoutConfirmar";
     }
     @GetMapping("/logoutConfirmar")
@@ -106,20 +65,4 @@ public class indexcontroller {
     public String registerUser() {
         return "register";
     }
-
-    @GetMapping("/rule")
-    public String goRule() {
-        return "rule"; // Página rule.html
-    }
-
-    @GetMapping("/slots")
-    public String goSlots() {
-        return "slots"; // Página slots.html
-    }
-
 }
-
-
-
-
-
