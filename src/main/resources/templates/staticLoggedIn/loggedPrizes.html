@@ -56,6 +56,9 @@
                 <img th:src="${item.getImage()}" width="190" height="190">
                 <p th:text="${item.getDescription()}">Descripción</p>
                 <p th:text="${item.getPrice()} + ' $'"></p>
+                <form th:action="@{/buy/{id}(id=${item.getId()})}" method="post">
+                    <button type="submit">Comprar</button>
+                </form>
                 <form th:action="@{/editPrize/{id}(id=${item.getId()})}" method="get">
                     <button type="submit">Editar Recompensa</button>
                 </form>
