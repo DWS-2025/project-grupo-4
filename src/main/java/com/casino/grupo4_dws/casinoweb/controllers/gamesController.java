@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -38,5 +35,23 @@ private User user;
         }
         model.addAttribute("user", user);
         return "staticLoggedIn/loggedGames";
+    }
+
+    @GetMapping("/add")
+    public String addGameForm(Model model) {
+        model.addAttribute("newGame", new Game());
+        return "staticLoggedIn/addGameForm";
+    }
+
+    @PostMapping("/add")
+    public String newGame(@ModelAttribute("newGame") Game newGame) {
+        gameManager.addGame(newGame);
+        return "redirect:/NJuegos"; // Redirigir a la lista de juegos
+    }
+
+    @PostMapping("/delete/{id}")
+    public String eliminarJuego(@PathVariable int id) {
+        gameManager.removeGameId(id);
+        return "redirect:/NJuegos"; // Redirigir a la lista de juegos
     }
 }

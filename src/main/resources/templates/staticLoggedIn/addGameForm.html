@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Crear Nuevo Juego</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+</head>
+<body>
+<div class="gold-text-container">
+  <div class="gold-text">
+    <h1>Casino La Miel</h1>
+  </div>
+</div>
+<div id="container">
+  <nav class="navbar">
+    <ul class="menu">
+      <button role="button" class="golden-button" onclick="location.href='/'">
+        <span class="golden-text">INICIO</span>
+      </button>
+      <button role="button" class="golden-button" onclick="location.href='/games'">
+        <span class="golden-text">NUESTROS JUEGOS</span>
+      </button>
+      <button role="button" class="golden-button" onclick="location.href='/prizes'">
+        <span class="golden-text">RECOMPENSAS</span>
+      </button>
+      <button role="button" class="golden-button" onclick="location.href='/login'">
+        <span class="golden-text">LOGIN</span>
+      </button>
+      <button role="button" class="golden-button" onclick="location.href='/register'">
+        <span class="golden-text">REGISTER</span>
+      </button>
+    </ul>
+  </nav>
+
+  <header>
+    <div id="TitulosJuegos">
+      <h1>Crear Nuevo Juego</h1>
+      <p>Completa el formulario para añadir un nuevo juego al casino.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- Formulario para crear un nuevo juego -->
+    <div id="add-game-form">
+      <form th:action="@{/add}" th:object="${newGame}" method="post">
+        <div>
+          <label for="name">Nombre:</label>
+          <input type="text" id="name" th:field="*{title}" required>
+        </div>
+        <div>
+          <label for="description">Descripción:</label>
+          <input type="text" id="description" th:field="*{description}" required>
+        </div>
+        <div>
+          <label for="image">URL de la imagen:</label>
+          <input type="text" id="image" th:field="*{image}">
+        </div>
+        <div>
+          <label for="minAge">Apuesta Mínima:</label>
+          <input type="number" id="minAge" th:field="*{minInput}" required>
+        </div>
+        <div>
+          <label for="maxPlayers">Multiplicador de apuesta:</label>
+          <input type="number" id="maxPlayers" th:field="*{multiplier}" required>
+        </div>
+        <div>
+          <label for="duration">Probabilidad de ganar (del 1 al 100):</label>
+          <input type="number" id="duration" th:field="*{chance}" required>
+        </div>
+        <div>
+          <button type="submit">Crear Juego</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
+  </footer>
+</div>
+</body>
+</html>
