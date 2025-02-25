@@ -59,54 +59,6 @@ public class indexcontroller {
         return "crash"; // Página crash.html
     }
 
-    @GetMapping("/login")
-    public String loadLoginPage() {
-        return "login";
-    }
-    @PostMapping("/login")
-    public String loginUser(Model model, @RequestParam String loginUsername, @RequestParam String loginPassword, HttpSession session) {
-        if (loginUsername == null || loginUsername.trim().isEmpty()) {
-            return "redirect:/login";
-        }
-
-        User user = new User();
-        user.setUserName(loginUsername);
-        user.setPassword(loginPassword);
-        user.setMoney(5000);
-        if ("admin".equals(loginUsername) && "admin".equals(loginPassword)) {
-            user.setIsadmin(true);
-        }
-
-        session.setAttribute("user", user);
-        return "redirect:/";
-    }
-
-    @GetMapping("/logout")
-    public String loggingOut(HttpSession session, HttpServletRequest request) {
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            user.setIsadmin(false);
-            user.setUserName("");
-            user.setPassword("");
-            session.removeAttribute("user");
-        }
-
-        String urlAnterior = request.getHeader("Referer");
-        session.setAttribute("urlAntesDeLogout", urlAnterior);
-        session.removeAttribute("loginUsername");
-        return "redirect:/logoutConfirmar";
-    }
-    @GetMapping("/logoutConfirmar")
-    public String logoutConfirmar(HttpSession session) {
-        String urlAnterior = (String) session.getAttribute("urlAntesDeLogout");
-        session.removeAttribute("urlAntesDeLogout");
-        return "redirect:" + (urlAnterior != null ? urlAnterior : "/");
-    }
-    @GetMapping("/register")
-    public String registerUser() {
-        return "register";
-    }
-
     @GetMapping("/rule")
     public String goRule() {
         return "rule"; // Página rule.html
