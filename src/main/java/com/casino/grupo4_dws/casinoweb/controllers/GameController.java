@@ -17,7 +17,13 @@ public class GameController {
     }
 
     @GetMapping
-    public List<Game> obtenerJuegos() {
+    public List<Game> obtainGames() {
         return gameManager.getGameList();
+    }
+    public Game getGame(int id){
+        return gameManager.getGame(id);
+    }
+    public int getSize(){
+        return gameManager.getGameList().size();
     }
 }
