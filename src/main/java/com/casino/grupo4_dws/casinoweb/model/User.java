@@ -3,6 +3,8 @@ package com.casino.grupo4_dws.casinoweb.model;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.List;
+
 @Component
 @SessionScope
 public class User {
@@ -10,6 +12,7 @@ public class User {
     private String password;
     private int money;
     private boolean isadmin;
+    private List <Prize> inventario;
 
     public String getUserName() {
         return userName;
@@ -34,5 +37,11 @@ public class User {
     }
     public void setIsadmin(boolean isadmin) {
         this.isadmin = isadmin;
+    }
+    public List<Prize> getInventario() {
+        return inventario;
+    }
+    public void setInventario(List<Prize> inventario) {
+        this.inventario = inventario;
     }
 }
