@@ -17,7 +17,7 @@ public class PrizeController {
     }
 
     @GetMapping
-    public List<Prize> obtenerJuegos() {
+    public List<Prize> obtainPrizes() {
         return prizeManager.getPrizeList();
     }
 }
