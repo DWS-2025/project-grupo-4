@@ -20,4 +20,9 @@ public class PrizeController {
     public List<Prize> obtainPrizes() {
         return prizeManager.getPrizeList();
     }
+
+    @GetMapping("/{id}")
+    public Prize getPrize(@PathVariable int id) {
+        return prizeManager.getPrize(id);
+    }
 }

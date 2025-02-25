@@ -24,7 +24,7 @@ GameManager {
 
     @PostConstruct
     private void startGames(){
-        Game TirarDado = new Game(1, "Dado", "Tira un dado de seis caras!", "/images/albacete.jpg", 16,0,6);
+        Game TirarDado = new Game(1, "Dado", "Tira un dado de seis caras!", "/images/dados.png", 16,0,6);
         addGame(TirarDado);
     }
 
