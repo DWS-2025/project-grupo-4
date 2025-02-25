@@ -33,16 +33,6 @@ public class indexController {
         return "staticLoggedIn/loggedMain";
     }
 
-    @GetMapping("/prizes")
-    public String showPrizes(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "prizes";
-        }
-        model.addAttribute("user", user);
-        return "staticLoggedIn/loggedPrizes";
-    }
-
     @GetMapping("/user")
     public String showUser(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");

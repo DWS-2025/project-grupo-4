@@ -29,6 +29,9 @@
             <button role="button" class="golden-button" onclick="location.href='/prizes'">
                 <span class="golden-text">RECOMPENSAS</span>
             </button>
+            <button role="button" class="golden-button" onclick="location.href='/addPrize'">
+                <span class="golden-text">NUEVA RECOMPENSA</span>
+            </button>
             <button class="Btn" onclick="location.href='/logout'">
 
                 <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
@@ -48,97 +51,13 @@
 
     <main>
         <div id="grid-container">
-            <section class="game-section">
-                <h2>Iphone</h2>
-                <img src="/images/iphone16.jpg" alt="crash" width="190" height="190" id="crash">
-                <p>El iphone 16 para poder seguir apostando en máxima calidad</p>
-                <a href="crash">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Crash</span>
-                    </button>
-                </a>
-            </section>
-
-            <section class="game-section">
-                <h2>Crocs del rayo</h2>
-                <img src="/images/crocs_rayo.jpg" alt="ruleta" width="190" height="190" id="ruleta">
-                <p>Activa el modo "sport" y despista a los azules</p>
-                <a href="/rule">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Ruleta</span>
-                    </button>
-                </a>
-            </section>
-
-            <section class="game-section">
-                <h2>Viaje a albacete para 2 personas</h2>
-                <img src="/images/albacete.jpg" alt="slots" width="190" height="190" id="albacete">
-                <p>Disfruta con tu shawty de la españa antigua en una lujosa pensión de 2 estrellas</p>
-                <a href="/slots">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Slots</span>
-                    </button>
-                </a>
-            </section>
-            <section class="game-section">
-                <h2>AWP Dragon Lore</h2>
-                <img src="/images/awp_lore.png" alt="slots" width="190" height="190" id="awp">
-                <p>Demuestrale a tu tío Ernesto que un arma virtual vale más que su Opel Corsa</p>
-                <a href="/slots">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Slots</span>
-                    </button>
-                </a>
-            </section>
-            <section class="game-section">
-                <h2>Conoce a chiquibai</h2>
-                <img src="/images/chiquibai.jpg" alt="slots" width="190" height="190" id="chiquibai">
-                <p>Cumple tu sueño de conocer al mayor influyente de masas de la era moderna</p>
-                <a href="/slots">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Slots</span>
-                    </button>
-                </a>
-            </section>
-            <section class="game-section">
-                <h2>Cena para dos provolone</h2>
-                <img src="/images/provolone.jpg" alt="slots" width="190" height="190" id="provolone">
-                <p>Haz caso al gallego más selecto y disfruta de una cena inolvidable</p>
-                <a href="/slots">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Slots</span>
-                    </button>
-                </a>
-            </section>
-            <section class="game-section">
-                <h2>Pack premium</h2>
-                <img src="/images/pack_cigarro_tabaco.png" alt="slots" width="190" height="190" id="pack">
-                <p>Ibamos a incluir café-cigarro, pero preferimos a las rubias que a las morenas (las bebidas claro)</p>
-                <a href="/slots">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Slots</span>
-                    </button>
-                </a>
-            </section>
-            <section class="game-section">
-                <h2>Key Buscaminas PC</h2>
-                <img src="/images/buscaminas.jpeg" alt="slots" width="190" height="190" id="buscaminas">
-                <p>Rebasa a la plebe y presume de tu juego más puntero</p>
-                <a href="/slots">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Slots</span>
-                    </button>
-                </a>
-            </section>
-            <section class="game-section">
-                <h2>Cheque Cafetería Ramiro</h2>
-                <img src="/images/cafeteria%20ramiro.jpg" alt="slots" width="190" height="190" id="ramiro">
-                <p>Bocata lomo ya</p>
-                <a href="/slots">
-                    <button role="button" class="golden-button">
-                        <span class="golden-text">Slots</span>
-                    </button>
-                </a>
+            <section class="game-section" th:each="item : ${prizes}">
+                <h2 th:text="${item.getTitle()}">Nombre del juego</h2>
+                <img th:src="${item.getImage()}" width="190" height="190">
+                <p th:text="${item.getDescription()}">Descripción</p>
+                <form th:action="@{/deletePrize/{id}(id=${item.getId()})}" method="post">
+                    <button type="submit">Eliminar Recompensa</button>
+                </form>
             </section>
         </div>
     </main>

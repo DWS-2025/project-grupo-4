@@ -23,9 +23,9 @@
         <h2>Mochila:</h2>
         <div id="grid-container">
             <section class="game-section" th:each="item : ${inventario}">
-                <h2 th:text="${item.title}"></h2>
-                <p th:text="${item.description}"></p>
-                <img th:if="${item.image}" th:src="${item.image}" alt="Imagen del juego" class="game-image"/>
+                <h2 th:text="${item.getTitle()}"></h2>
+                <p th:text="${item.getDescription()}"></p>
+                <img th:if="${item.getImage()}" th:src="${item.getImage()}" alt="Imagen del juego" class="game-image"/>
             </section>
         </div>
     </div>

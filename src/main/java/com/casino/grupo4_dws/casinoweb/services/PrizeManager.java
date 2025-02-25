@@ -18,16 +18,21 @@ public class PrizeManager {
 
     @PostConstruct
     private void startPrizes() {
-        Prize DLore = new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN", "/images/awp_lore.jpg", 100);
+        Prize DLore = new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN", "/images/albacete.jpg", 100);
         addPrize(DLore);
     }
 
     public void addPrize(Prize prize) {
+        int newId = prizeList.size();
+        prize.setId(newId);
         prizeList.add(prize);
     }
 
     public void removePrizeId(int id) {
-        prizeList.removeIf(prize -> prize.getId() == id); // Asegúrate de usar getId()
+        prizeList.removeIf(prize -> prize.getId() == id);
+        for (int i = 0; i < prizeList.size(); i++) {
+            prizeList.get(i).setId(i + 1); // Reasignar IDs basados en la posición
+        }
     }
 
     public List<Prize> getPrizeList() {
