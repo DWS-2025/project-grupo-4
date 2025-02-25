@@ -39,6 +39,13 @@ public class PrizeManager {
         return prizeList;
     }
 
+    public void updatePrize(Prize updatedPrize, int id) {
+        Prize prize = prizeList.get(id);
+        prize.setTitle(updatedPrize.getTitle());
+        prize.setDescription(updatedPrize.getDescription());
+        prize.setImage(updatedPrize.getImage());
+        prize.setPrice(updatedPrize.getPrice());
+    }
     public Prize getPrize(int id) {
         return prizeList.stream().filter(prize -> prize.getId() == id).findFirst().orElse(null);
     }

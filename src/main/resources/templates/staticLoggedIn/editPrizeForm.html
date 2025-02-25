@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Our Games</title>
+    <title>Crear Nuevo Juego</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/styles.css" rel="stylesheet" type="text/css" />
@@ -19,7 +19,7 @@
             <button role="button" class="golden-button" onclick="location.href='/'">
                 <span class="golden-text">INICIO</span>
             </button>
-            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+            <button role="button" class="golden-button" onclick="location.href='/games'">
                 <span class="golden-text">NUESTROS JUEGOS</span>
             </button>
             <button role="button" class="golden-button" onclick="location.href='/prizes'">
@@ -36,31 +36,41 @@
 
     <header>
         <div id="TitulosJuegos">
-            <h1>Nuestros juegos</h1>
-            <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots</p>
-            <img src="/images/luigiapuestas.jpg" alt="Luigi" width=681 height=511 id="Luigi"/>
+            <h1>Crear Nuevo Juego</h1>
+            <p>Completa el formulario para añadir un nuevo juego al casino.</p>
         </div>
     </header>
 
     <main>
-        <div id="grid-container">
-            <section class="game-section" th:each="game : ${games}">
-                <h2 th:text="${game.getTitle()}">Nombre del juego</h2>
-                <img th:src="${game.getImage()}" th:alt="${game.title}" width="190" height="190">
-                <p th:text="${game.getDescription()}">Descripción</p>
-                <form th:action="@{/game/{id}(id=${game.getId()})}" method="post">
-                    <button type="submit">Ver Juego</button>
-                </form>
-            </section>
+        <!-- Formulario para crear un nuevo juego -->
+        <div id="add-game-form">
+            <form th:action="@{/updatePrize/{id}(id=${prize.getId()})}" th:object="${prize}" method="post">
+                <div>
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" th:field="*{title}" required>
+                </div>
+                <div>
+                    <label for="description">Descripción:</label>
+                    <input type="text" id="description" th:field="*{description}" required>
+                </div>
+                <div>
+                    <label for="image">URL de la imagen:</label>
+                    <input type="text" id="image" th:field="*{image}">
+                </div>
+                <div>
+                    <label for="minAge">Precio del producto:</label>
+                    <input type="number" id="minAge" th:field="*{price}" required>
+                </div>
+                <div>
+                    <button type="submit">Guardar Cambios</button>
+                </div>
+            </form>
         </div>
-    </main>
     </main>
 
     <footer class="footer">
         <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
     </footer>
 </div>
-
-
 </body>
 </html>

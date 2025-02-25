@@ -51,6 +51,18 @@ public class prizeController {
         prizeManager.removePrizeId(id);
         return "redirect:/prizes";
     }
+    @GetMapping("/editPrize/{id}")
+    public String editPrize(Model model, @PathVariable int id) {
+        Prize editado = prizeManager.getPrize(id);
+        model.addAttribute("prize", editado);
+        return "staticLoggedIn/editPrizeForm";
+    }
+    @PostMapping("/updatePrize/{id}")
+    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id) {
+        prizeManager.updatePrize(updatedPrize,id);
+        return "redirect:/prizes";
+    }
+
 
 //    @PostMapping("/buyPrize/{id}")
 //    public String buyPrize(@PathVariable int id) {
