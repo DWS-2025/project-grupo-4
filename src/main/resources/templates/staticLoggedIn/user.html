@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+    <title>Perfil de Usuario</title>
+</head>
+<body>
+
+<div class="profile-container">
+    <h1>Perfil de Usuario</h1>
+    <div class="username">
+        <strong>Nombre de Usuario:</strong> <span th:text="${user.getUserName()}"></span>
+    </div>
+    <div class="money">
+        <strong>Dinero Actual:</strong> <span th:text="${user.getMoney()}"></span>
+    </div>
+    <div class="backpack">
+        <h2>Mochila:</h2>
+        <div id="grid-container">
+            <section class="game-section" th:each="item : ${inventario}">
+                <h2 th:text="${item.title}"></h2>
+                <p th:text="${item.description}"></p>
+                <img th:if="${item.image}" th:src="${item.image}" alt="Imagen del juego" class="game-image"/>
+            </section>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

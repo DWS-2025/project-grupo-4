@@ -33,6 +33,7 @@ public class sessionController {
         user.setUserName(loginUsername);
         user.setPassword(loginPassword);
         user.setMoney(5000);
+        user.setInventario(null);
         if ("admin".equals(loginUsername) && "admin".equals(loginPassword)) {
             user.setIsadmin(true);
         }
@@ -48,6 +49,8 @@ public class sessionController {
             user.setIsadmin(false);
             user.setUserName("");
             user.setPassword("");
+            user.setMoney(0);
+            user.setInventario(null);
             session.removeAttribute("user");
         }
 
