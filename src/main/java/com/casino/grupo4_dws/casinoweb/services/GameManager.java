@@ -24,7 +24,7 @@ GameManager {
 
     @PostConstruct
     private void startGames(){
-        Game TirarDado = new Game(1, "Dado", "Tira un dado de seis caras!", "", 16,0,6);
+        Game TirarDado = new Game(1, "Dado", "Tira un dado de seis caras!", "/images/albacete.jpg", 16,0,6);
         addGame(TirarDado);
     }
 
@@ -34,6 +34,9 @@ GameManager {
 
     public void removeGameId(int id){
         gameList.removeIf(g -> g.getId() == id);
+    }
+    public Game getGame(int id){
+        return gameList.stream().filter(g -> g.getId() == id).findFirst().orElse(null);
     }
 
     public List<Game> getGameList(){
