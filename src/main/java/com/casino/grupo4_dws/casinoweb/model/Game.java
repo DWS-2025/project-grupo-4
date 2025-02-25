@@ -11,6 +11,8 @@ public class Game {
     private int minInput;
     private int multiplier;
 
+    public Game() {}
+
     public Game(int id, String title, String description, String image, int chance, int minInput, int multiplier) {
         this.id = id;
         this.title = title;
@@ -47,6 +49,27 @@ public class Game {
 
     public int getMultiplier() {
         return multiplier;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+    public void setChance(int chance) {
+        this.chance = chance;
+    }
+    public void setMinInput(int minInput) {
+        this.minInput = minInput;
+    }
+    public void setMultiplier(int multiplier) {
+        this.multiplier = multiplier;
     }
 
 }
