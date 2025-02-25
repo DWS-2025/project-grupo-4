@@ -11,9 +11,6 @@ import java.util.List;
 @Service
 public class
 
-
-
-
 GameManager {
 
     private List <Game> gameList;

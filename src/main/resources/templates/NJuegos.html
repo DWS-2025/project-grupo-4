@@ -43,10 +43,14 @@
     </header>
 
     <main>
-        <div id="grid-container"></div>
-        <script src="/js/gameLoader.js"></script>
+        <div id="grid-container">
+            <section class="game-section" th:each="game : ${games}">
+                <h2 th:text="${game.title}"></h2>
+                <p th:text="${game.description}"></p>
+                <img th:if="${game.image}" th:src="${game.image}" alt="Imagen del juego" class="game-image"/>
+            </section>
+        </div>
     </main>
-
     <footer class="footer">
         <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
     </footer>
