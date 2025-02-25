@@ -48,9 +48,9 @@
                 <h2 th:text="${game.title}">Nombre del juego</h2>
                 <img th:src="${game.image}" th:alt="${game.title}" width="190" height="190">
                 <p th:text="${game.description}">Descripción</p>
-                <a th:href="@{/{gameTitle}(gameTitle=${game.title})}">
+                <a th:href="@{/game/{id}(id=${game.id})}">
                     <button role="button" class="golden-button">
-                        <span class="golden-text" th:text="${game.title}">Jugar</span>
+                        <span class="golden-text">PLAY NOW</span>
                     </button>
                 </a>
             </section>

@@ -56,9 +56,16 @@
                 <h2 th:text="${game.title}"></h2>
                 <p th:text="${game.description}"></p>
                 <img th:if="${game.image}" th:src="${game.image}" alt="Imagen del juego" class="game-image"/>
-                <form th:action="@{/delete/{id}(id=${game.id})}" method="post">
-                    <button type="submit">Eliminar Juego</button>
-                </form>
+                <div class="game-buttons">
+                    <a th:href="@{/game/{id}(id=${game.id})}">
+                        <button role="button" class="golden-button">
+                            <span class="golden-text">PLAY NOW</span>
+                        </button>
+                    </a>
+                    <form th:action="@{/delete/{id}(id=${game.id})}" method="post">
+                        <button type="submit" class="delete-button">Eliminar Juego</button>
+                    </form>
+                </div>
             </section>
         </div>
     </main>
