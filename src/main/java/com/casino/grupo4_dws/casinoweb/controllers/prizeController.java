@@ -8,11 +8,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/Prizes")
-public class PrizeController {
+public class prizeController {
 
     private final PrizeManager prizeManager;
 
-    public PrizeController(PrizeManager prizeManager) {
+    public prizeController(PrizeManager prizeManager) {
         this.prizeManager = prizeManager;
     }
 
