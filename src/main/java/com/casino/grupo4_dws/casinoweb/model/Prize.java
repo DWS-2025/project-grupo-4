@@ -5,7 +5,16 @@ public class Prize {
     private int price;
     private String description;
     private String Image;
+    private int id;
 
+
+    public Prize(String title, int price, String description, String Image, int id) {
+        this.title = title;
+        this.price = price;
+        this.description = description;
+        this.Image = Image;
+        this.id = id;
+    }
     public void setTitle(String title) {
         this.title = title;
     }
@@ -18,6 +27,7 @@ public class Prize {
     public void setImage(String image) {
         Image = image;
     }
+    public void setId(int id) {this.id = id;}
 
     public String GetTitle() {
         return title;
@@ -31,6 +41,7 @@ public class Prize {
     public int GetImage() {
         return Integer.parseInt(Image);
     }
+    public int GetId() {return id;}
 }
 
 

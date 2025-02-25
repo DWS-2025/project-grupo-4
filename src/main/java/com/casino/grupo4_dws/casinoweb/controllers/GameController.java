@@ -1,4 +1,4 @@
-package com.casino.grupo4_dws.casinoweb.controllers;
+package com.casino.grupo4_dws.casinoweb.Controllers;
 
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.services.GameManager;
