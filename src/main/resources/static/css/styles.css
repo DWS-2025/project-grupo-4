@@ -169,6 +169,154 @@ ul {
     inset 0 -2px 5px 1px #b17d10, inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
 }
 
+.grid2x2 {
+    min-height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+.grid2x2 > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(138, 31, 31, 0.85);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+.grid2x2 > div > div {
+    width: 100%;
+    aspect-ratio: 3/2;
+    overflow: hidden;
+    position: relative;
+}
+.grid2x2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.grid2x2 h2 {
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin: 15px 0;
+    font-size: 1.8rem;
+}
+.grid2x2 p {
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.box { margin: 20px; }
+
+#TitulosJuegos {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#TitulosJuegos h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+#TitulosJuegos p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+#TitulosJuegos img {
+    max-width: 100%;
+    height: auto;
+}
+
+#IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#IzquierdaJuegos h2, #CentroJuegos h2, #DerechaJuegos h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+#IzquierdaJuegos img, #CentroJuegos img, #DerechaJuegos img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+#IzquierdaJuegos p, #CentroJuegos p, #DerechaJuegos p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+#IzquierdaJuegos button, #CentroJuegos button, #DerechaJuegos button {
+    margin: 0 auto;
+}
+.grid-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.grid-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.grid-item {
+    flex: 1;
+    min-width: 0;
+}
+
+.card {
+    background: linear-gradient(145deg, #2a1f1d, #1a0f0d);
+    border: 2px solid #d4af37;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 2px solid #d4af37;
+}
+
+.card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card-title {
+    color: #d4af37;
+    font-size: 1.5rem;
+    margin: 0;
+    font-family: 'Casino', sans-serif;
+}
+
+.card-text {
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.5;
+    font-size: 1rem;
+}
 /* CONTENT */
 #content {
     display: flex;
