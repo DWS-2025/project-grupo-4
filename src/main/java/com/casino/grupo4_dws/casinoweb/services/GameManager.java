@@ -41,6 +41,7 @@ public class GameManager {
             gameList.get(i).setId(i + 1); // Reasignar IDs basados en la posición
         }
     }
+
     public Game getGame(int id){
         return gameList.stream().filter(g -> g.getId() == id).findFirst().orElse(null);
     }
