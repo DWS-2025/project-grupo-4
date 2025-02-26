@@ -13,7 +13,14 @@ public class User {
     private int money;
     private boolean isadmin;
     private List <Prize> inventario;
+    private List <Game> gamesLiked;
 
+    public List<Game> getGamesLiked() {
+        return gamesLiked;
+    }
+    public void setGamesLiked(List<Game> gamesLiked) {
+        this.gamesLiked = gamesLiked;
+    }
     public String getUserName() {
         return userName;
     }

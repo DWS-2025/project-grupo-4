@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import java.util.List;
 import java.util.Random;
 
 public class Game {
@@ -10,6 +11,7 @@ public class Game {
     private int chance;
     private int minInput;
     private int multiplier;
+    private List<User> usersLiked;
 
     public Game() {}
 
@@ -21,6 +23,12 @@ public class Game {
         this.chance = chance;
         this.minInput = minInput;
         this.multiplier = multiplier;
+    }
+    public List<User> getUsersLiked() {
+        return usersLiked;
+    }
+    public void setUsersLiked(List<User> usersLiked) {
+        this.usersLiked = usersLiked;
     }
 
     public int getId() {

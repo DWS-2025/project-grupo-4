@@ -3,6 +3,7 @@ package com.casino.grupo4_dws.casinoweb.services;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;

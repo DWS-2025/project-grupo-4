@@ -1,84 +1,5 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<style>
-    .template {
-        /* ------------------------------------------------------------ */
-        /* fill */
-        --fill: #fd4040;
-        --fill-hover: hsl(0, 61%, 48%);
-        --fill-active: hsl(0, 50%, 27%);
-        /* txt */
-        --txt: #eee;
-        /*-------------------------*/
-        --br: 0.325rem;
-        --gap: 0.275rem;
-        /* ---------------------------------------------------------- */
-        display: flex;
-        padding-bottom: 16px;
-        padding-top: 16px;
-        margin: 0;
-        box-sizing: border-box;
-        font-size: 0.975rem;
-        color: var(--txt);
-    }
-    /* button */
-    .button {
-        display: inline-block;
-        list-style-type: none;
-        list-style: none;
-        appearance: none;
-        outline: 0;
-        border: 0;
-        cursor: pointer;
-        text-decoration: none;
-        font-size: inherit;
-        color: inherit;
-        white-space: nowrap;
-        padding: calc(var(--gap) * 3) calc(var(--gap) * 5);
-        text-align: left;
-        background-color: var(--fill);
-        border-radius: var(--br);
-    }
-    .button:hover {
-        background-color: var(--fill-hover);
-    }
-    .button:focus,
-    .button:active,
-    .button.active {
-        background-color: var(--fill-active);
-    }
-    /* popup */
-    .popup {
-        position: relative;
-    }
-    .popup-header {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        gap: calc(var(--gap) * 3);
-    }
-    .popup-main {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        opacity: 0;
-        margin-top: var(--gap);
-        border-radius: var(--br);
-        padding: var(--gap);
-        background-color: hsl(0, 0%, 10%);
-        box-shadow: hsl(0, 0%, 12%) 0px 0px 0px 1px;
-        transition: 0.4s;
-    }
-    .popup:focus .popup-main {
-        margin-top: 1rem;
-        opacity: 1;
-    }
-    .list-box {
-        display: flex;
-        flex-direction: column;
-    }
-</style>
 <head>
     <title>Online Casino</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -86,6 +7,86 @@
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
+<div class="transparent-container">
+    <div class="template">
+        <div
+                tabindex="0"
+                class="popup button"
+                style="padding:0 0.225rem  0; border-top-right-radius: 1.2rem;
+    border-bottom-right-radius: 1.2rem;"
+        >
+            <div class="popup-header">
+                <p
+                        style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
+                        th:text="${user.getUserName()}"
+                >
+                    User
+                </p>
+
+                <svg height="32" width="32" viewBox="0 0 1024 1024" class="icon">
+                    <path
+                            fill="#FFCE8B"
+                            d="M1021.103385 510.551692A510.551692 510.551692 0 1 1 510.551692 0a510.551692 510.551692 0 0 1 510.551693 510.551692"
+                    ></path>
+                    <path
+                            fill="#644646"
+                            d="M809.99026 493.192935v315.26567H494.979866a317.052601 317.052601 0 0 1-66.626996-7.147724V493.192935z"
+                    ></path>
+                    <path
+                            d="M494.979866 808.458605h-66.626996v-7.147724a317.052601 317.052601 0 0 0 66.626996 7.147724"
+                    ></path>
+                    <path
+                            fill="#644646"
+                            d="M809.99026 493.192935H428.35287v308.117946A315.010394 315.010394 0 0 1 178.693092 493.192935a310.670705 310.670705 0 0 1 21.953723-115.639958A314.755118 314.755118 0 0 1 494.979866 178.693092a308.373222 308.373222 0 0 1 82.96465 11.232138 313.989291 313.989291 0 0 1 232.045744 304.033532"
+                    ></path>
+                    <path
+                            fill="#C7F4F1"
+                            d="M758.935091 959.581906a510.551692 510.551692 0 0 1-512.338624-9.18993 268.55019 268.55019 0 0 1 512.338624 9.18993"
+                    ></path>
+                    <path
+                            fill="#F7BEA9"
+                            d="M581.263102 727.02561v86.793788a68.924478 68.924478 0 0 1-137.593681 0v-91.133477a184.309161 184.309161 0 0 0 74.285271 15.571826 178.693092 178.693092 0 0 0 63.30841-11.232137"
+                    ></path>
+                    <path
+                            fill="#FBD1BB"
+                            d="M700.987474 390.572045v163.121266a195.796574 195.796574 0 0 1-119.724372 183.798609 172.566472 172.566472 0 0 1-137.593681-4.850241 197.072953 197.072953 0 0 1-108.747511-178.693093v-163.376541a189.92523 189.92523 0 0 1 183.032782-195.796574 176.39561 176.39561 0 0 1 129.424854 57.437065 201.667919 201.667919 0 0 1 53.607928 138.359509"
+                    ></path>
+                    <path
+                            fill="#FBD1BB"
+                            d="M370.405253 553.182759a43.396894 43.396894 0 1 1-43.396894-41.099411 42.37579 42.37579 0 0 1 43.396894 41.099411"
+                    ></path>
+                    <path
+                            fill="#F49F83"
+                            d="M605.769583 590.963584v2.042207a70.966685 70.966685 0 1 1-141.93337 0v-2.042207"
+                    ></path>
+                    <path
+                            fill="#030303"
+                            d="M499.064279 517.699416a18.890413 18.890413 0 1 1-18.890412-18.890412 18.890413 18.890413 0 0 1 18.890412 18.890412M619.043927 517.699416a18.890413 18.890413 0 1 1-18.890412-18.890412 18.890413 18.890413 0 0 1 18.890412 18.890412"
+                    ></path>
+                    <path
+                            fill="#644646"
+                            d="M796.46064 401.038354a224.387469 224.387469 0 0 1-282.590362-28.590894 224.132193 224.132193 0 0 1-312.202359 5.105517A314.755118 314.755118 0 0 1 494.979866 178.693092a308.373222 308.373222 0 0 1 82.96465 11.232138 316.031498 316.031498 0 0 1 218.516124 211.878952"
+                    ></path>
+                </svg>
+            </div>
+
+            <div class="popup-main">
+                <ul class="list-box">
+                    <li class="button item" onclick="location.href='/user'">Mi zona</li>
+                    <li class="button item">
+                        Saldo: <span th:text="${user.getMoney()}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <button class="Btn" onclick="location.href='/logout'">
+
+        <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+
+        <div class="text">Logout</div>
+    </button>
+</div>
 <div class="gold-text-container">
     <div class="gold-text">
         <h1>Casino La Miel</h1>
@@ -94,139 +95,68 @@
 <div id="container">
     <nav class="navbar">
         <ul class="menu">
-            <button role="button" class="golden-button" onclick="location.href='/'">
-                <span class="golden-text">INICIO</span>
-            </button>
-            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
-                <span class="golden-text">NUESTROS JUEGOS</span>
-            </button>
-            <button role="button" class="golden-button" onclick="location.href='/prizes'">
-                <span class="golden-text">RECOMPENSAS</span>
-            </button>
-            <div class="template">
-                <div
-                        tabindex="0"
-                        class="popup button"
-                        style="padding:0 0.225rem  0; border-top-right-radius: 1.2rem;
-    border-bottom-right-radius: 1.2rem;"
-                >
-                    <div class="popup-header">
-                        <p
-                                style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
-                                th:text="${user.getUserName()}"
-                        >
-                            User
-                        </p>
-
-                        <svg height="32" width="32" viewBox="0 0 1024 1024" class="icon">
-                            <path
-                                    fill="#FFCE8B"
-                                    d="M1021.103385 510.551692A510.551692 510.551692 0 1 1 510.551692 0a510.551692 510.551692 0 0 1 510.551693 510.551692"
-                            ></path>
-                            <path
-                                    fill="#644646"
-                                    d="M809.99026 493.192935v315.26567H494.979866a317.052601 317.052601 0 0 1-66.626996-7.147724V493.192935z"
-                            ></path>
-                            <path
-                                    d="M494.979866 808.458605h-66.626996v-7.147724a317.052601 317.052601 0 0 0 66.626996 7.147724"
-                            ></path>
-                            <path
-                                    fill="#644646"
-                                    d="M809.99026 493.192935H428.35287v308.117946A315.010394 315.010394 0 0 1 178.693092 493.192935a310.670705 310.670705 0 0 1 21.953723-115.639958A314.755118 314.755118 0 0 1 494.979866 178.693092a308.373222 308.373222 0 0 1 82.96465 11.232138 313.989291 313.989291 0 0 1 232.045744 304.033532"
-                            ></path>
-                            <path
-                                    fill="#C7F4F1"
-                                    d="M758.935091 959.581906a510.551692 510.551692 0 0 1-512.338624-9.18993 268.55019 268.55019 0 0 1 512.338624 9.18993"
-                            ></path>
-                            <path
-                                    fill="#F7BEA9"
-                                    d="M581.263102 727.02561v86.793788a68.924478 68.924478 0 0 1-137.593681 0v-91.133477a184.309161 184.309161 0 0 0 74.285271 15.571826 178.693092 178.693092 0 0 0 63.30841-11.232137"
-                            ></path>
-                            <path
-                                    fill="#FBD1BB"
-                                    d="M700.987474 390.572045v163.121266a195.796574 195.796574 0 0 1-119.724372 183.798609 172.566472 172.566472 0 0 1-137.593681-4.850241 197.072953 197.072953 0 0 1-108.747511-178.693093v-163.376541a189.92523 189.92523 0 0 1 183.032782-195.796574 176.39561 176.39561 0 0 1 129.424854 57.437065 201.667919 201.667919 0 0 1 53.607928 138.359509"
-                            ></path>
-                            <path
-                                    fill="#FBD1BB"
-                                    d="M370.405253 553.182759a43.396894 43.396894 0 1 1-43.396894-41.099411 42.37579 42.37579 0 0 1 43.396894 41.099411"
-                            ></path>
-                            <path
-                                    fill="#F49F83"
-                                    d="M605.769583 590.963584v2.042207a70.966685 70.966685 0 1 1-141.93337 0v-2.042207"
-                            ></path>
-                            <path
-                                    fill="#030303"
-                                    d="M499.064279 517.699416a18.890413 18.890413 0 1 1-18.890412-18.890412 18.890413 18.890413 0 0 1 18.890412 18.890412M619.043927 517.699416a18.890413 18.890413 0 1 1-18.890412-18.890412 18.890413 18.890413 0 0 1 18.890412 18.890412"
-                            ></path>
-                            <path
-                                    fill="#644646"
-                                    d="M796.46064 401.038354a224.387469 224.387469 0 0 1-282.590362-28.590894 224.132193 224.132193 0 0 1-312.202359 5.105517A314.755118 314.755118 0 0 1 494.979866 178.693092a308.373222 308.373222 0 0 1 82.96465 11.232138 316.031498 316.031498 0 0 1 218.516124 211.878952"
-                            ></path>
-                        </svg>
-                    </div>
-
-                    <div class="popup-main">
-                        <ul class="list-box">
-                            <li class="button item" onclick="location.href='/user'">Mi zona</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <button class="Btn" onclick="location.href='/logout'">
-
-                <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
-
-                <div class="text">Logout</div>
-            </button>
+            <li>
+                <button role="button" class="golden-button" onclick="location.href='/'">
+                    <span class="golden-text">INICIO</span>
+                </button>
+            </li>
+            <li>
+                <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+                    <span class="golden-text">NUESTROS JUEGOS</span>
+                </button>
+            </li>
+            <li>
+                <button role="button" class="golden-button" onclick="location.href='/prizes'">
+                    <span class="golden-text">RECOMPENSAS</span>
+                </button>
+            </li>
         </ul>
     </nav>
-    <center>
+    <div style="text-align: center;">
         <img src="/images/borje_saul.jpg" alt="Logo" width="300" height="270" id="logo"/>
         <img src="/images/vino.jpg" alt="Slogan" width="300" height="270" id="slogan"/>
         <h1>Bienvenido <span th:text="${user.getUserName()}">Usuario</span>, ¿preparado para apostar?</h1>
-
-    </center>
-</div>
-<center>
-    <div id="content">
-        <div id="leftPan">
-            <div id="welcome">
-                <h2></h2>
-                <img src="/images/crupier.jpg" width="300" height="255" alt="" />
-                <p><span class="headline">El casino online ya está aquí!</span><br />
-                    Ahora puedes satisfacer tus ganas de más desde la comodidad de tu sofá! Apuesta el dinero de la pensión de tu madre ya!</p>
-                <div class="clear"></div>
-            </div>
-            <div id="popular">
-                <h2></h2>
-                <div class="popularItem" id="l1"> <img src="/images/neymar.jpg" width="300" height="255" alt="" />
-                    <p><span class="headline">Tus ídolos también juegan! </span><br />
-                        Puede que neymar nunca ganase un mundial, pero si que es un claro GANADOR cuando se trata de la tricolor. </p>
-                    <div class="clear"></div>
-                </div>
-                <div class="popularItem" id="r1"> <img src="/images/meci%20y%20cristiano.jpg" width="300" height="255" alt="" />
-                    <p><span class="headline">Juega de forma justa, </span><br />
-                        Mepsy y cristiano ahora se dejan el dinero en los brillantes colores de las tragaperras. ¿A qué esperas? </p>
-                    <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
-        <div id="rightPan">
-            <div id="how">
-                <h2></h2>
-                <img src="/images/laporta.jpg" width="300" height="255" alt="" />
-                <p><span class="headline">Esencialmente, siempre tienes un 50% de probabilidades de ganar; o ganas o pierdes </span><br />
-                    <br />
-                    La vida solo es una, metele 5 eurillos que mañana tampoco te ibas a acordar (o si!)</p>
-            </div>
-        </div>
-        <div class="clear" id="end"></div>
     </div>
-</center>
+</div>
+<div id="content">
+    <div id="leftPan">
+        <div id="welcome">
+            <h2></h2>
+            <img src="/images/crupier.jpg" width="300" height="255" alt="" />
+            <p><span class="headline">El casino online ya está aquí!</span><br />
+                Ahora puedes satisfacer tus ganas de más desde la comodidad de tu sofá! Apuesta el dinero de la pensión de tu madre ya!</p>
+            <div class="clear"></div>
+        </div>
+        <div id="popular">
+            <h2></h2>
+            <div class="popularItem" id="l1">
+                <img src="/images/neymar.jpg" width="300" height="255" alt="" />
+                <p><span class="headline">Tus ídolos también juegan! </span><br />
+                    Puede que neymar nunca ganase un mundial, pero si que es un claro GANADOR cuando se trata de la tricolor. </p>
+                <div class="clear"></div>
+            </div>
+            <div class="popularItem" id="r1">
+                <img src="/images/meci%20y%20cristiano.jpg" width="300" height="255" alt="" />
+                <p><span class="headline">Juega de forma justa, </span><br />
+                    Mepsy y cristiano ahora se dejan el dinero en los brillantes colores de las tragaperras. ¿A qué esperas? </p>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div id="rightPan">
+        <div id="how">
+            <h2></h2>
+            <img src="/images/laporta.jpg" width="300" height="255" alt="" />
+            <p><span class="headline">Esencialmente, siempre tienes un 50% de probabilidades de ganar; o ganas o pierdes </span><br />
+                <br />
+                La vida solo es una, metele 5 eurillos que mañana tampoco te ibas a acordar (o si!)</p>
+        </div>
+    </div>
+    <div class="clear" id="end"></div>
+</div>
 <footer class="footer">
     <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
 </footer>
-</div>
 </body>
 </html>
