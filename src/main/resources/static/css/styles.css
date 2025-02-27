@@ -717,7 +717,7 @@ ul {
     justify-content: center;
     align-items: center;
     text-align: center; /* Por si acaso */
-    width: 100%;
+    width: auto;
 }
 
 .gold-text:after {

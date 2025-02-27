@@ -10,9 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class prizeController {
@@ -45,7 +53,17 @@ public class prizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addGame(@ModelAttribute("newPrize") Prize newPrize) {
+    public String addGame(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile)throws IOException {
+        String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
+        Path uploadPath = Paths.get("src/main/resources/static/images");
+        if(!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        try (InputStream inputStream = imageFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            newPrize.setImage("/images/" + fileName);
+        }
         prizeManager.addPrize(newPrize);
         return "redirect:/prizes";
     }
@@ -64,7 +82,17 @@ public class prizeController {
     }
 
     @PostMapping("/updatePrize/{id}")
-    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id) {
+    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id,@RequestParam("imageFile") MultipartFile imageFile)throws IOException {
+        String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
+        Path uploadPath = Paths.get("src/main/resources/static/images");
+        if(!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        try (InputStream inputStream = imageFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            updatedPrize.setImage("/images/" + fileName);
+        }
         prizeManager.updatePrize(updatedPrize, id);
         return "redirect:/prizes";
     }

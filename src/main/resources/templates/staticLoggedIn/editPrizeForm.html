@@ -44,7 +44,7 @@
     <main>
         <!-- Formulario para crear un nuevo juego -->
         <div id="add-game-form">
-            <form th:action="@{/updatePrize/{id}(id=${prize.getId()})}" th:object="${prize}" method="post">
+            <form th:action="@{/updatePrize/{id}(id=${prize.getId()})}" th:object="${prize}" method="post" enctype="multipart/form-data">
                 <div>
                     <label for="name">Nombre:</label>
                     <input type="text" id="name" th:field="*{title}" required>
@@ -53,9 +53,10 @@
                     <label for="description">Descripción:</label>
                     <input type="text" id="description" th:field="*{description}" required>
                 </div>
-                <div>
-                    <label for="image">URL de la imagen:</label>
-                    <input type="text" id="image" th:field="*{image}">
+                <div class="mb-3">
+                    <label for="imageFile">Imagen:</label>
+                    <img th:src="${prize.getImage()}" height="35%" width="35%">
+                    <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" required>
                 </div>
                 <div>
                     <label for="minAge">Precio del producto:</label>
