@@ -83,6 +83,10 @@ public class prizeController {
 
     @PostMapping("/updatePrize/{id}")
     public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id,@RequestParam("imageFile") MultipartFile imageFile)throws IOException {
+        if(imageFile.isEmpty()) {
+            prizeManager.updatePrizeWOImage(updatedPrize, id);
+            return "redirect:/prizes";
+        }
         String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
         Path uploadPath = Paths.get("src/main/resources/static/images");
         if(!Files.exists(uploadPath)) {
@@ -93,7 +97,7 @@ public class prizeController {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             updatedPrize.setImage("/images/" + fileName);
         }
-        prizeManager.updatePrize(updatedPrize, id);
+        prizeManager.updatePrizeNImage(updatedPrize, id);
         return "redirect:/prizes";
     }
 
