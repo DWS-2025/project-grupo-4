@@ -18,7 +18,7 @@ public class PrizeManager {
 
     @PostConstruct
     private void startPrizes() {
-        Prize DLore = new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN", "/images/albacete.jpg", 100);
+        Prize DLore = new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN", "/images/awp_lore.png", 100);
         addPrize(DLore);
     }
 

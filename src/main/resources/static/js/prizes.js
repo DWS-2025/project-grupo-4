@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 prizes.forEach(prize => {
                     // Crear un <section> para cada premio
                     const prizeSection = document.createElement('section');
-                    prizeSection.classList.add('prize-section');
+                    prizeSection.classList.add('game-section');
 
                     // Crear el título <h2> con el nombre del juego
                     const prizeTitle = document.createElement('h2');

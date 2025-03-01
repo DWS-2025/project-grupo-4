@@ -74,6 +74,11 @@ public class IndexController {
         model.addAttribute("game", game);
         return "game-details";
     }
+    @GetMapping("/favourites")
+    public String goFavourites() {
+        return "favourites";
+    }
+
 }
 
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jugar al Juego</title>
+  <script>
+    document.addEventListener("DOMContentLoaded", async function() {
+      const params = new URLSearchParams(window.location.search);
+      const gameID = params.get("gameID");
+
+      try {
+        const response = await fetch(`/game/play/${gameID}`);
+        const gameData = await response.json();
+
+        document.getElementById("game-title").textContent = gameData.title;
+        document.getElementById("game-description").textContent = gameData.description;
+        document.getElementById("game-image").src = gameData.image;
+      } catch (error) {
+        console.error("Error cargando datos del juego:", error);
+      }
+    });
+
+    async function playGame() {
+      const betAmount = parseInt(document.getElementById("bet-amount").value, 10);
+      if (isNaN(betAmount) || betAmount <= 0) {
+        alert("Ingrese una cantidad válida para apostar.");
+        return;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const gameID = params.get("gameID");
+
+      try {
+        const formData = new URLSearchParams();
+        formData.append("gameId", gameID);
+        formData.append("amount", betAmount);
+
+        const response = await fetch("/bet", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: formData.toString()
+        });
+
+        const result = await response.text();
+        document.getElementById("result").textContent = result;
+      } catch (error) {
+        console.error("Error al realizar la apuesta:", error);
+      }
+    }
+  </script>
+</head>
+<body>
+<h1 id="game-title">Cargando juego...</h1>
+<p id="game-description"></p>
+<img id="game-image" src="" alt="Imagen del juego" width="300">
+<br>
+
+<label for="bet-amount">Cantidad a apostar:</label>
+<input type="number" id="bet-amount" min="1">
+<button onclick="playGame()">Jugar</button>
+
+<p id="result"></p>
+</body>
+</html>

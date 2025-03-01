@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Juegos Favoritos</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+</head>
+<body>
+<h1>Mis Juegos Favoritos</h1>
+<div id="container">
+  <nav class="navbar">
+    <ul class="menu">
+      <li>
+        <button role="button" class="golden-button" onclick="location.href='/'">
+          <span class="golden-text">INICIO</span>
+        </button>
+      </li>
+      <li>
+        <button role="button" class="golden-button" onclick="location.href='/session/NJuegos'">
+          <span class="golden-text">NUESTROS JUEGOS</span>
+        </button>
+      </li>
+      <li>
+        <button role="button" class="golden-button" onclick="location.href='/prizes'">
+          <span class="golden-text">RECOMPENSAS</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div>
+  <ul>
+    <th:block th:each="game : ${favoriteGames}">
+      <li>
+        <h3 th:text="${game.title}"></h3>
+        <p th:text="${game.description}"></p>
+        <form th:action="@{/user/favorites/remove}" method="post">
+          <input type="hidden" th:name="gameId" th:value="${game.id}" />
+          <button type="submit">Eliminar de favoritos</button>
+        </form>
+      </li>
+    </th:block>
+  </ul>
+</div>
+</body>
+</html>
+>
