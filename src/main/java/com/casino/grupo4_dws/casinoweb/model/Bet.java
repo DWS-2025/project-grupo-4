@@ -3,10 +3,10 @@ package com.casino.grupo4_dws.casinoweb.model;
 public class Bet {
     private int amount;
     private int revenue = 0;
-    private String user;
     private int date;
+    private User user;
+    private Game game;
     private boolean status;
-    private int gameID;
 
 
     public int GetAmount() {
@@ -21,9 +21,9 @@ public class Bet {
 
     public void setRevenue(int revenue) {this.revenue = revenue;}
 
-    public String GetUser() {return user;}
+    public User GetUser() {return user;}
 
-    public void setUser(String user) {this.user = user;}
+    public void setUser(User activeUser) {this.user = activeUser;}
 
     public int GetDate() {return date;}
 
@@ -33,8 +33,8 @@ public class Bet {
 
     public void setStatus(boolean status) {this.status = status;}
 
-    public int GetGameID() {return gameID;}
+    public Game GetGame() {return game;}
 
-    public void setGameID(int gameID) {this.gameID = gameID;}
+    public void setGame(Game gamePlayed) {this.game = gamePlayed;}
 
 }

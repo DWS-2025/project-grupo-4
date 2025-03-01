@@ -113,47 +113,34 @@
         </ul>
     </nav>
     <div style="text-align: center;">
-        <img src="/images/borje_saul.jpg" alt="Logo" width="300" height="270" id="logo"/>
-        <img src="/images/vino.jpg" alt="Slogan" width="300" height="270" id="slogan"/>
         <h1>Bienvenido <span th:text="${user.getUserName()}">Usuario</span>, ¿preparado para apostar?</h1>
     </div>
 </div>
-<div id="content">
-    <div id="leftPan">
-        <div id="welcome">
-            <h2></h2>
-            <img src="/images/crupier.jpg" width="300" height="255" alt="" />
-            <p><span class="headline">El casino online ya está aquí!</span><br />
-                Ahora puedes satisfacer tus ganas de más desde la comodidad de tu sofá! Apuesta el dinero de la pensión de tu madre ya!</p>
-            <div class="clear"></div>
-        </div>
-        <div id="popular">
-            <h2></h2>
-            <div class="popularItem" id="l1">
-                <img src="/images/neymar.jpg" width="300" height="255" alt="" />
-                <p><span class="headline">Tus ídolos también juegan! </span><br />
-                    Puede que neymar nunca ganase un mundial, pero si que es un claro GANADOR cuando se trata de la tricolor. </p>
-                <div class="clear"></div>
-            </div>
-            <div class="popularItem" id="r1">
-                <img src="/images/meci%20y%20cristiano.jpg" width="300" height="255" alt="" />
-                <p><span class="headline">Juega de forma justa, </span><br />
-                    Mepsy y cristiano ahora se dejan el dinero en los brillantes colores de las tragaperras. ¿A qué esperas? </p>
-                <div class="clear"></div>
-            </div>
-            <div class="clear"></div>
+<div class="grid2x2">
+    <div class="box"><img src="/images/crupier.jpg" alt="Crupier" class="card-image" />
+        <div class="card-content">
+            <h2 class="card-title">El casino online está aquí!</h2>
+            <p class="card-text">Satisface tus ganas de más desde la comodidad de tu sofá! Apuesta el dinero de la pensión de tu madre ya!</p>
         </div>
     </div>
-    <div id="rightPan">
-        <div id="how">
-            <h2></h2>
-            <img src="/images/laporta.jpg" width="300" height="255" alt="" />
-            <p><span class="headline">Esencialmente, siempre tienes un 50% de probabilidades de ganar; o ganas o pierdes </span><br />
-                <br />
-                La vida solo es una, metele 5 eurillos que mañana tampoco te ibas a acordar (o si!)</p>
+    <div class="box"><img src="/images/neymar.jpg" alt="Neymar" class="card-image" />
+        <div class="card-content">
+            <h2 class="card-title">Tus ídolos también juegan!</h2>
+            <p class="card-text">Puede que neymar nunca ganase un mundial, pero si que es un claro GANADOR cuando se trata de la tricolor.</p>
         </div>
     </div>
-    <div class="clear" id="end"></div>
+    <div class="box"><img src="/images/meci%20y%20cristiano.jpg" alt="Messi y Cristiano" class="card-image" />
+        <div class="card-content">
+            <h2 class="card-title">Juega de forma justa</h2>
+            <p class="card-text">Mepsy y cristiano ahora se dejan el dinero en los brillantes colores de las tragaperras. ¿A qué esperas?</p>
+        </div>
+    </div>
+    <div class="box"><img src="/images/laporta.jpg" alt="Laporta" class="card-image" />
+        <div class="card-content">
+            <h2 class="card-title">Eres un perdedor?</h2>
+            <p class="card-text">En la vida solo hay ganadores o perdedores. La vida solo es una, metele 5 eurillos que mañana tampoco te ibas a acordar (o si!)</p>
+        </div>
+    </div>
 </div>
 <footer class="footer">
     <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>

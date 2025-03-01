@@ -4,7 +4,6 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.model.Game;
-import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.services.GameManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Controller
-public class indexController {
+public class IndexController {
     @Autowired
     private User user;
     private final GameManager Services;
 
     @Autowired
-    public indexController(GameManager services) {
+    public IndexController(GameManager services) {
         Services = services;
     }
 

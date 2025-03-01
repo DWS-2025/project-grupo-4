@@ -14,7 +14,14 @@ public class User {
     private boolean isadmin;
     private List <Prize> inventario;
     private List <Game> gamesLiked;
+    private List <Bet> betHistory;
 
+    public List<Bet> getBetHistory() {
+        return betHistory;
+    }
+    public void setBetHistory(List<Bet> betHistory) {
+        this.betHistory = betHistory;
+    }
     public List<Game> getGamesLiked() {
         return gamesLiked;
     }

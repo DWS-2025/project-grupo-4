@@ -1,9 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
-import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
-import com.casino.grupo4_dws.casinoweb.services.GameManager;
 import com.casino.grupo4_dws.casinoweb.services.PrizeManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +21,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-public class prizeController {
+public class PrizeController {
     @Autowired
     private final PrizeManager prizeManager;
 
-    public prizeController(PrizeManager prizeManager) {
+    public PrizeController(PrizeManager prizeManager) {
         this.prizeManager = prizeManager;
     }
 
@@ -53,10 +51,10 @@ public class prizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addGame(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile)throws IOException {
+    public String addGame(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
         String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
         Path uploadPath = Paths.get("src/main/resources/static/images");
-        if(!Files.exists(uploadPath)) {
+        if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
         try (InputStream inputStream = imageFile.getInputStream()) {
@@ -82,14 +80,14 @@ public class prizeController {
     }
 
     @PostMapping("/updatePrize/{id}")
-    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id,@RequestParam("imageFile") MultipartFile imageFile)throws IOException {
-        if(imageFile.isEmpty()) {
+    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+        if (imageFile.isEmpty()) {
             prizeManager.updatePrizeWOImage(updatedPrize, id);
             return "redirect:/prizes";
         }
         String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
         Path uploadPath = Paths.get("src/main/resources/static/images");
-        if(!Files.exists(uploadPath)) {
+        if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
         try (InputStream inputStream = imageFile.getInputStream()) {
@@ -116,7 +114,7 @@ public class prizeController {
         }
         user.setMoney(user.getMoney() - prizeBought.getPrice());
 
-        if(user.getInventario() == null){
+        if (user.getInventario() == null) {
             user.setInventario(new ArrayList<>());
         }
         user.getInventario().add(prizeBought);
