@@ -62,8 +62,8 @@
     <header>
         <div id="TitulosJuegos">
             <h1>Nuestros Juegos</h1>
-            <h2>Disfruta <span th:text="${user.getUserName()}">Usuario</span> </h2>
-            <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots</p>
+            <h2>Listo para sentirte como un ganador, <span th:text="${user.getUserName()}">Usuario</span> ? </h2>
+            <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots, entre otros muchos!</p>
             <img src="/images/luigiapuestas.jpg" alt="Luigi" width=681 height=511 id="Luigi"/>
         </div>
     </header>
@@ -75,14 +75,14 @@
                 <p th:text="${game.getDescription()}"></p>
                 <img th:if="${game.getImage()}" th:src="${game.getImage()}" alt="Imagen del juego" class="game-image"/>
                 <form th:action="@{/game/{id}(id=${game.getId()})}" method="get">
-                    <button type="submit">Ver Juego</button>
+                    <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
                 <form th:action="@{/delete/{id}(id=${game.getId()})}" method="post">
-                    <button type="submit">Eliminar Juego</button>
+                    <button class="golden-button" type="submit">Eliminar Juego</button>
                 </form>
                 <form th:action="@{/user/favourites/add/{id}(id=${game.getId()})}" method="post">
                     <input type="hidden" name="gameId" th:value="${game.id}">
-                    <button type="submit">Añadir a favoritos</button>
+                    <button class="golden-button" type="submit">Añadir a favoritos</button>
                 </form>
             </section>
         </div>
