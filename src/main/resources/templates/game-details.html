@@ -138,6 +138,14 @@
                             <span class="bet-label">Multiplicador:</span>
                             <span class="bet-value" th:text="'x'+${game.multiplier}">0</span>
                         </div>
+                        <form th:if="${user != null and user.getUserName() != null and !#lists.contains(user.getGamesLiked(),game)}" th:action="@{/user/favourites/add/{id}(id=${game.getId()})}" method="post">
+                            <input type="hidden" name="id" th:value="${game.id}">
+                            <button type="submit">Añadir a favoritos</button>
+                        </form>
+                        <form th:if="${user != null and user.getUserName() != null and #lists.contains(user.getGamesLiked(),game)}" th:action="@{/user/favourites/remove/{id}(id=${game.getId()})}" method="post">
+                            <input type="hidden" name="gameId" th:value="${game.id}">
+                            <button type="submit">Eliminar juego de favoritos</button>
+                        </form>
                     </div>
                 </div>
             </div>

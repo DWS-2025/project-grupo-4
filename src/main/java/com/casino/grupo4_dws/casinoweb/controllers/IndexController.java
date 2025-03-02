@@ -44,41 +44,6 @@ public class IndexController {
         return "staticLoggedIn/user";
     }
 
-    @GetMapping("/crash")
-    public String goCrash() {
-        return "crash"; // Página crash.html
-    }
-
-    @GetMapping("/rule")
-    public String goRule() {
-        return "rule"; // Página rule.html
-    }
-
-    @GetMapping("/slots")
-    public String goSlots() {
-        return "slots"; // Página slots.html
-    }
-
-    @GetMapping("/game/{id}")
-    public String showGameDetails(@PathVariable int id, Model model, HttpSession session) {
-        Game game = Services.getGame(id);
-        if (game == null) {
-            return "redirect:/NJuegos";
-        }
-
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("user", user);
-        }
-
-        model.addAttribute("game", game);
-        return "game-details";
-    }
-    @GetMapping("/favourites")
-    public String goFavourites() {
-        return "favourites";
-    }
-
 }
 
 
