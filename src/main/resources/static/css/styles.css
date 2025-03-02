@@ -189,13 +189,13 @@ ul {
 }
 .grid2x2 > div > div {
     width: 100%;
-    aspect-ratio: 3/2;
+    aspect-ratio: 6/2;
     overflow: hidden;
     position: relative;
 }
 .grid2x2 img {
-    width: 100%;
-    height: 100%;
+    width: 65%;
+    height: 65%;
     object-fit: cover;
     border-radius: 8px;
 }
