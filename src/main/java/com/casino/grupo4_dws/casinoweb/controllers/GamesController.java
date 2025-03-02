@@ -47,6 +47,35 @@ private User user;
         return "staticLoggedIn/loggedGames";
     }
 
+    @GetMapping("/NJuegos/mostLiked")
+    public String mostLiked(Model model, HttpSession session) {
+        List<Game> games = gameManager.getGameList();
+
+        games.sort((g1,g2) ->{
+            int size1 = g1.getUsersLiked() != null ? g1.getUsersLiked().size() : 0;
+            int size2 = g2.getUsersLiked() != null ? g2.getUsersLiked().size() : 0;
+            return Integer.compare(size2, size1);
+        });
+        model.addAttribute("games", games);
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
+        return "GamesMostLiked";
+    }
+    @GetMapping("/NJuegos/myLiked")
+    public String myLiked(Model model, HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
+        if(user.getGamesLiked() == null) {
+            user.setGamesLiked(new ArrayList<>());
+        }
+        List <Game> games = user.getGamesLiked();
+        model.addAttribute("games", games);
+        return "GamesMyLiked";
+    }
+
     @GetMapping("/add")
     public String addGameForm(Model model) {
         model.addAttribute("newGame", new Game());
@@ -87,15 +116,15 @@ private User user;
         return "redirect:/NJuegos"; // Redirigir a la lista de juegos
     }
 
-    @PostMapping("gameFav/{id}")
-    public void addGameFav(@PathVariable int id, Model model, HttpSession session) {
+    @PostMapping("/user/favourites/add/{id}")
+    public String addGameFav(@PathVariable int id, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            return;
+            return "redirect:/login";
         }
         Game game = gameManager.getGame(id);
         if (game == null) {
-            return;
+            return "redirect:/NJuegos";
         }
         if(game.getUsersLiked() == null){
             game.setUsersLiked(new ArrayList<>());
@@ -103,6 +132,50 @@ private User user;
         if(user.getGamesLiked() == null){
             user.setGamesLiked(new ArrayList<>());
         }
-        
+        user.getGamesLiked().add(game);
+        game.getUsersLiked().add(user);
+
+
+        model.addAttribute("user", user);
+        return "redirect:/game/" + id;
+    }
+    @PostMapping("/user/favorites/remove/{id}")
+    public String removeFavoriteGame(@RequestParam int gameId, HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        Game game = gameManager.getGame(gameId);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        if (game == null) {
+            return "redirect:/NJuegos";
+        }
+        user.getGamesLiked().remove(game);
+        game.getUsersLiked().remove(user);
+        model.addAttribute("user", user);
+
+        return "redirect:/game/" + gameId;
+    }
+
+    @GetMapping("/game/{id}")
+    public String showGameDetails(@PathVariable int id, Model model, HttpSession session) {
+        Game game = gameManager.getGame(id);
+        if (game == null) {
+            return "redirect:/NJuegos";
+        }
+        if(game.getUsersLiked() == null){
+            game.setUsersLiked(new ArrayList<>());
+        }
+
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+        if(user.getGamesLiked() == null){
+            user.setGamesLiked(new ArrayList<>());
+        }
+
+        model.addAttribute("game", game);
+        model.addAttribute("user", user);
+        return "game-details";
     }
 }

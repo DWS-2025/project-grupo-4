@@ -71,7 +71,7 @@
     <main>
         <div class="radio-inputs">
             <label class="radio">
-                <input type="radio" name="radio" checked>
+                <input type="radio" name="radio" onclick="location.href='/NJuegos'">
                 <span class="name">Todos los Juegos</span>
             </label>
             <label class="radio">
@@ -80,12 +80,19 @@
             </label>
 
             <label class="radio">
-                <input type="radio" name="radio" onclick="location.href='/NJuegos/myLiked'">
+                <input type="radio" name="radio" checked>
                 <span class="name">Mis favoritos</span>
             </label>
         </div>
+        <div>
+            <br>
+            <br>
+        <center>
+            <h2 th:if="${games.size() == 0}">No has añadido ningún juego a favoritos todavía</h2>
+        </center>
+        </div>
         <div id="grid-container">
-            <section class="game-section" th:each="game : ${games}">
+            <section class="game-section" th:each="game : ${user.getGamesLiked()}">
                 <h2 th:text="${game.getTitle()}"></h2>
                 <p th:text="${game.getDescription()}"></p>
                 <img th:if="${game.getImage()}" th:src="${game.getImage()}" alt="Imagen del juego" class="game-image"/>
