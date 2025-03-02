@@ -401,6 +401,91 @@ ul {
     line-height: 1.5;
     font-size: 1rem;
 }
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 20px;
+}
+
+.login-box {
+    background: linear-gradient(145deg, #2a1f1d, #1a0f0d);
+    border: 2px solid #d4af37;
+    border-radius: 15px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.login-box h2 {
+    color: #d4af37;
+    font-family: 'Casino', sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.login-subtitle {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.login-form .form-group {
+    margin-bottom: 20px;
+}
+
+.login-form label {
+    display: block;
+    color: #d4af37;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d4af37;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.login-button {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    height: 3em;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-link p {
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.register-link .golden-button {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    text-decoration: none;
+}
+
 /* CONTENT */
 #content {
     display: flex;
