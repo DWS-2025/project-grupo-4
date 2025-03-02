@@ -34,9 +34,8 @@ ul {
 
 #container {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -64,18 +63,19 @@ ul {
 }
 
 .navbar {
-    background: rgba(252, 192, 2, 0.73);
-    padding: 10px 0;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    background: linear-gradient(160deg, rgba(252, 192, 2, 0.9), rgba(252, 192, 2, 0.7));
+    padding: 15px 0;
+    margin: 0;
     display: flex;
-    justify-content: center; /* Centra los botones horizontalmente */
-    width: 100%; /* Asegura que la barra ocupe todo el ancho disponible */
+    justify-content: center;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .menu {
     display: flex;
-    justify-content: space-around; /* Distribuye los botones de manera uniforme */
+    justify-content: center;
+    gap: 2rem;
     list-style: none;
     font-family: 'Casino', sans-serif;
     font-size: 1.8rem;
@@ -85,8 +85,9 @@ ul {
     text-align: center;
     padding: 0;
     margin: 0;
-    width: 100%; /* Asegura que el menú ocupe todo el ancho disponible */
-    flex-wrap: wrap; /* Permite que los botones se envuelvan en pantallas pequeñas */
+    max-width: 1200px;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .menu li {
