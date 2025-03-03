@@ -127,13 +127,13 @@
                 <p th:text="${item.getDescription()}">Descripción</p>
                 <p th:text="${item.getPrice()} + ' $'"></p>
                 <form th:action="@{/buy/{id}(id=${item.getId()})}" method="post">
-                    <button type="submit">Comprar</button>
+                    <button type="submit" class="golden-button">Comprar</button>
                 </form>
                 <form th:action="@{/editPrize/{id}(id=${item.getId()})}" method="get">
-                    <button type="submit">Editar Recompensa</button>
+                    <button type="submit" class="golden-button">Editar Recompensa</button>
                 </form>
                 <form th:action="@{/deletePrize/{id}(id=${item.getId()})}" method="post">
-                    <button type="submit">Eliminar Recompensa</button>
+                    <button type="submit" class="golden-button">Eliminar Recompensa</button>
                 </form>
             </section>
         </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Crear Nuevo Juego</title>
+    <title>Editar recompesa</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/styles.css" rel="stylesheet" type="text/css" />
@@ -36,13 +36,12 @@
 
     <header>
         <div id="TitulosJuegos">
-            <h1>Crear Nuevo Juego</h1>
-            <p>Completa el formulario para añadir un nuevo juego al casino.</p>
+            <h1>Edita la recompensa</h1>
+            <p>Modifica el formulario para editar la recompensa seleccionada.</p>
         </div>
     </header>
 
     <main>
-        <!-- Formulario para crear un nuevo juego -->
         <div id="add-game-form">
             <form th:action="@{/updatePrize/{id}(id=${prize.getId()})}" th:object="${prize}" method="post" enctype="multipart/form-data">
                 <div>
@@ -63,7 +62,7 @@
                     <input type="number" id="minAge" th:field="*{price}" required>
                 </div>
                 <div>
-                    <button type="submit">Guardar Cambios</button>
+                    <button type="submit" class="golden-button">Guardar Cambios</button>
                 </div>
             </form>
         </div>
