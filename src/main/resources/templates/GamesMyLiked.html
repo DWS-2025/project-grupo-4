@@ -105,10 +105,10 @@
                 <p th:text="${game.getDescription()}"></p>
                 <img th:if="${game.getImage()}" th:src="${game.getImage()}" alt="Imagen del juego" class="game-image"/>
                 <form th:action="@{/game/{id}(id=${game.getId()})}" method="get">
-                    <button type="submit">Ver Juego</button>
+                    <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
                 <form th:action="@{/delete/{id}(id=${game.getId()})}" method="post">
-                    <button type="submit">Eliminar Juego</button>
+                    <button class="golden-button" type="submit">Eliminar Juego</button>
                 </form>
 
             </section>
