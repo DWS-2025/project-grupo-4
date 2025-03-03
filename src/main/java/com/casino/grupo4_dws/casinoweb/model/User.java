@@ -12,7 +12,7 @@ public class User {
     private String password;
     private int money;
     private boolean isadmin;
-    private List <Prize> inventario;
+    private List <Prize> Inventory;
     private List <Game> gamesLiked;
     private List <Bet> betHistory;
 
@@ -59,9 +59,9 @@ public class User {
     }
 
     public List<Prize> getInventory() {
-        return inventario;
+        return Inventory;
     }
-    public void setInventory(List<Prize> inventario) {
-        this.inventario = inventario;
+    public void setInventory(List<Prize> Inventory) {
+        this.Inventory = Inventory;
     }
 }

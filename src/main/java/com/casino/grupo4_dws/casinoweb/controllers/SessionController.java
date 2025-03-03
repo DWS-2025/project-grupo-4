@@ -89,7 +89,7 @@ public class SessionController {
 
         model.addAttribute("user", user);
         model.addAttribute("betHistory", betHistory);
-        model.addAttribute("inventario", userInventory);
+        model.addAttribute("Inventory", userInventory);
         return "staticLoggedIn/user";
     }
 }
