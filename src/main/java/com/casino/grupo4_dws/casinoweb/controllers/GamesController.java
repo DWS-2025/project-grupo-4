@@ -34,20 +34,20 @@ public class GamesController {
     private User user;
 
 
-    @GetMapping("/NJuegos")
+    @GetMapping("/NGames")
     public String showGames(Model model, HttpSession session) {
         List<Game> games = gameManager.getGameList();
         model.addAttribute("games", games); // Pasar la lista de juegos a la vista
 
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            return "NJuegos";
+            return "NGames";
         }
         model.addAttribute("user", user);
         return "staticLoggedIn/loggedGames";
     }
 
-    @GetMapping("/NJuegos/mostLiked")
+    @GetMapping("/NGames/mostLiked")
     public String mostLiked(Model model, HttpSession session) {
         List<Game> games = new ArrayList<>(gameManager.getGameList());
 
@@ -61,7 +61,7 @@ public class GamesController {
         model.addAttribute("user", user);
         return "GamesMostLiked";
     }
-    @GetMapping("/NJuegos/liked")
+    @GetMapping("/NGames/liked")
     public String liked(Model model, HttpSession session) {
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
@@ -107,7 +107,7 @@ public class GamesController {
         // Save the game to the database
         gameManager.addGame(newGame);
 
-        return "redirect:/NJuegos";
+        return "redirect:/NGames";
     }
 
     @PostMapping("/delete/{id}")
@@ -122,7 +122,7 @@ public class GamesController {
         if(gameManager.getGame(id) != null) {
             gameManager.removeGameId(id);
         }
-        return "redirect:/NJuegos"; // Redirigir a la lista de juegos
+        return "redirect:/NGames"; // Redirigir a la lista de juegos
     }
 
     @PostMapping("/user/favourites/add/{id}")
@@ -133,7 +133,7 @@ public class GamesController {
         }
         Game game = gameManager.getGame(id);
         if (game == null) {
-            return "redirect:/NJuegos";
+            return "redirect:/NGames";
         }
         if(game.getUsersLiked() == null){
             game.setUsersLiked(new ArrayList<>());
@@ -159,7 +159,7 @@ public class GamesController {
             return "redirect:/login";
         }
         if (game == null) {
-            return "redirect:/NJuegos";
+            return "redirect:/NGames";
         }
         user.getGamesLiked().remove(game);
         game.getUsersLiked().remove(user);
@@ -172,7 +172,7 @@ public class GamesController {
     public String showGameDetails(@PathVariable int id, Model model, HttpSession session) {
         Game game = gameManager.getGame(id);
         if (game == null) {
-            return "redirect:/NJuegos";
+            return "redirect:/NGames";
         }
         if(game.getUsersLiked() == null){
             game.setUsersLiked(new ArrayList<>());
