@@ -34,17 +34,31 @@ public class BetController {
     @PostMapping("/playGame/{id}")
     public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmout") int amout, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
+        if (amout <= 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Amount must be greater than 0");
+            return "redirect:/game/" + id;
+        }
         if (user == null) {
             return "redirect:/login";
         }
         Game gamePlayed = gameManager.getGame(id);
         if (gamePlayed == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Game not found");
             return "redirect:/login";
         }
-        Bet bet = betManager.playBet(gamePlayed,user,amout);
-        model.addAttribute("user", user);
-        boolean status = bet.GetStatus();
-        redirectAttributes.addFlashAttribute("status", status);
+        try {
+            Bet bet = betManager.playBet(gamePlayed, user, amout);
+            redirectAttributes.addFlashAttribute("user", user);
+            boolean status = bet.GetStatus();
+            redirectAttributes.addFlashAttribute("status", status);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/game/" + id;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Something went wrong");
+            return "redirect:/game/" + id;
+        }
+
         return "redirect:/game/" + id;
     }
 }

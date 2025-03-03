@@ -13,11 +13,18 @@ public class BetManager {
 
     public Bet playBet (Game gamePlayed, User player, int amount) {
         if (amount < gamePlayed.getMinInput()) {
-            throw new IllegalArgumentException("Amount must be greater than or equal to " + gamePlayed.getMinInput());
+            throw new IllegalArgumentException("La apuesta debe de ser mayor o igual a " + gamePlayed.getMinInput());
+        }
+        if (player.getMoney() < gamePlayed.getMinInput()) {
+            throw new IllegalArgumentException("No tienes dinero suficiente para apostar");
         }
         if (player.getMoney() < amount) {
-            throw new IllegalArgumentException("You do not have enough money!");
+            throw new IllegalArgumentException("No tienes tanto dinero flipao");
         }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("No puedes apostar en blanco");
+        }
+
 
         Bet bet = new Bet();
         bet.setAmount(amount);
