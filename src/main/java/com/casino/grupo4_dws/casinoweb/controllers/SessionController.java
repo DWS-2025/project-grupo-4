@@ -1,11 +1,9 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.model.Bet;
-import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.services.GameManager; // Inyectar GameManager
-import com.casino.grupo4_dws.casinoweb.services.UserManager;  // Inyectar UserManager
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +18,7 @@ import java.util.List;
 public class SessionController {
 
     @Autowired
-    private UserManager userManager;  // Inyectar UserManager
-
-    @Autowired
-    private GameManager gameManager;  // Inyectar GameManager para obtener los juegos disponibles
+    private GameManager gameManager;
 
     @GetMapping("/login")
     public String loadLoginPage() {
@@ -40,7 +35,7 @@ public class SessionController {
         user.setUserName(loginUsername);
         user.setPassword(loginPassword);
         user.setMoney(5000);
-        user.setInventario(null);
+        user.setInventory(null);
         if ("admin".equals(loginUsername) && "admin".equals(loginPassword)) {
             user.setIsadmin(true);
         }
@@ -57,13 +52,13 @@ public class SessionController {
             user.setUserName("");
             user.setPassword("");
             user.setMoney(0);
-            user.setInventario(null);
+            user.setInventory(null);
             session.removeAttribute("user");
         }
         return "redirect:/logoutConfirmar";
     }
 
-    @GetMapping("/logoutConfirmar")
+    @GetMapping("/logoutConfirm")
     public String logoutConfirmar(HttpSession session) {
         return "redirect:/";
     }
@@ -78,14 +73,14 @@ public class SessionController {
     public String showUser(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        if(user.getInventario() == null) {
-            user.setInventario(new ArrayList<>());
+        if(user.getInventory() == null) {
+            user.setInventory(new ArrayList<>());
         }
         if(user.getBetHistory() == null) {
             user.setBetHistory(new ArrayList<>());
         }
 
-        List<Prize> inventario = user.getInventario();
+        List<Prize> userInventory = user.getInventory();
         List<Bet> betHistory = user.getBetHistory();
 
         if(!betHistory.isEmpty()) {
@@ -94,7 +89,7 @@ public class SessionController {
 
         model.addAttribute("user", user);
         model.addAttribute("betHistory", betHistory);
-        model.addAttribute("inventario", inventario);
+        model.addAttribute("inventario", userInventory);
         return "staticLoggedIn/user";
     }
 }

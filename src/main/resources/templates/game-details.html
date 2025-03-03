@@ -95,7 +95,7 @@
             <button role="button" class="golden-button" onclick="location.href='/'">
                 <span class="golden-text">INICIO</span>
             </button>
-            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+            <button role="button" class="golden-button" onclick="location.href='/NGames'">
                 <span class="golden-text">NUESTROS JUEGOS</span>
             </button>
             <button role="button" class="golden-button" onclick="location.href='/prizes'">
@@ -163,14 +163,14 @@
         <div class="error-message" th:if="${game == null}">
             <h2>Game not found</h2>
             <p>The requested game could not be found.</p>
-            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+            <button role="button" class="golden-button" onclick="location.href='/NGames'">
                 <span class="golden-text">BACK TO GAMES</span>
             </button>
         </div>
         <center>
             <form th:if="${user != null}" th:action="@{/playGame/{id}(id=${game.getId()})}" method="post">
-                <label for="playedAmout"></label>
-                <input type="number" id="playedAmout" name="playedAmout" min="0" required>
+                <label for="playedAmount"></label>
+                <input type="number" id="playedAmount" name="playedAmount" min="0" required>
                 <button class="golden-button" type="submit">Jugar</button>
             </form>
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">

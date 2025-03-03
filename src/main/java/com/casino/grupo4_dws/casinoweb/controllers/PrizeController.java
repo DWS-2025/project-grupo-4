@@ -37,6 +37,7 @@ public class PrizeController {
         List<Prize> prizes = prizeManager.getPrizeList();
         model.addAttribute("prizes", prizes);
         User user = (User) session.getAttribute("user");
+
         if (user == null) {
             return "prizes";
         }
@@ -67,7 +68,7 @@ public class PrizeController {
     }
 
     @PostMapping("/deletePrize/{id}")
-    public String eliminarJuego(@PathVariable int id) {
+    public String deletePrize(@PathVariable int id) {
         prizeManager.removePrizeId(id);
         return "redirect:/prizes";
     }
@@ -114,10 +115,10 @@ public class PrizeController {
         }
         user.setMoney(user.getMoney() - prizeBought.getPrice());
 
-        if (user.getInventario() == null) {
-            user.setInventario(new ArrayList<>());
+        if (user.getInventory() == null) {
+            user.setInventory(new ArrayList<>());
         }
-        user.getInventario().add(prizeBought);
+        user.getInventory().add(prizeBought);
         model.addAttribute("user", user);
 
         return "redirect:/prizes";

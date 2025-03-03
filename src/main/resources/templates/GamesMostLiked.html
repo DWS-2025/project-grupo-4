@@ -55,7 +55,7 @@
       <button role="button" class="golden-button" onclick="location.href='/'">
         <span class="golden-text">INICIO</span>
       </button>
-      <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+      <button role="button" class="golden-button" onclick="location.href='/NGames'">
         <span class="golden-text">NUESTROS JUEGOS</span>
       </button>
       <button role="button" class="golden-button" onclick="location.href='/prizes'">
@@ -68,7 +68,7 @@
   </nav>
 
   <header>
-    <div id="TitulosJuegos">
+    <div id="GameTitles">
       <h1>Nuestros Juegos</h1>
       <h2>Disfruta <span th:text="${user.getUserName()}">Usuario</span> </h2>
       <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots</p>
@@ -79,7 +79,7 @@
   <main>
     <div class="radio-inputs">
       <label class="radio">
-        <input type="radio" name="radio" onclick="location.href='/NJuegos'">
+        <input type="radio" name="radio" onclick="location.href='/NGames'">
         <span class="name">Todos los Juegos</span>
       </label>
       <label class="radio">
@@ -88,7 +88,7 @@
       </label>
 
       <label class="radio">
-        <input type="radio" name="radio" onclick="location.href='/NJuegos/myLiked'">
+        <input type="radio" name="radio" onclick="location.href='/NGames/myLiked'">
         <span class="name">Mis favoritos</span>
       </label>
     </div>

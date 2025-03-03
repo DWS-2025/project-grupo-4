@@ -26,26 +26,34 @@ import java.util.List;
 
 @Controller
 public class BetController {
+
+
     @Autowired
     private BetManager betManager;
     @Autowired
     private GameManager gameManager;
 
+    // ENDPOINT TO PLACE A BET
     @PostMapping("/playGame/{id}")
     public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmout") int amout, RedirectAttributes redirectAttributes) {
+        Game gamePlayed = gameManager.getGame(id);
         User user = (User) session.getAttribute("user");
+
+        // Case user has no money
         if (amout <= 0) {
             redirectAttributes.addFlashAttribute("errorMessage", "Amount must be greater than 0");
             return "redirect:/game/" + id;
         }
+        // Case there's no user
         if (user == null) {
             return "redirect:/login";
         }
-        Game gamePlayed = gameManager.getGame(id);
+        // Case there's no game value
         if (gamePlayed == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Game not found");
             return "redirect:/login";
         }
+        // If bet params are ok, play bet
         try {
             Bet bet = betManager.playBet(gamePlayed, user, amout);
             redirectAttributes.addFlashAttribute("user", user);
