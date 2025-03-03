@@ -43,7 +43,7 @@
 </head>
 <body>
 
-<div class="transparent-container">
+<div class="transparent-container" th:if="${user != null and user.getUserName() != null}">
     <div class="template">
         <div
                 tabindex="0"
@@ -102,11 +102,8 @@
                 <span class="golden-text">RECOMPENSAS</span>
             </button>
             <th:block th:if="${user == null}">
-                <button role="button" class="golden-button" onclick="location.href='/login'">
+                <button role="button" class="golden-button" th:if="${user != null and user.getUserName() != null}" onclick="location.href='/login'">
                     <span class="golden-text">LOGIN</span>
-                </button>
-                <button role="button" class="golden-button" onclick="location.href='/register'">
-                    <span class="golden-text">REGISTER</span>
                 </button>
             </th:block>
         </ul>
@@ -168,7 +165,7 @@
             </button>
         </div>
         <center>
-            <form th:if="${user != null}" th:action="@{/playGame/{id}(id=${game.getId()})}" method="post">
+            <form th:if="${user != null and user.getUserName() != null}" th:action="@{/playGame/{id}(id=${game.getId()})}" method="post">
                 <label for="playedAmount"></label>
                 <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647" oninput="validity.valid||(value='');" required>
                 <button class="golden-button" type="submit">Jugar</button>

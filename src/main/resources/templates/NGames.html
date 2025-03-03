@@ -46,9 +46,6 @@
                 <h2 th:text="${game.getTitle()}">Nombre del juego</h2>
                 <img th:src="${game.getImage()}" th:alt="${game.title}">
                 <p th:text="${game.getDescription()}">Descripción</p>
-                <form th:action="@{/game/{id}(id=${game.getId()})}" method="get">
-                    <button class="golden-button" type="submit">Ver Juego</button>
-                </form>
             </section>
         </div>
     </main>
