@@ -17,14 +17,14 @@ div, p, ul, h2, h3, h4, img {
     margin: 0;
 }
 
-/*p, h1, h2 {*/
-/*    color: #d4af37;*/
-/*    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);*/
-/*    background: linear-gradient(to right, #d4af37, #ffd700);*/
-/*    -webkit-background-clip: text;*/
-/*    -webkit-text-fill-color: transparent;*/
-/*    font-weight: 500;*/
-/*}*/
+p, h1, h2 {
+    color: #eed905;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to right, #ded303, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+}
 
 ul {
     list-style-type: none;
