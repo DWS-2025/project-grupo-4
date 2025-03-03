@@ -276,9 +276,9 @@ ul {
     display: flex;
     flex-wrap: wrap;
     border-radius: 0.5rem;
-    background-color: #EEE;
+    background-color: #fabe02;
     box-sizing: border-box;
-    box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 0 0px 1px rgb(191, 143, 1);
     padding: 0.25rem;
     width: 300px;
     font-size: 14px;
