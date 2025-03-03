@@ -31,16 +31,17 @@ public class GameManager {
 
     public void addGame(Game game){
         int newId = gameList.size() + 1;
-
+        for(Game g : gameList){
+            if(g.getId() == newId){
+                newId = newId + 1;
+            }
+        }
         game.setId(newId);
         gameList.add(game);
     }
 
     public void removeGameId(int id){
         gameList.removeIf(g -> g.getId() == id);
-        for (int i = 0; i < gameList.size(); i++) {
-            gameList.get(i).setId(i + 1); // Reasignar IDs basados en la posición
-        }
     }
 
     public Game getGame(int id){

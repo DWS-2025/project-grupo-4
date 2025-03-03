@@ -111,7 +111,9 @@ private User user;
     }
 
     @PostMapping("/delete/{id}")
-    public String eliminarJuego(@PathVariable int id) {
+    public String eliminarJuego(@PathVariable int id, HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        user.getGamesLiked().remove(id);
         gameManager.removeGameId(id);
         return "redirect:/NJuegos"; // Redirigir a la lista de juegos
     }
@@ -131,6 +133,9 @@ private User user;
         }
         if(user.getGamesLiked() == null){
             user.setGamesLiked(new ArrayList<>());
+        }
+        if(user.getGamesLiked().contains(game)){
+            return "redirect:/game/" + id;
         }
         user.getGamesLiked().add(game);
         game.getUsersLiked().add(user);
