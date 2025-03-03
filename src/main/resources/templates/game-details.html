@@ -1,10 +1,44 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
+    <style>
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .container {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .container svg {
+            position: relative;
+            top: 0;
+            left: 0;
+            height: 50px;
+            width: 50px;
+            transition: all 0.3s;
+            fill: #666;
+        }
+
+        .container svg:hover {
+            transform: scale(1.1);
+        }
+
+        .container input:checked ~ svg {
+            fill: #E3474F;
+        }
+    </style>
     <title>Game Details</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
@@ -25,7 +59,8 @@
                     User
                 </p>
 
-                <img src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil" style="height: 32px; width: 32px; border-radius: 50%;">
+                <img src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                     style="height: 32px; width: 32px; border-radius: 50%;">
             </div>
 
             <div class="popup-main">
@@ -40,7 +75,11 @@
     </div>
     <button class="Btn" onclick="location.href='/logout'">
 
-        <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+        <div class="sign">
+            <svg viewBox="0 0 512 512">
+                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+            </svg>
+        </div>
 
         <div class="text">Logout</div>
     </button>
@@ -95,14 +134,27 @@
                             <span class="bet-label">Multiplicador:</span>
                             <span class="bet-value" th:text="'x'+${game.multiplier}">0</span>
                         </div>
-                        
-                        <form th:if="${user != null and user.getUserName() != null and !#lists.contains(user.getGamesLiked(),game)}" th:action="@{/user/favourites/add/{id}(id=${game.getId()})}" method="post">
-                            <input type="hidden" name="id" th:value="${game.id}">
-                            <button class="golden-button" type="submit">Añadir a favoritos</button>
+                        <form th:if="${user != null and user.getUserName() != null and !#lists.contains(user.getGamesLiked(), game)}"
+                              th:action="@{/user/favourites/add/{id}(id=${game.id})}" method="post">
+                            <label class="container">
+                                <input type="checkbox" name="id" th:value="${game.id}" onchange="this.form.submit()">
+                                <svg id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"
+                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"></path>
+        </svg>
+                            </label>
                         </form>
-                        <form th:if="${user != null and user.getUserName() != null and #lists.contains(user.getGamesLiked(),game)}" th:action="@{/user/favourites/remove/{id}(id=${game.getId()})}" method="post">
-                            <input type="hidden" name="gameId" th:value="${game.id}">
-                            <button class="golden-button" type="submit">Eliminar juego de favoritos</button>
+                        <form th:if="${user != null and user.getUserName() != null and #lists.contains(user.getGamesLiked(),game)}"
+                              th:action="@{/user/favourites/remove/{id}(id=${game.getId()})}" method="post">
+                            <label class="container">
+                                <input type="checkbox" name="gameId" th:value="${game.id}" onchange="this.form.submit()"
+                                       checked>
+                                <input type="hidden" name="gameId" th:value="${game.id}">
+                                <svg id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"
+                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"></path>
+        </svg>
+                            </label>
                         </form>
                     </div>
                 </div>
@@ -124,8 +176,8 @@
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
                 <span th:text="${errorMessage}"></span>
             </div>
-        <h1 th:if="${status == false}" style="color: crimson">Has perdido</h1>
-        <h1 th:if="${status == true}" style="color: #4caf50">¡Has Ganado!</h1>
+            <h1 th:if="${status == false}" style="color: crimson">Has perdido</h1>
+            <h1 th:if="${status == true}" style="color: #4caf50">¡Has Ganado!</h1>
         </center>
     </main>
 
