@@ -84,7 +84,7 @@ public class SessionController {
             user.setBetHistory(new ArrayList<>());
         }
 
-        List<Prize> inventario = user.getInventory();
+        List<Prize> userInventory = user.getInventory();
         List<Bet> betHistory = user.getBetHistory();
 
         if(!betHistory.isEmpty()) {
@@ -93,7 +93,7 @@ public class SessionController {
 
         model.addAttribute("user", user);
         model.addAttribute("betHistory", betHistory);
-        model.addAttribute("inventario", inventario);
+        model.addAttribute("inventario", userInventory);
         return "staticLoggedIn/user";
     }
 }
