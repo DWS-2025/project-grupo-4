@@ -28,9 +28,6 @@
             <button role="button" class="golden-button" onclick="location.href='/login'">
                 <span class="golden-text">LOGIN</span>
             </button>
-            <button role="button" class="golden-button" onclick="location.href='/register'">
-                <span class="golden-text">REGISTER</span>
-            </button>
         </ul>
     </nav>
 
@@ -46,7 +43,7 @@
         <div id="grid-container">
             <section class="game-section" th:each="game : ${games}">
                 <h2 th:text="${game.getTitle()}">Nombre del juego</h2>
-                <img th:src="${game.getImage()}" th:alt="${game.title}" width="190" height="190">
+                <img th:src="${game.getImage()}" th:alt="${game.title}">
                 <p th:text="${game.getDescription()}">Descripción</p>
                 <form th:action="@{/game/{id}(id=${game.getId()})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
