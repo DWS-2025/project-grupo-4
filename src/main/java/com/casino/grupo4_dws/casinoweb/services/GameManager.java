@@ -12,14 +12,14 @@ import java.util.List;
 @Service
 public class GameManager {
 
-    private List <Game> gameList;
+    private List<Game> gameList;
 
     public GameManager() {
         this.gameList = new ArrayList<Game>();
     }
 
     @PostConstruct
-    private void startGames(){
+    private void startGames() {
         Game TirarDado = new Game(1, "Dado", "Tira un dado de seis caras y prueba tu suerte!", "/images/dice.jpg", 16, 1, 6);
         Game Ruleta = new Game(2, "Ruleta", "Apuesta a tu color favorito y gira la ruleta!", "/images/Ssegura.jpg", 50, 1, 2);
         Game Slots = new Game(3, "Tragaperras", "Las monedas en el bolsillo no te generan mas dinero... aquí si", "/images/slots.jpg", 5, 10, 20);
@@ -29,10 +29,10 @@ public class GameManager {
         addGame(Slots);
     }
 
-    public void addGame(Game game){
+    public void addGame(Game game) {
         int newId = gameList.size() + 1;
-        for(Game g : gameList){
-            if(g.getId() == newId){
+        for (Game g : gameList) {
+            if (g.getId() == newId) {
                 newId = newId + 1;
             }
         }
@@ -40,15 +40,15 @@ public class GameManager {
         gameList.add(game);
     }
 
-    public void removeGameId(int id){
+    public void removeGameId(int id) {
         gameList.removeIf(g -> g.getId() == id);
     }
 
-    public Game getGame(int id){
+    public Game getGame(int id) {
         return gameList.stream().filter(g -> g.getId() == id).findFirst().orElse(null);
     }
 
-    public List<Game> getGameList(){
+    public List<Game> getGameList() {
         return gameList;
     }
 

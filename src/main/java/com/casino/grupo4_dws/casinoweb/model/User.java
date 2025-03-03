@@ -12,13 +12,14 @@ public class User {
     private String password;
     private int money;
     private boolean isadmin;
-    private List <Prize> Inventory;
-    private List <Game> gamesLiked;
-    private List <Bet> betHistory;
+    private List<Prize> Inventory;
+    private List<Game> gamesLiked;
+    private List<Bet> betHistory;
 
     public List<Bet> getBetHistory() {
         return betHistory;
     }
+
     public void setBetHistory(List<Bet> betHistory) {
         this.betHistory = betHistory;
     }
@@ -26,6 +27,7 @@ public class User {
     public List<Game> getGamesLiked() {
         return gamesLiked;
     }
+
     public void setGamesLiked(List<Game> gamesLiked) {
         this.gamesLiked = gamesLiked;
     }
@@ -33,6 +35,7 @@ public class User {
     public String getUserName() {
         return userName;
     }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -40,6 +43,7 @@ public class User {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -47,6 +51,7 @@ public class User {
     public int getMoney() {
         return money;
     }
+
     public void setMoney(int money) {
         this.money = money;
     }
@@ -54,6 +59,7 @@ public class User {
     public boolean getIsadmin() {
         return isadmin;
     }
+
     public void setIsadmin(boolean isadmin) {
         this.isadmin = isadmin;
     }
@@ -61,6 +67,7 @@ public class User {
     public List<Prize> getInventory() {
         return Inventory;
     }
+
     public void setInventory(List<Prize> Inventory) {
         this.Inventory = Inventory;
     }

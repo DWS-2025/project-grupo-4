@@ -7,7 +7,8 @@ public class Prize {
     private String image;
     private int id;
 
-    public Prize() {}
+    public Prize() {
+    }
 
     public Prize(String title, int price, String description, String image, int id) {
         this.title = title;
@@ -17,18 +18,43 @@ public class Prize {
         this.id = id;
     }
 
-    public void setTitle(String title) { this.title = title; }
-    public String getTitle() { return title; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public void setPrice(int price) { this.price = price; }
-    public int getPrice() { return price; }
+    public String getTitle() {
+        return title;
+    }
 
-    public void setDescription(String description) { this.description = description; }
-    public String getDescription() { return description; }
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
-    public void setImage(String image) { this.image = image; }
-    public String getImage() { return image; }
+    public int getPrice() {
+        return price;
+    }
 
-    public void setId(int id) { this.id = id; }
-    public int getId() { return id; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

@@ -17,24 +17,44 @@ public class Bet {
         this.amount = amount;
     }
 
-    public int GetRevenue() { return revenue;}
+    public int GetRevenue() {
+        return revenue;
+    }
 
-    public void setRevenue(int revenue) {this.revenue = revenue;}
+    public void setRevenue(int revenue) {
+        this.revenue = revenue;
+    }
 
-    public User GetUser() {return user;}
+    public User GetUser() {
+        return user;
+    }
 
-    public void setUser(User activeUser) {this.user = activeUser;}
+    public void setUser(User activeUser) {
+        this.user = activeUser;
+    }
 
-    public int GetDate() {return date;}
+    public int GetDate() {
+        return date;
+    }
 
-    public void setDate(int date) {this.date = date;}
+    public void setDate(int date) {
+        this.date = date;
+    }
 
-    public boolean GetStatus() {return status;}
+    public boolean GetStatus() {
+        return status;
+    }
 
-    public void setStatus(boolean status) {this.status = status;}
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
-    public Game GetGame() {return game;}
+    public Game GetGame() {
+        return game;
+    }
 
-    public void setGame(Game gamePlayed) {this.game = gamePlayed;}
+    public void setGame(Game gamePlayed) {
+        this.game = gamePlayed;
+    }
 
 }

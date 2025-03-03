@@ -73,17 +73,17 @@ public class SessionController {
     public String showUser(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        if(user.getInventory() == null) {
+        if (user.getInventory() == null) {
             user.setInventory(new ArrayList<>());
         }
-        if(user.getBetHistory() == null) {
+        if (user.getBetHistory() == null) {
             user.setBetHistory(new ArrayList<>());
         }
 
         List<Prize> userInventory = user.getInventory();
         List<Bet> betHistory = user.getBetHistory();
 
-        if(!betHistory.isEmpty()) {
+        if (!betHistory.isEmpty()) {
             Collections.reverse(betHistory);
         }
 

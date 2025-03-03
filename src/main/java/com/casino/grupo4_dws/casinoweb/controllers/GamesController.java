@@ -26,6 +26,7 @@ public class GamesController {
 
     @Autowired
     private GameManager gameManager;
+
     public GamesController(GameManager gameManager) {
         this.gameManager = gameManager;
     }
@@ -51,7 +52,7 @@ public class GamesController {
     public String mostLiked(Model model, HttpSession session) {
         List<Game> games = new ArrayList<>(gameManager.getGameList());
 
-        games.sort((g1,g2) ->{
+        games.sort((g1, g2) -> {
             int size1 = g1.getUsersLiked() != null ? g1.getUsersLiked().size() : 0;
             int size2 = g2.getUsersLiked() != null ? g2.getUsersLiked().size() : 0;
             return Integer.compare(size2, size1);
@@ -61,6 +62,7 @@ public class GamesController {
         model.addAttribute("user", user);
         return "GamesMostLiked";
     }
+
     @GetMapping("/NGames/liked")
     public String liked(Model model, HttpSession session) {
         if (session.getAttribute("user") == null) {
@@ -68,10 +70,10 @@ public class GamesController {
         }
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        if(user.getGamesLiked() == null) {
+        if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());
         }
-        List <Game> games = user.getGamesLiked();
+        List<Game> games = user.getGamesLiked();
         model.addAttribute("games", games);
         return "GamesMyLiked";
     }
@@ -116,10 +118,10 @@ public class GamesController {
         if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());
         }
-        if(user.getGamesLiked().contains(gameManager.getGame(id))) {
+        if (user.getGamesLiked().contains(gameManager.getGame(id))) {
             user.getGamesLiked().remove(gameManager.getGame(id));
         }
-        if(gameManager.getGame(id) != null) {
+        if (gameManager.getGame(id) != null) {
             gameManager.removeGameId(id);
         }
         return "redirect:/NGames"; // Redirigir a la lista de juegos
@@ -135,13 +137,13 @@ public class GamesController {
         if (game == null) {
             return "redirect:/NGames";
         }
-        if(game.getUsersLiked() == null){
+        if (game.getUsersLiked() == null) {
             game.setUsersLiked(new ArrayList<>());
         }
-        if(user.getGamesLiked() == null){
+        if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());
         }
-        if(user.getGamesLiked().contains(game)){
+        if (user.getGamesLiked().contains(game)) {
             return "redirect:/game/" + id;
         }
         user.getGamesLiked().add(game);
@@ -151,6 +153,7 @@ public class GamesController {
         model.addAttribute("user", user);
         return "redirect:/game/" + id;
     }
+
     @PostMapping("/user/favourites/remove/{id}")
     public String removeFavoriteGame(@RequestParam int gameId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
@@ -174,7 +177,7 @@ public class GamesController {
         if (game == null) {
             return "redirect:/NGames";
         }
-        if(game.getUsersLiked() == null){
+        if (game.getUsersLiked() == null) {
             game.setUsersLiked(new ArrayList<>());
         }
 
@@ -182,7 +185,7 @@ public class GamesController {
         if (user != null) {
             model.addAttribute("user", user);
         }
-        if(user.getGamesLiked() == null){
+        if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());
         }
 

@@ -11,7 +11,7 @@ import java.util.Random;
 @Service
 public class BetManager {
 
-    public Bet playBet (Game gamePlayed, User player, int amount) {
+    public Bet playBet(Game gamePlayed, User player, int amount) {
         if (amount < gamePlayed.getMinInput()) {
             throw new IllegalArgumentException("La apuesta debe de ser mayor o igual a " + gamePlayed.getMinInput());
         }
@@ -42,13 +42,14 @@ public class BetManager {
             bet.setStatus(false);
         }
 
-        if(player.getBetHistory() == null) {
+        if (player.getBetHistory() == null) {
             player.setBetHistory(new ArrayList<>());
         }
         player.getBetHistory().add(bet);
         return bet;
 
     }
+
     private boolean playGame(Bet activeBet) {
         Random rand = new Random();
         int randomValue = rand.nextInt(100) + 1;

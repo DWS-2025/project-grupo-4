@@ -4,53 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Login - Casino La Miel</title>
-    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
-    <div class="gold-text-container">
-        <div class="gold-text">
-            <h1>Casino La Miel</h1>
-        </div>
+<div class="gold-text-container">
+    <div class="gold-text">
+        <h1>Casino La Miel</h1>
     </div>
-    
-    <div id="container">
-        <nav class="navbar">
-            <ul class="menu">
-                <button role="button" class="golden-button" onclick="location.href='/'"><span class="golden-text">INICIO</span></button>
-                <button role="button" class="golden-button" onclick="location.href='/NGames'"><span class="golden-text">NUESTROS JUEGOS</span></button>
-                <button role="button" class="golden-button" onclick="location.href='/prizes'"><span class="golden-text">RECOMPENSAS</span></button>
-            </ul>
-        </nav>
+</div>
 
-        <div class="login-container">
-            <div class="login-box">
-                <h2>Bienvenido al Casino</h2>
-                <p class="login-subtitle">Entra y demuestra que no solo el crupier puede hacer magia</p>
-                
-                <form action="/login" method="POST" class="login-form">
-                    <div class="form-group">
-                        <label for="user">Usuario</label>
-                        <input type="text" id="user" name="loginUsername" required>
-                    </div>
+<div id="container">
+    <nav class="navbar">
+        <ul class="menu">
+            <button role="button" class="golden-button" onclick="location.href='/'"><span
+                    class="golden-text">INICIO</span></button>
+            <button role="button" class="golden-button" onclick="location.href='/NGames'"><span class="golden-text">NUESTROS JUEGOS</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/prizes'"><span class="golden-text">RECOMPENSAS</span>
+            </button>
+        </ul>
+    </nav>
 
-                    <div class="form-group">
-                        <label for="pass">Contraseña</label>
-                        <input type="password" id="pass" name="loginPassword" required>
-                    </div>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Bienvenido al Casino</h2>
+            <p class="login-subtitle">Entra y demuestra que no solo el crupier puede hacer magia</p>
 
-                    <button type="submit" class="golden-button login-button">Iniciar sesión</button>
-                </form>
-                
-                <div class="register-link">
-                    <p>¿Aún formas parte de los perdedores? <a class="golden-button" href="/login">Regístrate aquí</a></p>
+            <form action="/login" method="POST" class="login-form">
+                <div class="form-group">
+                    <label for="user">Usuario</label>
+                    <input type="text" id="user" name="loginUsername" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="pass">Contraseña</label>
+                    <input type="password" id="pass" name="loginPassword" required>
+                </div>
+
+                <button type="submit" class="golden-button login-button">Iniciar sesión</button>
+            </form>
+
+            <div class="register-link">
+                <p>¿Aún formas parte de los perdedores? <a class="golden-button" href="/login">Regístrate aquí</a></p>
             </div>
         </div>
-
-        <footer class="footer">
-            <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
-        </footer>
     </div>
+
+    <footer class="footer">
+        <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
+    </footer>
+</div>
 </body>
 </html>

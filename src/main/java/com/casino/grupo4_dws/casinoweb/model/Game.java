@@ -13,7 +13,8 @@ public class Game {
     private int multiplier;
     private List<User> usersLiked;
 
-    public Game() {}
+    public Game() {
+    }
 
     public Game(int id, String title, String description, String image, int chance, int minInput, int multiplier) {
         this.id = id;
@@ -24,9 +25,11 @@ public class Game {
         this.minInput = minInput;
         this.multiplier = multiplier;
     }
+
     public List<User> getUsersLiked() {
         return usersLiked;
     }
+
     public void setUsersLiked(List<User> usersLiked) {
         this.usersLiked = usersLiked;
     }
@@ -58,12 +61,15 @@ public class Game {
     public int getMultiplier() {
         return multiplier;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -71,6 +77,7 @@ public class Game {
     public void setImage(String image) {
         this.image = image;
     }
+
     public void setChance(int chance) {
         this.chance = chance;
     }
