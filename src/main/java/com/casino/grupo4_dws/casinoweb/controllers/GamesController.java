@@ -49,14 +49,14 @@ private User user;
 
     @GetMapping("/NJuegos/mostLiked")
     public String mostLiked(Model model, HttpSession session) {
-        List<Game> games = gameManager.getGameList();
+        List<Game> games = new ArrayList<>(gameManager.getGameList());
 
         games.sort((g1,g2) ->{
             int size1 = g1.getUsersLiked() != null ? g1.getUsersLiked().size() : 0;
             int size2 = g2.getUsersLiked() != null ? g2.getUsersLiked().size() : 0;
             return Integer.compare(size2, size1);
         });
-        model.addAttribute("games", games);
+        model.addAttribute("mostLikedGames", games);
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
         return "GamesMostLiked";

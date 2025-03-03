@@ -85,7 +85,7 @@
       </label>
     </div>
     <div id="grid-container">
-      <section class="game-section" th:each="game : ${games}">
+      <section class="game-section" th:each="game : ${mostLikedGames}">
         <h2 th:text="${game.getTitle()}"></h2>
         <p th:text="${game.getDescription()}"></p>
         <img th:if="${game.getImage()}" th:src="${game.getImage()}" alt="Imagen del juego" class="game-image"/>
