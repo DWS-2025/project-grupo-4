@@ -95,10 +95,6 @@
                 <form th:action="@{/delete/{id}(id=${game.getId()})}" method="post">
                     <button class="golden-button" type="submit">Eliminar Juego</button>
                 </form>
-                <form th:action="@{/user/favourites/add/{id}(id=${game.getId()})}" method="post">
-                    <input type="hidden" name="gameId" th:value="${game.id}">
-                    <button class="golden-button" type="submit">Añadir a favoritos</button>
-                </form>
             </section>
         </div>
     </main>

@@ -35,14 +35,6 @@ public class IndexController {
         return "staticLoggedIn/loggedMain";
     }
 
-    @GetMapping("/user")
-    public String showUser(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
-        List<Prize> inventario = user.getInventario();
-        model.addAttribute("inventario", inventario);
-        return "staticLoggedIn/user";
-    }
 
 }
 
