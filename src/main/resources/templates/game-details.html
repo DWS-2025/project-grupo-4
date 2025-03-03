@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <title>Game Details</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -97,11 +97,11 @@
                         </div>
                         <form th:if="${user != null and user.getUserName() != null and !#lists.contains(user.getGamesLiked(),game)}" th:action="@{/user/favourites/add/{id}(id=${game.getId()})}" method="post">
                             <input type="hidden" name="id" th:value="${game.id}">
-                            <button type="submit">Añadir a favoritos</button>
+                            <button class="golden-button" type="submit">Añadir a favoritos</button>
                         </form>
                         <form th:if="${user != null and user.getUserName() != null and #lists.contains(user.getGamesLiked(),game)}" th:action="@{/user/favourites/remove/{id}(id=${game.getId()})}" method="post">
                             <input type="hidden" name="gameId" th:value="${game.id}">
-                            <button type="submit">Eliminar juego de favoritos</button>
+                            <button class="golden-button" type="submit">Eliminar juego de favoritos</button>
                         </form>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
             <form th:if="${user != null}" th:action="@{/playGame/{id}(id=${game.getId()})}" method="post">
                 <label for="playedAmout"></label>
                 <input type="number" id="playedAmout" name="playedAmout" min="0" required>
-                <button type="submit">Jugar</button>
+                <button class="golden-button" type="submit">Jugar</button>
             </form>
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
                 <span th:text="${errorMessage}"></span>
