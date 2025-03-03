@@ -4,7 +4,6 @@ import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.services.GameManager; // Inyectar GameManager
-import com.casino.grupo4_dws.casinoweb.services.UserManager;  // Inyectar UserManager
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,10 +18,7 @@ import java.util.List;
 public class SessionController {
 
     @Autowired
-    private UserManager userManager;  // Inyectar UserManager
-
-    @Autowired
-    private GameManager gameManager;  // Inyectar GameManager para obtener los juegos disponibles
+    private GameManager gameManager;
 
     @GetMapping("/login")
     public String loadLoginPage() {

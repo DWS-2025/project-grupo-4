@@ -1,4 +1,4 @@
-/* CSS Document */
+
 @import url('https://fonts.cdnfonts.com/css/casino');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
 
@@ -232,45 +232,45 @@ ul {
 
 .box { margin: 20px; }
 
-#TitulosJuegos {
+#GameTitles {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
 }
 
-#TitulosJuegos h1 {
+#GameTitles h1 {
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
 
-#TitulosJuegos p {
+#GameTitles p {
     font-size: 1.2rem;
     margin-bottom: 20px;
 }
 
-#TitulosJuegos img {
+#GameTitles img {
     max-width: 100%;
     height: auto;
 }
 
-#IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+#Games-Left, #Games-Center, #Games-Right {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
 }
 
-#IzquierdaJuegos h2, #CentroJuegos h2, #DerechaJuegos h2 {
+#Games-Left h2, #Games-Center h2, #Games-Right h2 {
     font-size: 2rem;
     margin-bottom: 10px;
 }
 
-#IzquierdaJuegos img, #CentroJuegos img, #DerechaJuegos img {
+#Games-Left img, #Games-Center img, #Games-Right img {
     max-width: 100%;
     height: auto;
     margin-bottom: 10px;
 }
 
-/* Seleccion de listas de juegos */
+
 .radio-inputs {
     position: relative;
     display: flex;
@@ -310,12 +310,12 @@ ul {
     font-weight: 600;
 }
 
-#IzquierdaJuegos p, #CentroJuegos p, #DerechaJuegos p {
+#Games-Left p, #Games-Center p, #Games-Right p {
     font-size: 1.1rem;
     margin-bottom: 20px;
 }
 
-#IzquierdaJuegos button, #CentroJuegos button, #DerechaJuegos button {
+#Games-Left button, #Games-Center button, #Games-Right button {
     margin: 0 auto;
 }
 .template {
@@ -584,29 +584,29 @@ ul {
     height: auto;
 }
 
-#IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+#Games-Left, #Games-Center, #Games-Right {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
 }
 
-#IzquierdaJuegos h2, #CentroJuegos h2, #DerechaJuegos h2 {
+#Games-Left h2, #Games-Center h2, #Games-Right h2 {
     font-size: 2rem;
     margin-bottom: 10px;
 }
 
-#IzquierdaJuegos img, #CentroJuegos img, #DerechaJuegos img {
+#Games-Left img, #Games-Center img, #Games-Right img {
     max-width: 100%;
     height: auto;
     margin-bottom: 10px;
 }
 
-#IzquierdaJuegos p, #CentroJuegos p, #DerechaJuegos p {
+#Games-Left p, #Games-Center p, #Games-Right p {
     font-size: 1.1rem;
     margin-bottom: 20px;
 }
 
-#IzquierdaJuegos button, #CentroJuegos button, #DerechaJuegos button {
+#Games-Left button, #Games-Center button, #Games-Right button {
     margin: 0 auto;
 }
 
@@ -1136,7 +1136,7 @@ ul {
         width: 48%;
     }
 
-    #IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+    #Games-Left, #Games-Center, #Games-Right {
         width: 100%;
     }
 }
@@ -1150,19 +1150,19 @@ ul {
         width: 68%;
     }
 
-    #IzquierdaJuegos, #CentroJuegos, #DerechaJuegos {
+    #Games-Left, #Games-Center, #Games-Right {
         width: 48%;
         display: inline-block;
         vertical-align: top;
     }
 
-    #DerechaJuegos {
+    #Games-Right {
         width: 100%;
     }
 }
 .container2 {
     display: inline-block;
-    max-width: 300px; /* Puedes ajustar según el contenido */
+    max-width: 300px;
     width: fit-content;
 }
 

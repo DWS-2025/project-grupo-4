@@ -24,7 +24,7 @@
                     User
                 </p>
 
-                <img src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil" style="height: 32px; width: 32px; border-radius: 50%;">
+                <img src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Profile picture" style="height: 32px; width: 32px; border-radius: 50%;">
             </div>
 
             <div class="popup-main">
@@ -55,7 +55,7 @@
             <button role="button" class="golden-button" onclick="location.href='/'">
                 <span class="golden-text">INICIO</span>
             </button>
-            <button role="button" class="golden-button" onclick="location.href='/NJuegos'">
+            <button role="button" class="golden-button" onclick="location.href='/NGames'">
                 <span class="golden-text">NUESTROS JUEGOS</span>
             </button>
             <button role="button" class="golden-button" onclick="location.href='/prizes'">
@@ -68,7 +68,7 @@
     </nav>
 
     <header>
-        <div id="TitulosJuegos">
+        <div id="GameTitles">
             <h1>Nuestros Juegos</h1>
             <h2>Listo para sentirte como un ganador, <span th:text="${user.getUserName()}">Usuario</span> ? </h2>
             <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots, entre otros muchos!</p>
@@ -83,12 +83,12 @@
                 <span class="name">Todos los Juegos</span>
             </label>
             <label class="radio">
-                <input type="radio" name="radio" onclick="location.href='/NJuegos/mostLiked'">
+                <input type="radio" name="radio" onclick="location.href='/NGames/mostLiked'">
                 <span class="name">Populares</span>
             </label>
 
             <label class="radio">
-                <input type="radio" name="radio" onclick="location.href='/NJuegos/myLiked'">
+                <input type="radio" name="radio" onclick="location.href='/NGames/myLiked'">
                 <span class="name">Mis favoritos</span>
             </label>
         </div>
@@ -96,7 +96,7 @@
             <section class="game-section" th:each="game : ${games}">
                 <h2 th:text="${game.getTitle()}"></h2>
                 <p th:text="${game.getDescription()}"></p>
-                <img th:if="${game.getImage()}" th:src="${game.getImage()}" alt="Imagen del juego" class="game-image">
+                <img th:if="${game.getImage()}" th:src="${game.getImage()}" alt="Game Img" class="game-image">
                 <form th:action="@{/game/{id}(id=${game.getId()})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
