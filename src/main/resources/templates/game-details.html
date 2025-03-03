@@ -170,7 +170,7 @@
         <center>
             <form th:if="${user != null}" th:action="@{/playGame/{id}(id=${game.getId()})}" method="post">
                 <label for="playedAmount"></label>
-                <input type="number" id="playedAmount" name="playedAmount" min="0" required>
+                <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647" oninput="validity.valid||(value='');" required>
                 <button class="golden-button" type="submit">Jugar</button>
             </form>
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">

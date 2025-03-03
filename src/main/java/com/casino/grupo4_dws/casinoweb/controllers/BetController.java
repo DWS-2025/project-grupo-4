@@ -35,13 +35,13 @@ public class BetController {
 
     // ENDPOINT TO PLACE A BET
     @PostMapping("/playGame/{id}")
-    public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmout") int amout, RedirectAttributes redirectAttributes) {
+    public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmount") int amout, RedirectAttributes redirectAttributes) {
         Game gamePlayed = gameManager.getGame(id);
         User user = (User) session.getAttribute("user");
 
         // Case user has no money
-        if (amout <= 0) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Amount must be greater than 0");
+        if (amout < 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Prohibido apostar en negativo");
             return "redirect:/game/" + id;
         }
         // Case there's no user
