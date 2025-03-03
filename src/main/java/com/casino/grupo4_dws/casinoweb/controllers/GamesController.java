@@ -24,18 +24,18 @@ import java.util.List;
 @Controller
 public class GamesController {
 
-@Autowired
-private GameManager gameManager;
-public GamesController(GameManager gameManager) {
-    this.gameManager = gameManager;
-}
+    @Autowired
+    private GameManager gameManager;
+    public GamesController(GameManager gameManager) {
+        this.gameManager = gameManager;
+    }
 
+    @Autowired
+    private User user;
 
-@Autowired
-private User user;
 
     @GetMapping("/NJuegos")
-    public String mostrarJuegos(Model model, HttpSession session) {
+    public String showGames(Model model, HttpSession session) {
         List<Game> games = gameManager.getGameList();
         model.addAttribute("games", games); // Pasar la lista de juegos a la vista
 
@@ -61,8 +61,8 @@ private User user;
         model.addAttribute("user", user);
         return "GamesMostLiked";
     }
-    @GetMapping("/NJuegos/myLiked")
-    public String myLiked(Model model, HttpSession session) {
+    @GetMapping("/NJuegos/liked")
+    public String liked(Model model, HttpSession session) {
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
         }
@@ -111,7 +111,7 @@ private User user;
     }
 
     @PostMapping("/delete/{id}")
-    public String eliminarJuego(@PathVariable int id, HttpSession session, Model model) {
+    public String deleteGame(@PathVariable int id, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());

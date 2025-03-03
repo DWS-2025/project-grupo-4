@@ -1,7 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.model.Bet;
-import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.services.GameManager; // Inyectar GameManager
@@ -40,7 +39,7 @@ public class SessionController {
         user.setUserName(loginUsername);
         user.setPassword(loginPassword);
         user.setMoney(5000);
-        user.setInventario(null);
+        user.setInventory(null);
         if ("admin".equals(loginUsername) && "admin".equals(loginPassword)) {
             user.setIsadmin(true);
         }
@@ -57,13 +56,13 @@ public class SessionController {
             user.setUserName("");
             user.setPassword("");
             user.setMoney(0);
-            user.setInventario(null);
+            user.setInventory(null);
             session.removeAttribute("user");
         }
         return "redirect:/logoutConfirmar";
     }
 
-    @GetMapping("/logoutConfirmar")
+    @GetMapping("/logoutConfirm")
     public String logoutConfirmar(HttpSession session) {
         return "redirect:/";
     }
@@ -78,14 +77,14 @@ public class SessionController {
     public String showUser(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        if(user.getInventario() == null) {
-            user.setInventario(new ArrayList<>());
+        if(user.getInventory() == null) {
+            user.setInventory(new ArrayList<>());
         }
         if(user.getBetHistory() == null) {
             user.setBetHistory(new ArrayList<>());
         }
 
-        List<Prize> inventario = user.getInventario();
+        List<Prize> inventario = user.getInventory();
         List<Bet> betHistory = user.getBetHistory();
 
         if(!betHistory.isEmpty()) {

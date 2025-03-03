@@ -22,40 +22,46 @@ public class User {
     public void setBetHistory(List<Bet> betHistory) {
         this.betHistory = betHistory;
     }
+
     public List<Game> getGamesLiked() {
         return gamesLiked;
     }
     public void setGamesLiked(List<Game> gamesLiked) {
         this.gamesLiked = gamesLiked;
     }
+
     public String getUserName() {
         return userName;
     }
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
     public String getPassword() {
         return password;
     }
     public void setPassword(String password) {
         this.password = password;
     }
+
     public int getMoney() {
         return money;
     }
     public void setMoney(int money) {
         this.money = money;
     }
-    public boolean isIsadmin() {
+
+    public boolean getIsadmin() {
         return isadmin;
     }
     public void setIsadmin(boolean isadmin) {
         this.isadmin = isadmin;
     }
-    public List<Prize> getInventario() {
+
+    public List<Prize> getInventory() {
         return inventario;
     }
-    public void setInventario(List<Prize> inventario) {
+    public void setInventory(List<Prize> inventario) {
         this.inventario = inventario;
     }
 }

@@ -9,7 +9,6 @@ import java.util.List;
 @Service
 public class UserManager {
 
-    // Método para agregar un juego a los favoritos del usuario
     public void addFavoriteGame(User user, Game game) {
         List<Game> gamesLiked = user.getGamesLiked();
         if (!gamesLiked.contains(game)) {
@@ -17,13 +16,11 @@ public class UserManager {
         }
     }
 
-    // Método para eliminar un juego de los favoritos del usuario
     public void removeFavoriteGame(User user, Game game) {
         List<Game> gamesLiked = user.getGamesLiked();
         gamesLiked.remove(game);  // Eliminar el juego de la lista de favoritos
     }
 
-    // Método para obtener los juegos favoritos de un usuario
     public List<Game> getFavoriteGames(User user) {
         return user.getGamesLiked();
     }

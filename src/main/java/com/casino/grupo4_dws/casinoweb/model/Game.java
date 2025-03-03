@@ -67,15 +67,18 @@ public class Game {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public void setImage(String image) {
         this.image = image;
     }
     public void setChance(int chance) {
         this.chance = chance;
     }
+
     public void setMinInput(int minInput) {
         this.minInput = minInput;
     }
+
     public void setMultiplier(int multiplier) {
         this.multiplier = multiplier;
     }

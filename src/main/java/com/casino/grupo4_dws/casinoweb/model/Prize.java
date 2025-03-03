@@ -4,13 +4,11 @@ public class Prize {
     private String title;
     private int price;
     private String description;
-    private String image;  // Corrección en el nombre (minúscula)
+    private String image;
     private int id;
 
-    // 🔹 Constructor vacío (necesario para Jackson)
     public Prize() {}
 
-    // 🔹 Constructor con parámetros
     public Prize(String title, int price, String description, String image, int id) {
         this.title = title;
         this.price = price;
@@ -19,17 +17,18 @@ public class Prize {
         this.id = id;
     }
 
-    // 🔹 Métodos setters
     public void setTitle(String title) { this.title = title; }
-    public void setPrice(int price) { this.price = price; }
-    public void setDescription(String description) { this.description = description; }
-    public void setImage(String image) { this.image = image; }
-    public void setId(int id) { this.id = id; }
-
-    // 🔹 Métodos getters con nombres correctos
     public String getTitle() { return title; }
+
+    public void setPrice(int price) { this.price = price; }
     public int getPrice() { return price; }
+
+    public void setDescription(String description) { this.description = description; }
     public String getDescription() { return description; }
-    public String getImage() { return image; }  // No convertir a int
+
+    public void setImage(String image) { this.image = image; }
+    public String getImage() { return image; }
+
+    public void setId(int id) { this.id = id; }
     public int getId() { return id; }
 }
