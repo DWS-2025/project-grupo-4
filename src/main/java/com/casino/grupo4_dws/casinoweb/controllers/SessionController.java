@@ -41,7 +41,7 @@ public class SessionController {
         }
 
         session.setAttribute("user", user);
-        return "redirect:/NJuegos";
+        return "redirect:/NGames";
     }
 
     @GetMapping("/logout")
@@ -55,7 +55,7 @@ public class SessionController {
             user.setInventory(null);
             session.removeAttribute("user");
         }
-        return "redirect:/logoutConfirmar";
+        return "redirect:/logoutConfirm";
     }
 
     @GetMapping("/logoutConfirm")
