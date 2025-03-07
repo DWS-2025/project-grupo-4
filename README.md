@@ -18,37 +18,38 @@ Se trata de una página web de un casino digital donde puedes jugar diferentes a
 
 Lista de entidades principales y sus relaciones:
 
-- **Entidad 1** → Relación con **Entidad 2**
-- **Entidad 2** → Relación con **Entidad 3**
-- **Entidad 3** → Relación con **Entidad 1**
+- **Juego** → Relación N:M con **Usuario**
+- **Usuario** → Relación 1:N con **Recompensa**
+- **Usuario** → Relación 1:N con **Apuesta**
+- **Juego** → Relación 1:N con **Apuesta**
 
 ### Permisos de los Usuarios
 
 | Tipo de Usuario | Permisos |
 |----------------|----------|
 | **Administrador** | Gestión completa de todas las entidades |
-| **Usuario Registrado** | Creación y modificación de sus propios datos |
-| **Invitado** | Acceso solo a información pública |
+| **Usuario Registrado** | Creación de sus propios datos y modificación de estos mediante los resultados de las apuestas |
+| **Invitado** | Acceso solo a información pública. No se puede jugar sin registrarse |
 
 ### Imágenes
 
 | Entidad | Asociadas |
 |---------|----------|
-| **Entidad 1** | 1 imagen por registro |
-| **Entidad 2** | Varias imágenes por registro |
-| **Entidad 3** | Sin imágenes |
+| **Juego** | 1 imagen por registro |
+| **Recompensa** | 1 imágenen por registro |
+| **Apuesta** | Sin imágenes |
 
 ## Diagrama de la Base de Datos
 
 Se incluirá un diagrama con las entidades de la base de datos, sus campos y relaciones. Puede ser un diagrama entidad-relación o un diagrama UML de las clases Java.
-
+(**En desarrollo**)
 ![Diagrama de la Base de Datos](ruta/a/diagrama.png)
 
 ## Instalación y Ejecución
 
 ```sh
 # Clonar el repositorio
-git clone https://github.com/usuario/repo.git
+git clone https://github.com/DWS-2025/project-grupo-4.git
 
 # Navegar al directorio del proyecto
 cd repo
