@@ -29,9 +29,6 @@ public class PrizeController {
         this.prizeManager = prizeManager;
     }
 
-    @Autowired
-    private User user;
-
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {
         List<Prize> prizes = prizeManager.getPrizeList();

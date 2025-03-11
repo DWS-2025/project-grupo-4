@@ -31,9 +31,6 @@ public class GamesController {
         this.gameManager = gameManager;
     }
 
-    @Autowired
-    private User user;
-
 
     @GetMapping("/NGames")
     public String showGames(Model model, HttpSession session) {

@@ -16,8 +16,7 @@ import java.util.List;
 
 @Controller
 public class IndexController {
-    @Autowired
-    private User user;
+
     private final GameManager Services;
 
     @Autowired
