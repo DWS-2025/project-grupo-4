@@ -1,6 +1,8 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.model.Game;
+import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Controller;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
@@ -26,15 +28,22 @@ public class GamesController {
 
     @Autowired
     private GameManager gameManager;
+    @Autowired
+    private GameRepository gameRepo;
 
     public GamesController(GameManager gameManager) {
         this.gameManager = gameManager;
     }
+    @PostConstruct
+    public void init() {
+        gameRepo.save(new Game(1, "Dado", "Tira un dado de seis caras y prueba tu suerte!", "/images/dice.jpg", 16, 1, 6));
+        gameRepo.save(new Game(2, "Ruleta", "Apuesta a tu color favorito y gira la ruleta!", "/images/Ssegura.jpg", 50, 1, 2));
+        gameRepo.save(new Game(3, "Tragaperras", "Las monedas en el bolsillo no te generan mas dinero... aquí si", "/images/slots.jpg", 5, 10, 20));
+    }
 
     @GetMapping("/NGames")
     public String showGames(Model model, HttpSession session) {
-        List<Game> games = gameManager.getGameList();
-        model.addAttribute("games", games); // Pasar la lista de juegos a la vista
+        model.addAttribute("games",gameRepo.findAll()); // Pasar la lista de juegos a la vista
 
         User user = (User) session.getAttribute("user");
         if (user == null) {

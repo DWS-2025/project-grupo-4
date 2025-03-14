@@ -5,6 +5,8 @@ import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager; // Inyectar GameManager
+import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,16 @@ public class SessionController {
     private GameManager gameManager;
     @Autowired
     private UserManager userManager;
+    @Autowired
+    private UserRepository userRepo;
+
+    @PostConstruct
+    public void init() {
+        userRepo.save(new User("gigandres","1234",5000,true));
+        userRepo.save(new User("ralpi","qwerty",10000,true));
+        userRepo.save(new User("user","aaaaa",500,false));
+    }
+
 
     @GetMapping("/login")
     public String loadLoginPage() {

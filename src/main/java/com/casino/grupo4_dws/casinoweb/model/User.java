@@ -1,12 +1,11 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +20,15 @@ public class User {
     private List<Game> gamesLiked;
     @OneToMany
     private List<Bet> betHistory;
+
+    public User() {
+    }
+    public User(String userName, String password, int money, boolean isadmin) {
+        this.userName = userName;
+        this.password = password;
+        this.money = money;
+        this.isadmin = isadmin;
+    }
 
     public List<Bet> getBetHistory() {
         return betHistory;
