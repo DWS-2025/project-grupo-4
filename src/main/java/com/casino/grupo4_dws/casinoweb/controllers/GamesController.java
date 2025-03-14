@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -53,9 +54,10 @@ public class GamesController {
         return "staticLoggedIn/loggedGames";
     }
 
+    //Adaptada a H2
     @GetMapping("/NGames/mostLiked")
     public String mostLiked(Model model, HttpSession session) {
-        List<Game> games = new ArrayList<>(gameManager.getGameList());
+        List<Game> games = new ArrayList<>(gameRepo.findAll());
 
         games.sort((g1, g2) -> {
             int size1 = g1.getUsersLiked() != null ? g1.getUsersLiked().size() : 0;
@@ -89,6 +91,7 @@ public class GamesController {
         return "staticLoggedIn/addGameForm";
     }
 
+    //Adaptada a H2
     @PostMapping("/add")
     public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
         // Generate a unique filename to avoid conflicts
@@ -112,22 +115,23 @@ public class GamesController {
         newGame.setImage("/images/" + fileName);
 
         // Save the game to the database
-        gameManager.addGame(newGame);
+        gameRepo.save(newGame);
 
         return "redirect:/NGames";
     }
 
+    //Adaptada a H2
     @PostMapping("/delete/{id}")
     public String deleteGame(@PathVariable int id, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());
         }
-        if (user.getGamesLiked().contains(gameManager.getGame(id))) {
-            user.getGamesLiked().remove(gameManager.getGame(id));
-        }
-        if (gameManager.getGame(id) != null) {
-            gameManager.removeGameId(id);
+        Optional<Game> op = gameRepo.findGameById(id);
+        if (op.isPresent()) {
+            Game game = op.get();
+            gameRepo.delete(game);
+            model.addAttribute("games", gameRepo.findAll());
         }
         return "redirect:/NGames"; // Redirigir a la lista de juegos
     }
@@ -176,26 +180,28 @@ public class GamesController {
         return "redirect:/game/" + gameId;
     }
 
+    //Adaptado a H2
     @GetMapping("/game/{id}")
     public String showGameDetails(@PathVariable int id, Model model, HttpSession session) {
-        Game game = gameManager.getGame(id);
-        if (game == null) {
+        Optional<Game> op = gameRepo.findGameById(id);
+        if (op.isPresent()) {
+            Game game = op.get();
+            if (game.getUsersLiked() == null) {
+                game.setUsersLiked(new ArrayList<>());
+            }
+            model.addAttribute("game", game);
+            User user = (User) session.getAttribute("user");
+            if (user != null) {
+                model.addAttribute("user", user);
+            }
+            if (user.getGamesLiked() == null) {
+                user.setGamesLiked(new ArrayList<>());
+            }
+            model.addAttribute("game", game);
+            model.addAttribute("user", user);
+            return "game-details";
+        } else {
             return "redirect:/NGames";
         }
-        if (game.getUsersLiked() == null) {
-            game.setUsersLiked(new ArrayList<>());
-        }
-
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("user", user);
-        }
-        if (user.getGamesLiked() == null) {
-            user.setGamesLiked(new ArrayList<>());
-        }
-
-        model.addAttribute("game", game);
-        model.addAttribute("user", user);
-        return "game-details";
     }
 }

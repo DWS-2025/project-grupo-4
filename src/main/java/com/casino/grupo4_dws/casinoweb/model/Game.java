@@ -1,14 +1,13 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Random;
 @Entity
 public class Game {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String title;
     private String description;

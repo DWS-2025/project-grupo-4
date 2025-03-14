@@ -1,6 +1,8 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
@@ -10,17 +12,17 @@ public class Prize {
     private String description;
     private String image;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     public Prize() {
     }
 
-    public Prize(String title, int price, String description, String image, int id) {
+    public Prize(String title, int price, String description, String image) {
         this.title = title;
         this.price = price;
         this.description = description;
         this.image = image;
-        this.id = id;
     }
 
     public void setTitle(String title) {

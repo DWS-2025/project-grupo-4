@@ -17,12 +17,6 @@ public class PrizeManager {
         this.prizeList = new ArrayList<>();
     }
 
-    @PostConstruct
-    private void startPrizes() {
-        Prize DLore = new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN", "/images/awp_lore.png", 100);
-        addPrize(DLore);
-    }
-
     public void addPrize(Prize prize) {
         int newId = prizeList.size();
         prize.setId(newId);

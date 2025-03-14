@@ -3,6 +3,8 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
+import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,22 +20,27 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
 public class PrizeController {
     @Autowired
     private final PrizeManager prizeManager;
+    @Autowired
+    private PrizeRepository prizeRepo;
 
     public PrizeController(PrizeManager prizeManager) {
         this.prizeManager = prizeManager;
     }
-
-
+    @PostConstruct
+    public void init() {
+        prizeRepo.save(new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN", "/images/awp_lore.png"));
+        prizeRepo.save(new Prize("Viaje Deluxe",3500,"Viaje deluxe a un pueblo perdido de la mano de dios por ahi para dos personas", "/images/albacete.jpg"));
+    }
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {
-        List<Prize> prizes = prizeManager.getPrizeList();
-        model.addAttribute("prizes", prizes);
+        model.addAttribute("prizes", prizeRepo.findAll());
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -61,13 +68,17 @@ public class PrizeController {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             newPrize.setImage("/images/" + fileName);
         }
-        prizeManager.addPrize(newPrize);
+        prizeRepo.save(newPrize);
         return "redirect:/prizes";
     }
 
     @PostMapping("/deletePrize/{id}")
-    public String deletePrize(@PathVariable int id) {
-        prizeManager.removePrizeId(id);
+    public String deletePrize(@PathVariable int id, Model model) {
+        Optional<Prize> op = prizeRepo.findPrizeById(id);
+        if(op.isPresent()){
+            prizeRepo.delete(op.get());
+            model.addAttribute("prizes", prizeRepo.findAll());
+        }
         return "redirect:/prizes";
     }
 
