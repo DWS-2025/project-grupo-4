@@ -10,6 +10,7 @@ import java.util.List;
 @Service
 public class PrizeManager {
 
+
     private List<Prize> prizeList;
 
     public PrizeManager() {
