@@ -2,7 +2,7 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
-import com.casino.grupo4_dws.casinoweb.services.PrizeManager;
+import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,8 +29,6 @@ public class PrizeController {
         this.prizeManager = prizeManager;
     }
 
-    @Autowired
-    private User user;
 
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {

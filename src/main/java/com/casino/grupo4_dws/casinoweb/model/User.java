@@ -1,19 +1,25 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 
-@Component
-@SessionScope
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String userName;
     private String password;
     private int money;
     private boolean isadmin;
+    @OneToMany
     private List<Prize> Inventory;
+    @ManyToMany
     private List<Game> gamesLiked;
+    @OneToMany
     private List<Bet> betHistory;
 
     public List<Bet> getBetHistory() {
@@ -70,5 +76,11 @@ public class User {
 
     public void setInventory(List<Prize> Inventory) {
         this.Inventory = Inventory;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 }

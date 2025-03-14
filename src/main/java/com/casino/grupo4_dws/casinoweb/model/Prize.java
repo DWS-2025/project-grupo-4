@@ -1,10 +1,15 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Prize {
     private String title;
     private int price;
     private String description;
     private String image;
+    @Id
     private int id;
 
     public Prize() {

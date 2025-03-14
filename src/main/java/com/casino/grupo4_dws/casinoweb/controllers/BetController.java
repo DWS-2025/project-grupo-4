@@ -2,27 +2,15 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
-import com.casino.grupo4_dws.casinoweb.services.BetManager;
+import com.casino.grupo4_dws.casinoweb.managers.BetManager;
 import org.springframework.stereotype.Controller;
 import com.casino.grupo4_dws.casinoweb.model.User;
-import com.casino.grupo4_dws.casinoweb.services.GameManager;
+import com.casino.grupo4_dws.casinoweb.managers.GameManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class BetController {

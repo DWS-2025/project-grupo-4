@@ -3,7 +3,7 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import org.springframework.stereotype.Controller;
 import com.casino.grupo4_dws.casinoweb.model.User;
-import com.casino.grupo4_dws.casinoweb.services.GameManager;
+import com.casino.grupo4_dws.casinoweb.managers.GameManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -30,10 +30,6 @@ public class GamesController {
     public GamesController(GameManager gameManager) {
         this.gameManager = gameManager;
     }
-
-    @Autowired
-    private User user;
-
 
     @GetMapping("/NGames")
     public String showGames(Model model, HttpSession session) {

@@ -1,4 +1,4 @@
-package com.casino.grupo4_dws.casinoweb.services;
+package com.casino.grupo4_dws.casinoweb.managers;
 
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import jakarta.annotation.PostConstruct;

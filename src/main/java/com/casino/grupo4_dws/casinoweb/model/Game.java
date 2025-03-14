@@ -1,9 +1,14 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+
 import java.util.List;
 import java.util.Random;
-
+@Entity
 public class Game {
+    @Id
     private int id;
     private String title;
     private String description;
@@ -11,6 +16,7 @@ public class Game {
     private int chance;
     private int minInput;
     private int multiplier;
+    @ManyToMany
     private List<User> usersLiked;
 
     public Game() {

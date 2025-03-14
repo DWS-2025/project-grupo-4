@@ -1,9 +1,10 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
-import com.casino.grupo4_dws.casinoweb.services.GameManager; // Inyectar GameManager
+import com.casino.grupo4_dws.casinoweb.managers.GameManager; // Inyectar GameManager
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,8 @@ public class SessionController {
 
     @Autowired
     private GameManager gameManager;
+    @Autowired
+    private UserManager userManager;
 
     @GetMapping("/login")
     public String loadLoginPage() {

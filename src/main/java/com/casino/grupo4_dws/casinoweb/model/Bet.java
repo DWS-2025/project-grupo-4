@@ -1,10 +1,18 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Bet {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private int amount;
     private int revenue = 0;
     private int date;
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
+    @OneToOne
     private Game game;
     private boolean status;
 
@@ -55,6 +63,12 @@ public class Bet {
 
     public void setGame(Game gamePlayed) {
         this.game = gamePlayed;
+    }
+    public long GetId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
 }
