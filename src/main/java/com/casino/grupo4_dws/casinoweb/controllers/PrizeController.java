@@ -26,7 +26,7 @@ import java.util.UUID;
 @Controller
 public class PrizeController {
     @Autowired
-    private final PrizeManager prizeManager;
+    private PrizeManager prizeManager;
     @Autowired
     private PrizeRepository prizeRepo;
 

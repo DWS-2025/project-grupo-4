@@ -21,8 +21,7 @@ public class Game {
     public Game() {
     }
 
-    public Game(int id, String title, String description, String image, int chance, int minInput, int multiplier) {
-        this.id = id;
+    public Game(String title, String description, String image, int chance, int minInput, int multiplier) {
         this.title = title;
         this.description = description;
         this.image = image;
