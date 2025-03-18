@@ -94,10 +94,13 @@ public class SessionController {
         return "redirect:/login";
     }
 
-
+//NO FUNCIONA ESTA PARTE, MIRAR CUANDO HAYAMOS AJUSTADO TODAS LAS ENTIDADES Y RELACIONES
     @GetMapping("/user")
     public String showUser(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("user", user);
         if (user.getInventory() == null) {
             user.setInventory(new ArrayList<>());
@@ -115,7 +118,7 @@ public class SessionController {
 
         model.addAttribute("user", user);
         model.addAttribute("betHistory", betHistory);
-        model.addAttribute("Inventory", userInventory);
+        model.addAttribute("inventory", userInventory);
         return "staticLoggedIn/user";
     }
 }

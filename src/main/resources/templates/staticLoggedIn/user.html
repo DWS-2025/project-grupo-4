@@ -87,9 +87,9 @@
 
 <div class="backpack" id="Backpack">
     <h1>Mochila:</h1>
-    <h2 th:if="${Inventory.isEmpty()}">No tienes ninguna recompensa comprada</h2>
+    <h2 th:if="${inventory.isEmpty()}">No tienes ninguna recompensa comprada</h2>
     <div id="grid-container">
-        <section class="game-section" th:each="item : ${Inventory}">
+        <section class="game-section" th:each="item : ${inventory}">
             <h2 th:text="${item.getTitle()}"></h2>
             <p th:text="${item.getDescription()}"></p>
             <img th:if="${item.getImage()}" th:src="${item.getImage()}" alt="Imagen del juego" class="game-image"/>
