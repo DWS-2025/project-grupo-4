@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,19 +30,15 @@ public class GamesController {
 
     @Autowired
     private GameManager gameManager;
-    @Autowired
-    private GameRepository gameRepo;
 
     @PostConstruct
     public void init() {
-        gameRepo.save(new Game("Dado", "Tira un dado de seis caras y prueba tu suerte!", "/images/dice.jpg", 16, 1, 6));
-        gameRepo.save(new Game("Ruleta", "Apuesta a tu color favorito y gira la ruleta!", "/images/Ssegura.jpg", 50, 1, 2));
-        gameRepo.save(new Game("Tragaperras", "Las monedas en el bolsillo no te generan mas dinero... aquí si", "/images/slots.jpg", 5, 10, 20));
+        gameManager.PostConstruct();
     }
 
     @GetMapping("/NGames")
     public String showGames(Model model, HttpSession session) {
-        model.addAttribute("games",gameRepo.findAll()); // Pasar la lista de juegos a la vista
+        model.addAttribute("games",gameManager.getGameList()); // Pasar la lista de juegos a la vista
 
         User user = (User) session.getAttribute("user");
         if (user == null) {
@@ -54,7 +51,7 @@ public class GamesController {
     //Adaptada a H2
     @GetMapping("/NGames/mostLiked")
     public String mostLiked(Model model, HttpSession session) {
-        List<Game> games = new ArrayList<>(gameRepo.findAll());
+        List<Game> games = new ArrayList<>(gameManager.getGameList());
 
         games.sort((g1, g2) -> {
             int size1 = g1.getUsersLiked() != null ? g1.getUsersLiked().size() : 0;
@@ -63,6 +60,9 @@ public class GamesController {
         });
         model.addAttribute("mostLikedGames", games);
         User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/NGames";
+        }
         model.addAttribute("user", user);
         return "GamesMostLiked";
     }
@@ -112,23 +112,23 @@ public class GamesController {
         newGame.setImage("/images/" + fileName);
 
         // Save the game to the database
-        gameRepo.save(newGame);
+        gameManager.saveGame(newGame);
 
         return "redirect:/NGames";
     }
 
     //Adaptada a H2
     @PostMapping("/delete/{id}")
-    public String deleteGame(@PathVariable int id, HttpSession session, Model model) {
+    public String deleteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
         if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());
         }
-        Optional<Game> op = gameRepo.findGameById(id);
-        if (op.isPresent()) {
-            Game game = op.get();
-            gameRepo.delete(game);
-            model.addAttribute("games", gameRepo.findAll());
+        try{
+            gameManager.deleteGame(id);
+            model.addAttribute("games", gameManager.getGameList());
+        } catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("error", "El juego a borrar no existe");
         }
         return "redirect:/NGames"; // Redirigir a la lista de juegos
     }
@@ -180,7 +180,7 @@ public class GamesController {
     //Adaptado a H2
     @GetMapping("/game/{id}")
     public String showGameDetails(@PathVariable int id, Model model, HttpSession session) {
-        Optional<Game> op = gameRepo.findGameById(id);
+        Optional<Game> op = gameManager.getGameById(id);
         if (op.isPresent()) {
             Game game = op.get();
             if (game.getUsersLiked() == null) {
@@ -190,6 +190,8 @@ public class GamesController {
             User user = (User) session.getAttribute("user");
             if (user != null) {
                 model.addAttribute("user", user);
+            } else {
+                return "redirect:/NGames";
             }
             if (user.getGamesLiked() == null) {
                 user.setGamesLiked(new ArrayList<>());
