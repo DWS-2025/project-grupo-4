@@ -12,28 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class SessionController {
 
     @Autowired
-    private GameManager gameManager;
-    @Autowired
-    private UserManager userManager;
-    @Autowired
-    private UserRepository userRepo;
+    UserManager userManager;
 
     @PostConstruct
     public void init() {
-        userRepo.save(new User("gigandres","1234",5000,true));
-        userRepo.save(new User("ralpi","qwerty",10000,true));
-        userRepo.save(new User("user","aaaaa",500,false));
+        userManager.postConstruct();
     }
-
 
     @GetMapping("/login")
     public String loadLoginPage() {
@@ -41,33 +36,27 @@ public class SessionController {
     }
 
     @PostMapping("/login")
-    public String loginUser(Model model, @RequestParam String loginUsername, @RequestParam String loginPassword, HttpSession session) {
+    public String loginUser(Model model, @RequestParam String loginUsername, @RequestParam String loginPassword, HttpSession session, RedirectAttributes redirectAttributes) {
         if (loginUsername == null || loginUsername.trim().isEmpty()) {
             return "redirect:/login";
         }
-
-        User user = new User();
-        user.setUserName(loginUsername);
-        user.setPassword(loginPassword);
-        user.setMoney(5000);
-        user.setInventory(null);
-        if ("admin".equals(loginUsername) && "admin".equals(loginPassword)) {
-            user.setIsadmin(true);
+        if (loginPassword == null || loginPassword.trim().isEmpty()) {
+            return "redirect:/login";
         }
-
-        session.setAttribute("user", user);
-        return "redirect:/NGames";
+        if (userManager.isUserCorrect(loginUsername, loginPassword)) {
+            Optional<User> user = userManager.findByUsername(loginUsername);
+            user.ifPresent(user1 -> session.setAttribute("user", user1));
+            return "redirect:/NGames";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario o Contraseña incorrectos");
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/logout")
     public String loggingOut(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            user.setIsadmin(false);
-            user.setUserName("");
-            user.setPassword("");
-            user.setMoney(0);
-            user.setInventory(null);
             session.removeAttribute("user");
         }
         return "redirect:/logoutConfirm";
@@ -83,6 +72,28 @@ public class SessionController {
         return "register";
     }
 
+    @PostMapping("/register")
+    public String registerUser(Model model, @RequestParam String loginUsername, @RequestParam String loginPassword, RedirectAttributes redirectAttributes) {
+        if (loginUsername == null || loginUsername.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage","Rellena todos los campos");
+            return "redirect:/register";
+        }
+        if (loginPassword == null || loginPassword.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage","Rellena todos los campos");
+            return "redirect:/register";
+        }
+        try{
+            userManager.saveUser(loginUsername, loginPassword);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
+            return "redirect:/register";
+        } catch (NullPointerException e) {
+            redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
+        }
+        redirectAttributes.addFlashAttribute("message","Usuario registrado con exito");
+        return "redirect:/login";
+    }
+
 
     @GetMapping("/user")
     public String showUser(Model model, HttpSession session) {
@@ -96,7 +107,7 @@ public class SessionController {
         }
 
         List<Prize> userInventory = user.getInventory();
-        List<Bet> betHistory = user.getBetHistory();
+        List<Bet> betHistory = new ArrayList<>(user.getBetHistory());
 
         if (!betHistory.isEmpty()) {
             Collections.reverse(betHistory);

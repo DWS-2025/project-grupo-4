@@ -24,7 +24,6 @@ public class IndexController {
 
     @GetMapping("/")
     public String inicio(Model model, HttpSession session) {
-        model.addAttribute("users", userRepo.findAll());
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return "inicio";
