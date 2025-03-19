@@ -14,5 +14,9 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     @Override
     <S extends Game> List<S> findAll(Example<S> example);
+
     Optional<Game> findGameById(int id);
+
+    // de momento lo dejo asi
+    //List<Game> findByUsersLiked_Id(Long userId);
 }

@@ -14,10 +14,18 @@ public class User {
     private String password;
     private int money;
     private boolean isadmin;
+
     @OneToMany
     private List<Prize> Inventory;
+
     @ManyToMany
+    @JoinTable(
+            name = "favorites", // Nombre de la tabla intermedia
+            joinColumns = @JoinColumn(name = "game_id"), // Columna que referencia a Game
+            inverseJoinColumns = @JoinColumn(name = "user_id") // Columna que referencia a User
+    )
     private List<Game> gamesLiked;
+
     @OneToMany
     private List<Bet> betHistory;
 
