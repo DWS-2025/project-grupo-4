@@ -27,20 +27,19 @@ import java.util.UUID;
 public class PrizeController {
     @Autowired
     private PrizeManager prizeManager;
-    @Autowired
-    private PrizeRepository prizeRepo;
 
+    //Done
     public PrizeController(PrizeManager prizeManager) {
         this.prizeManager = prizeManager;
     }
     @PostConstruct
     public void init() {
-        prizeRepo.save(new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN", "/images/awp_lore.png"));
-        prizeRepo.save(new Prize("Viaje Deluxe",3500,"Viaje deluxe a un pueblo perdido de la mano de dios por ahi para dos personas", "/images/albacete.jpg"));
+        prizeManager.postConstruct();
     }
+    //Done
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {
-        model.addAttribute("prizes", prizeRepo.findAll());
+        model.addAttribute("prizes", prizeManager.findAllPrizes());
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -49,7 +48,7 @@ public class PrizeController {
         model.addAttribute("user", user);
         return "staticLoggedIn/loggedPrizes";
     }
-
+    //Done
     @GetMapping("/addPrize")
     public String addGameForm(Model model) {
         model.addAttribute("newPrize", new Prize());
@@ -68,44 +67,54 @@ public class PrizeController {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             newPrize.setImage("/images/" + fileName);
         }
-        prizeRepo.save(newPrize);
+        prizeManager.save(newPrize);
         return "redirect:/prizes";
     }
 
     @PostMapping("/deletePrize/{id}")
     public String deletePrize(@PathVariable int id, Model model) {
-        Optional<Prize> op = prizeRepo.findPrizeById(id);
+        Optional<Prize> op = prizeManager.findPrizeById(id);
         if(op.isPresent()){
-            prizeRepo.delete(op.get());
-            model.addAttribute("prizes", prizeRepo.findAll());
+            prizeManager.deletePrize(op.get());
+            model.addAttribute("prizes", prizeManager.findAllPrizes());
         }
         return "redirect:/prizes";
     }
 
     @GetMapping("/editPrize/{id}")
     public String editPrize(Model model, @PathVariable int id) {
-        Prize editado = prizeManager.getPrize(id);
-        model.addAttribute("prize", editado);
-        return "staticLoggedIn/editPrizeForm";
+        Optional <Prize> editado = prizeManager.findPrizeById(id);
+        if (editado.isPresent()) {
+            model.addAttribute("prize", editado.get());
+            return "staticLoggedIn/editPrizeForm";
+        } else {
+            return "redirect:/prizes";
+        }
     }
 
     @PostMapping("/updatePrize/{id}")
-    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        if (imageFile.isEmpty()) {
-            prizeManager.updatePrizeWOImage(updatedPrize, id);
-            return "redirect:/prizes";
+    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id,
+                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                              Model model) throws IOException {
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String fileName = UUID.randomUUID().toString() + "-" +
+                    Paths.get(imageFile.getOriginalFilename()).getFileName().toString();
+
+            Path uploadPath = Paths.get("uploads/");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            try (InputStream inputStream = imageFile.getInputStream()) {
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                updatedPrize.setImage("/uploads/" + fileName);
+            }
         }
-        String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
-        Path uploadPath = Paths.get("src/main/resources/static/images");
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-        try (InputStream inputStream = imageFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            updatedPrize.setImage("/images/" + fileName);
-        }
-        prizeManager.updatePrizeNImage(updatedPrize, id);
+
+        prizeManager.updatePrizeDetails(updatedPrize, id);
+        model.addAttribute("prizes", prizeManager.findAllPrizes());
         return "redirect:/prizes";
     }
 
@@ -115,21 +124,22 @@ public class PrizeController {
         if (user == null) {
             return "redirect:/login";
         }
-        Prize prizeBought = prizeManager.getPrize(id);
-        if (prizeBought == null) {
+        Optional<Prize> op = prizeManager.findPrizeById(id);
+        if (op.isPresent()) {
+            Prize prizeBought = op.get();
+            if (prizeBought.getPrice() > user.getMoney()) {
+                return "redirect:/prizes";
+            }
+            user.setMoney(user.getMoney() - prizeBought.getPrice());
+            if (user.getInventory() == null) {
+                user.setInventory(new ArrayList<>());
+            }
+            user.getInventory().add(prizeBought);
+            model.addAttribute("user", user);
+
+            return "redirect:/prizes";
+        } else {
             return "redirect:/prizes";
         }
-        if (prizeBought.getPrice() > user.getMoney()) {
-            return "redirect:/prizes";
-        }
-        user.setMoney(user.getMoney() - prizeBought.getPrice());
-
-        if (user.getInventory() == null) {
-            user.setInventory(new ArrayList<>());
-        }
-        user.getInventory().add(prizeBought);
-        model.addAttribute("user", user);
-
-        return "redirect:/prizes";
     }
 }
