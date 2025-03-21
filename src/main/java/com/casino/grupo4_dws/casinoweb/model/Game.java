@@ -2,6 +2,7 @@ package com.casino.grupo4_dws.casinoweb.model;
 
 import jakarta.persistence.*;
 
+import java.sql.Blob;
 import java.util.List;
 import java.util.Random;
 @Entity
@@ -11,7 +12,8 @@ public class Game {
     private int id;
     private String title;
     private String description;
-    private String image;
+    @Lob    // Image defined as Blob and Lob tag to operate with database
+    private Blob image;
     private int chance;
     private int minInput;
     private int multiplier;
@@ -22,7 +24,7 @@ public class Game {
     public Game() {
     }
 
-    public Game(String title, String description, String image, int chance, int minInput, int multiplier) {
+    public Game(String title, String description, Blob image, int chance, int minInput, int multiplier) {
         this.title = title;
         this.description = description;
         this.image = image;
@@ -51,7 +53,7 @@ public class Game {
         return description;
     }
 
-    public String getImage() {
+    public Blob getImage() {
         return image;
     }
 
@@ -79,7 +81,7 @@ public class Game {
         this.description = description;
     }
 
-    public void setImage(String image) {
+    public void setImage(Blob image) {
         this.image = image;
     }
 

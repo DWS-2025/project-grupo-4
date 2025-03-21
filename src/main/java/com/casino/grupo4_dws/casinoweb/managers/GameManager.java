@@ -3,9 +3,14 @@ package com.casino.grupo4_dws.casinoweb.managers;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import jakarta.annotation.PostConstruct;
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,17 +51,22 @@ public class GameManager {
     }
 
     public void PostConstruct() {
+        /*
         gameRepo.save(new Game("Dado", "Tira un dado de seis caras y prueba tu suerte!", "/images/dice.jpg", 16, 1, 6));
         gameRepo.save(new Game("Ruleta", "Apuesta a tu color favorito y gira la ruleta!", "/images/Ssegura.jpg", 50, 1, 2));
         gameRepo.save(new Game("Tragaperras", "Las monedas en el bolsillo no te generan mas dinero... aquí si", "/images/slots.jpg", 5, 10, 20));
+        */
     }
 
     public List<Game> getGameList() {
         return gameRepo.findAll();
     }
 
-    public Game saveGame(Game game) {
-        return gameRepo.save(game);
+    public void saveGame(Game game, MultipartFile imageFile) throws IOException {
+        if(!imageFile.isEmpty()){
+            game.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
+        }
+        gameRepo.save(game);
     }
 
 }

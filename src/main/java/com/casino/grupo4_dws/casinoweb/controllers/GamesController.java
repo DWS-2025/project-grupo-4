@@ -3,6 +3,10 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
@@ -19,6 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -91,6 +97,10 @@ public class GamesController {
     //Adaptada a H2
     @PostMapping("/add")
     public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+        /*
+        // Chavales esto es el procesado de las imagenes antes de la base de datos, si funciona bien la bbdd lo quitamos
+        // pero lo dejo por si acaso
+
         // Generate a unique filename to avoid conflicts
         String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
 
@@ -113,6 +123,8 @@ public class GamesController {
 
         // Save the game to the database
         gameManager.saveGame(newGame);
+        */
+        gameManager.saveGame(newGame, imageFile);
 
         return "redirect:/NGames";
     }
@@ -201,6 +213,22 @@ public class GamesController {
             return "game-details";
         } else {
             return "redirect:/NGames";
+        }
+    }
+
+    // To download and access images, adapted to H2 and BLOP typefile
+    @GetMapping("/game/{id}/image")
+    public ResponseEntity<Object> downloadImage(@PathVariable int id) throws SQLException {
+
+        Optional<Game> op = gameManager.getGameById(id);
+
+        if (op.isPresent() && op.get().getImage() != null) {
+            Blob image = op.get().getImage();
+            Resource file =  new InputStreamResource(image.getBinaryStream());
+
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").contentLength(image.length()).body(file);
+        }else{
+            return ResponseEntity.notFound().build();
         }
     }
 }
