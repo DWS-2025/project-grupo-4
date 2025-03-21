@@ -12,16 +12,17 @@ public class User {
     private Long id;
     private String userName;
     private String password;
+    @Column(nullable = false)
     private int money;
     private boolean isadmin;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "owner", orphanRemoval = true)
     private List<Prize> Inventory;
 
     @ManyToMany
     private List<Game> gamesLiked;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Bet> betHistory;
 
     public User() {

@@ -1,9 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Prize {
@@ -14,6 +11,8 @@ public class Prize {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @ManyToOne
+    private User owner;
 
     public Prize() {
     }
@@ -63,5 +62,12 @@ public class Prize {
 
     public int getId() {
         return id;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+    public User getOwner() {
+        return owner;
     }
 }

@@ -78,6 +78,11 @@
             <p>Escoge entre nuestros exóticos premios que podrás reclamar a través de el balance de tu cartera.</p>
             <img src="/images/rick_dinero.jpg" alt="rick" width=681 height=511 id="rick"/>
         </div>
+        <center>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        </center>
     </header>
 
     <main>

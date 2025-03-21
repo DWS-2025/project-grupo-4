@@ -1,16 +1,19 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +30,8 @@ import java.util.UUID;
 public class PrizeController {
     @Autowired
     private PrizeManager prizeManager;
+    @Autowired
+    private UserManager userManager;
 
     //Done
     public PrizeController(PrizeManager prizeManager) {
@@ -118,28 +123,30 @@ public class PrizeController {
         return "redirect:/prizes";
     }
 
+
     @PostMapping("/buy/{id}")
-    public String buyPrize(@PathVariable int id, Model model, HttpSession session) {
+    public String buyPrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para comprar un premio.");
             return "redirect:/login";
         }
-        Optional<Prize> op = prizeManager.findPrizeById(id);
-        if (op.isPresent()) {
-            Prize prizeBought = op.get();
-            if (prizeBought.getPrice() > user.getMoney()) {
-                return "redirect:/prizes";
-            }
-            user.setMoney(user.getMoney() - prizeBought.getPrice());
-            if (user.getInventory() == null) {
-                user.setInventory(new ArrayList<>());
-            }
-            user.getInventory().add(prizeBought);
-            model.addAttribute("user", user);
 
-            return "redirect:/prizes";
-        } else {
+        Optional<Prize> op = prizeManager.findPrizeById(id);
+        if (!op.isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "El premio no existe.");
             return "redirect:/prizes";
         }
+
+        Prize prize = op.get();
+        try {
+            Prize boughtPrize = userManager.buyPrize(prize, user);
+            model.addAttribute("user", user);
+            redirectAttributes.addFlashAttribute("successMessage", "¡Compra realizada con éxito!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/prizes";
     }
 }

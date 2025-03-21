@@ -13,4 +13,5 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
     @Override
     <S extends Prize> List<S> findAll(Example<S> example);
     Optional<Prize> findPrizeById(int id);
+    List<Prize> findAllByOwnerIsNull();
 }

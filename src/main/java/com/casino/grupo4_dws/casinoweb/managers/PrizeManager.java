@@ -18,7 +18,7 @@ public class PrizeManager {
     private PrizeRepository prizeRepo;
 
     public List<Prize> findAllPrizes() {
-        return prizeRepo.findAll();
+        return prizeRepo.findAllByOwnerIsNull();
     }
     public Prize save(Prize prize) {
         return prizeRepo.save(prize);
@@ -43,7 +43,6 @@ public class PrizeManager {
         if (updatedPrize.getImage() != null) {
             prize.setImage(updatedPrize.getImage());
         }
-
         prizeRepo.save(prize);
     }
 
