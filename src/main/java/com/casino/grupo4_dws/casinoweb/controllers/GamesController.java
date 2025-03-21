@@ -38,8 +38,12 @@ public class GamesController {
     private GameManager gameManager;
 
     @PostConstruct
-    public void init() {
-        gameManager.PostConstruct();
+    public void init()  {
+        try {
+            gameManager.PostConstruct();
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/NGames")
