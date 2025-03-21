@@ -113,7 +113,7 @@
         <div class="game-details-container" th:if="${game != null}">
             <div class="game-card">
                 <div class="game-image-container">
-                    <img th:if="${game.image}" th:src="${game.image}" th:alt="${game.title}" class="game-image">
+                    <img th:if="${game.getImage()}" th:src="@{/game/{id}/image(id=${game.getId()})}" alt="Game Img" class="game-image">
                 </div>
                 <div class="game-info">
                     <h1 class="game-title" th:text="${game.title}">Game Title</h1>

@@ -108,7 +108,7 @@
             <section class="game-section" th:each="game : ${user.getGamesLiked()}">
                 <h2 th:text="${game.getTitle()}"></h2>
                 <p th:text="${game.getDescription()}"></p>
-                <img th:if="${game.getImage()}" th:src="${game.getImage()}" alt="Imagen del juego" class="game-image"/>
+                <img th:if="${game.getImage()}" th:src="@{/game/{id}/image(id=${game.getId()})}" alt="Game Img" class="game-image">
                 <form th:action="@{/game/{id}(id=${game.getId()})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
