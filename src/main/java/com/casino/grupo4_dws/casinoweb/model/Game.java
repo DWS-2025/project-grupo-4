@@ -15,8 +15,7 @@ public class Game {
     private int chance;
     private int minInput;
     private int multiplier;
-
-    @ManyToMany(mappedBy = "usersLiked")
+    @ManyToMany(mappedBy = "gamesLiked")
     private List<User> usersLiked;
 
 

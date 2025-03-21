@@ -19,11 +19,6 @@ public class User {
     private List<Prize> Inventory;
 
     @ManyToMany
-    @JoinTable(
-            name = "favorites", // Nombre de la tabla intermedia
-            joinColumns = @JoinColumn(name = "game_id"), // Columna que referencia a Game
-            inverseJoinColumns = @JoinColumn(name = "user_id") // Columna que referencia a User
-    )
     private List<Game> gamesLiked;
 
     @OneToMany
