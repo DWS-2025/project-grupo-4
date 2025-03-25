@@ -1,8 +1,10 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +38,8 @@ public class GamesController {
 
     @Autowired
     private GameManager gameManager;
+    @Autowired
+    private UserManager userManager;
 
     @PostConstruct
     public void init()  {
@@ -194,31 +198,41 @@ public class GamesController {
     }
 
     //Adaptado a H2
+    @Transactional
     @GetMapping("/game/{id}")
-    public String showGameDetails(@PathVariable int id, Model model, HttpSession session) {
+    public String showGameDetails(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        User userSession = (User) session.getAttribute("user");
+        if (userSession == null) {
+            return "redirect:/login";
+        }
+        User user = userManager.findByIdMeta(userSession.getId());
+        if (user == null) {
+            return "redirect:/login";
+        }
+        user.getGamesLiked().size();
+        session.setAttribute("user", user);
+        model.addAttribute("user", user);
+
         Optional<Game> op = gameManager.getGameById(id);
         if (op.isPresent()) {
             Game game = op.get();
             if (game.getUsersLiked() == null) {
                 game.setUsersLiked(new ArrayList<>());
             }
+            game.getUsersLiked().size();
             model.addAttribute("game", game);
-            User user = (User) session.getAttribute("user");
-            if (user != null) {
-                model.addAttribute("user", user);
-            } else {
-                return "redirect:/NGames";
-            }
-            if (user.getGamesLiked() == null) {
-                user.setGamesLiked(new ArrayList<>());
-            }
-            model.addAttribute("game", game);
-            model.addAttribute("user", user);
             return "game-details";
         } else {
+            redirectAttributes.addFlashAttribute("error", "El juego seleccionado no existe");
             return "redirect:/NGames";
         }
+
+
+
+
+
     }
+
 
     // To download and access images, adapted to H2 and BLOP typefile
     @GetMapping("/game/{id}/image")

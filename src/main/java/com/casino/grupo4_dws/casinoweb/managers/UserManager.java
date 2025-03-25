@@ -77,5 +77,11 @@ public class UserManager {
 
         return prize;
     }
+    public User getUserWithGamesLiked(int id) {
+        return userRepo.findByIdWithGamesLiked(id);
+    }
+    public User findByIdMeta(int id) {
+        return userRepo.findByIdWithGamesLiked(id);
+    }
 }
 

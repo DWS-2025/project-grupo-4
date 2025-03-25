@@ -41,6 +41,9 @@
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
+<script>
+    console.log("Cabecera cargada correctamente");
+</script>
 <body>
 
 <div class="transparent-container" th:if="${user != null and user.getUserName() != null}">
@@ -102,7 +105,7 @@
                 <span class="golden-text">RECOMPENSAS</span>
             </button>
             <th:block th:if="${user == null}">
-                <button role="button" class="golden-button" th:if="${user != null and user.getUserName() != null}" onclick="location.href='/login'">
+                <button role="button" class="golden-button" onclick="location.href='/login'">
                     <span class="golden-text">LOGIN</span>
                 </button>
             </th:block>
@@ -113,15 +116,15 @@
         <div class="game-details-container" th:if="${game != null}">
             <div class="game-card">
                 <div class="game-image-container">
-                    <img th:if="${game.getImage()}" th:src="@{/game/{id}/image(id=${game.getId()})}" alt="Game Img" class="game-image">
+                    <img th:if="${game.image}" th:src="@{/game/{id}/image(id=${game.id})}" alt="Game Img" class="game-image">
                 </div>
                 <div class="game-info">
-                    <h1 class="game-title" th:text="${game.title}">Game Title</h1>
-                    <p class="game-description" th:text="${game.description}">Game description</p>
+                    <h1 class="game-title" th:if="${game != null}" th:text="${game.title}">Game Title</h1>
+                    <p class="game-description" th:if="${game != null}" th:text="${game.description}">Game description</p>
                     <div class="betting-info">
                         <div class="bet-limit">
                             <span class="bet-label">Apuesta Mínima:</span>
-                            <span class="bet-value" th:text="${game.minInput}+'$'">0</span>
+                            <span class="bet-value" th:if="${game != null}" th:text="${game.minInput}+'$'">0</span>
                         </div>
                         <div class="bet-limit">
                             <span class="bet-label">Probabilidad:</span>
@@ -131,7 +134,7 @@
                             <span class="bet-label">Multiplicador:</span>
                             <span class="bet-value" th:text="'x'+${game.multiplier}">0</span>
                         </div>
-                        <form th:if="${user != null and user.getUserName() != null and !#lists.contains(user.getGamesLiked(), game)}"
+                        <form th:if="${game != null and user != null and user.getUserName() != null and !#lists.contains(user.getGamesLiked(), game)}"
                               th:action="@{/user/favourites/add/{id}(id=${game.id})}" method="post">
                             <label class="container">
                                 <input type="checkbox" name="id" th:value="${game.id}" onchange="this.form.submit()">
@@ -141,8 +144,8 @@
         </svg>
                             </label>
                         </form>
-                        <form th:if="${user != null and user.getUserName() != null and #lists.contains(user.getGamesLiked(),game)}"
-                              th:action="@{/user/favourites/remove/{id}(id=${game.getId()})}" method="post">
+                        <form th:if="${user != null and user.userName != null and #lists.contains(user.gamesLiked,game)}"
+                              th:action="@{/user/favourites/remove/{id}(id=${game.id})}" method="post">
                             <label class="container">
                                 <input type="checkbox" name="gameId" th:value="${game.id}" onchange="this.form.submit()"
                                        checked>
@@ -165,16 +168,17 @@
             </button>
         </div>
         <center>
-            <form th:if="${user != null and user.getUserName() != null}" th:action="@{/playGame/{id}(id=${game.getId()})}" method="post">
-                <label for="playedAmount"></label>
+            <form th:if="${game != null and user != null and user.userName != null}"
+                  th:action="@{/playGame/{id}(id=${game.id})}" method="post">
+            <label for="playedAmount"></label>
                 <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647" oninput="validity.valid||(value='');" required>
                 <button class="golden-button" type="submit">Jugar</button>
             </form>
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
                 <span th:text="${errorMessage}"></span>
             </div>
-            <h1 th:if="${status == false}" style="color: crimson">Has perdido</h1>
-            <h1 th:if="${status == true}" style="color: #4caf50">¡Has Ganado!</h1>
+            <h1 th:if="${status == false and status!=null}" style="color: crimson">Has perdido</h1>
+            <h1 th:if="${status == true and status!=null}" style="color: #4caf50">¡Has Ganado!</h1>
         </center>
     </main>
 

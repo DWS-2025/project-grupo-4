@@ -10,8 +10,8 @@ public class Bet {
     private int amount;
     private int revenue = 0;
     private int date;
-    @OneToOne(cascade = CascadeType.ALL)
-    private User user;
+    @ManyToOne
+    private User userPlayer;
     @OneToOne
     private Game game;
     private boolean status;
@@ -34,11 +34,11 @@ public class Bet {
     }
 
     public User GetUser() {
-        return user;
+        return userPlayer;
     }
 
-    public void setUser(User activeUser) {
-        this.user = activeUser;
+    public void setUserPlayer(User activeUser) {
+        this.userPlayer = activeUser;
     }
 
     public int GetDate() {

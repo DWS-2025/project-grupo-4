@@ -9,7 +9,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
     private String userName;
     private String password;
     @Column(nullable = false)
@@ -22,7 +22,7 @@ public class User {
     @ManyToMany
     private List<Game> gamesLiked;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "userPlayer", orphanRemoval = true)
     private List<Bet> betHistory;
 
     public User() {
@@ -89,10 +89,10 @@ public class User {
     public void setInventory(List<Prize> Inventory) {
         this.Inventory = Inventory;
     }
-    public Long getId() {
+    public int getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 }
