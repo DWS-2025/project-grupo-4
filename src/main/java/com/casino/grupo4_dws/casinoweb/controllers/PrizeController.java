@@ -14,7 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import org.springframework.web.multipart.MultipartFile;
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
+import java.sql.Blob;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -61,18 +64,19 @@ public class PrizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addGame(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
-        Path uploadPath = Paths.get("src/main/resources/static/images");
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+    public String addGame(@ModelAttribute("newPrize") Prize newPrize,
+                          @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+        if (!imageFile.isEmpty()) {
+            try (InputStream inputStream = imageFile.getInputStream()) {
+                byte[] bytes = inputStream.readAllBytes();
+                Blob imageBlob = new SerialBlob(bytes);
+                newPrize.setImage(imageBlob);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al procesar la imagen", e);
+            }
         }
-        try (InputStream inputStream = imageFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            newPrize.setImage("/images/" + fileName);
-        }
-        prizeManager.save(newPrize);
+
+        prizeManager.save(newPrize, imageFile);
         return "redirect:/prizes";
     }
 
@@ -98,23 +102,18 @@ public class PrizeController {
     }
 
     @PostMapping("/updatePrize/{id}")
-    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id,
+    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize,
+                              @PathVariable int id,
                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                               Model model) throws IOException {
 
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = UUID.randomUUID().toString() + "-" +
-                    Paths.get(imageFile.getOriginalFilename()).getFileName().toString();
-
-            Path uploadPath = Paths.get("uploads/");
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
             try (InputStream inputStream = imageFile.getInputStream()) {
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                updatedPrize.setImage("/uploads/" + fileName);
+                byte[] bytes = inputStream.readAllBytes();
+                Blob imageBlob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                updatedPrize.setImage(imageBlob); // Ahora es un Blob
+            } catch (Exception e) {
+                throw new RuntimeException("Error al procesar la imagen", e);
             }
         }
 
@@ -122,6 +121,7 @@ public class PrizeController {
         model.addAttribute("prizes", prizeManager.findAllPrizes());
         return "redirect:/prizes";
     }
+
 
 
     @PostMapping("/buy/{id}")

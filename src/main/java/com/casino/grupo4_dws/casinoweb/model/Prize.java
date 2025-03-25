@@ -1,13 +1,15 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
 import jakarta.persistence.*;
+import java.sql.Blob;
 
 @Entity
 public class Prize {
     private String title;
     private int price;
     private String description;
-    private String image;
+    @Lob    // Image defined as Blob and Lob tag to operate with database
+    private Blob image;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -17,7 +19,7 @@ public class Prize {
     public Prize() {
     }
 
-    public Prize(String title, int price, String description, String image) {
+    public Prize(String title, int price, String description, Blob image) {
         this.title = title;
         this.price = price;
         this.description = description;
@@ -48,11 +50,11 @@ public class Prize {
         return description;
     }
 
-    public void setImage(String image) {
+    public void setImage(Blob image) {
         this.image = image;
     }
 
-    public String getImage() {
+    public Blob getImage() {
         return image;
     }
 
