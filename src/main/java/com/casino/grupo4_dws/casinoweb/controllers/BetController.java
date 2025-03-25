@@ -55,7 +55,7 @@ public class BetController {
                 redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
                 return "redirect:/game/" + id;
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Something went wrong");
+                redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error: " + e.getMessage());
                 return "redirect:/game/" + id;
             }
         } else {

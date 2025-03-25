@@ -12,7 +12,8 @@ public class Bet {
     private int date;
     @ManyToOne
     private User userPlayer;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "game_id")
     private Game game;
     private boolean status;
 
