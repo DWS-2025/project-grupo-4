@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Our Games</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -8,7 +8,7 @@
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
-<div class="transparent-container">
+<div class="transparent-container" th:if="${user != null}">
     <div class="template">
         <div
                 tabindex="0"
@@ -75,7 +75,7 @@
     <header>
         <div id="GameTitles">
             <h1>Nuestros Juegos</h1>
-            <h2>Disfruta <span th:text="${user.getUserName()}">Usuario</span></h2>
+            <h2>Disfruta <span th:text="${user.userName}">Usuario</span></h2>
             <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots</p>
             <img src="/images/luigiapuestas.jpg" alt="Luigi" width=681 height=511 id="Luigi"/>
         </div>
@@ -101,18 +101,18 @@
             <br>
             <br>
             <center>
-                <h2 th:if="${games.size() == 0}">No has añadido ningún juego a favoritos todavía</h2>
+                <h2 th:if="${games.isEmpty()}">No has añadido ningún juego a favoritos todavía</h2>
             </center>
         </div>
-        <div id="grid-container">
-            <section class="game-section" th:each="game : ${user.getGamesLiked()}">
-                <h2 th:text="${game.getTitle()}"></h2>
-                <p th:text="${game.getDescription()}"></p>
-                <img th:if="${game.getImage()}" th:src="@{/game/{id}/image(id=${game.getId()})}" alt="Game Img" class="game-image">
-                <form th:action="@{/game/{id}(id=${game.getId()})}" method="get">
+        <div id="grid-container" th:if="${!games.isEmpty() && games != null}">
+            <section class="game-section" th:each="game : ${games}">
+                <h2 th:text="${game.title}"></h2>
+                <p th:text="${game.description}"></p>
+                <img th:if="${game.image}" th:src="@{/game/{id}/image(id=${game.id})}" alt="Game Img" class="game-image">
+                <form th:action="@{/game/{id}(id=${game.id})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
-                <form th:action="@{/delete/{id}(id=${game.getId()})}" method="post">
+                <form th:action="@{/delete/{id}(id=${game.id})}" method="post">
                     <button class="golden-button" type="submit">Eliminar Juego</button>
                 </form>
 

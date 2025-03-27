@@ -147,9 +147,9 @@
                         <form th:if="${user != null and user.userName != null and #lists.contains(user.gamesLiked,game)}"
                               th:action="@{/user/favourites/remove/{id}(id=${game.id})}" method="post">
                             <label class="container">
-                                <input type="checkbox" name="gameId" th:value="${game.id}" onchange="this.form.submit()"
+                                <input type="checkbox" name="id" th:value="${game.id}" onchange="this.form.submit()"
                                        checked>
-                                <input type="hidden" name="gameId" th:value="${game.id}">
+                                <input type="hidden" name="id" th:value="${game.id}">
                                 <svg id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"
                                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"></path>

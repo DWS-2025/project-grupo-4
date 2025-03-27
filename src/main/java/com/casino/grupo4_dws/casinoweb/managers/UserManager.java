@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.managers;
 
+import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
@@ -82,6 +83,50 @@ public class UserManager {
     }
     public User findByIdMeta(int id) {
         return userRepo.findByIdWithGamesLiked(id);
+    }
+
+    public void setFav(User user, Game game) {
+        if (game.getUsersLiked() == null) {
+            game.setUsersLiked(new ArrayList<>());
+        }
+        if (user.getGamesLiked() == null) {
+            user.setGamesLiked(new ArrayList<>());
+        }
+        if (user.getGamesLiked().contains(game)) {
+            throw new IllegalArgumentException("Ya tienes el juego en favoritos");
+        }
+        user.getGamesLiked().add(game);
+        userRepo.save(user);
+    }
+
+    @Transactional
+    public void deleteFav(User user, Game game) {
+        if (game.getUsersLiked() == null) {
+            game.setUsersLiked(new ArrayList<>());
+        }
+        if (user.getGamesLiked() == null) {
+            user.setGamesLiked(new ArrayList<>());
+        }
+
+        // Force load the collections
+        user.getGamesLiked().size();
+        game.getUsersLiked().size();
+
+        boolean contains = false;
+        for (Game g : user.getGamesLiked()) {
+            if (g.getId() == game.getId()) {
+                contains = true;
+                break;
+            }
+        }
+
+        if (!contains) {
+            throw new IllegalArgumentException("El juego no está en tus favoritos");
+        }
+
+        user.getGamesLiked().remove(game);
+        game.getUsersLiked().remove(user);
+        userRepo.save(user);
     }
 }
 
