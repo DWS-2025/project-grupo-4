@@ -2,7 +2,6 @@ package com.casino.grupo4_dws.casinoweb.managers;
 
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
-import jakarta.annotation.PostConstruct;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +24,12 @@ public class PrizeManager {
     public List<Prize> findAllPrizes() {
         return prizeRepo.findAllByOwnerIsNull();
     }
-    public Prize save(Prize prize) {
-        return prizeRepo.save(prize);
+
+    public void savePrize(Prize newPrize, MultipartFile imageFile) throws IOException {
+        if (!imageFile.isEmpty()) {
+            newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
+        }
+        prizeRepo.save(newPrize);
     }
 
     public Optional<Prize> getPrizeById(int id) {

@@ -1,7 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
-import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
@@ -62,7 +61,7 @@ public class PrizeController {
         model.addAttribute("newPrize", new Prize());
         return "staticLoggedIn/addPrizeForm";
     }
-
+    /*
     @PostMapping("/addPrize")
     public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
@@ -79,7 +78,14 @@ public class PrizeController {
 
         prizeManager.save(newPrize);
         return "redirect:/prizes";
+    }*/
+
+    @PostMapping("/addPrize")
+    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
+        prizeManager.savePrize(newPrize, imageFile);
+        return "redirect:/prizes";
     }
+
 
     @PostMapping("/deletePrize/{id}")
     public String deletePrize(@PathVariable int id, Model model) {

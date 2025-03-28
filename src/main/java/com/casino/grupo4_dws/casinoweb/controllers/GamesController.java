@@ -117,35 +117,7 @@ public class GamesController {
     //Adaptada a H2
     @PostMapping("/add")
     public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        /*
-        // Chavales esto es el procesado de las imagenes antes de la base de datos, si funciona bien la bbdd lo quitamos
-        // pero lo dejo por si acaso
-
-        // Generate a unique filename to avoid conflicts
-        String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
-
-        // Set the path where the image will be saved
-        Path uploadPath = Paths.get("src/main/resources/static/images");
-
-        // Create directories if they don't exist
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        // Save the file
-        try (InputStream inputStream = imageFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        // Set the image path in the game object
-        newGame.setImage("/images/" + fileName);
-
-        // Save the game to the database
-        gameManager.saveGame(newGame);
-        */
         gameManager.saveGame(newGame, imageFile);
-
         return "redirect:/NGames";
     }
 
