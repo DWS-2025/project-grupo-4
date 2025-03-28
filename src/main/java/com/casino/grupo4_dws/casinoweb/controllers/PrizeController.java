@@ -42,11 +42,7 @@ public class PrizeController {
     }
     @PostConstruct
     public void init() throws SQLException, IOException {
-        try {
-            prizeManager.postConstruct();
-        } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
-        }
+        prizeManager.postConstruct();
     }
     //Done
     @GetMapping("/prizes")

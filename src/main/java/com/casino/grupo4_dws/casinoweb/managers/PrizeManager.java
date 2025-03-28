@@ -30,7 +30,7 @@ public class PrizeManager {
         return prizeRepo.save(prize);
     }
 
-    public Optional<Prize> findPrizeById(int id) {
+    public Optional<Prize> getPrizeById(int id) {
         return prizeRepo.findPrizeById(id);
     }
 
