@@ -134,7 +134,7 @@ public class GamesController {
         } catch (IllegalArgumentException e){
             redirectAttributes.addFlashAttribute("error", "El juego a borrar no existe");
         }
-        return "redirect:/NGames"; // Redirigir a la lista de juegos
+        return "redirect:/NGames";
     }
 
     @PostMapping("/user/favourites/add/{id}")

@@ -55,37 +55,18 @@ public class PrizeController {
         model.addAttribute("user", user);
         return "staticLoggedIn/loggedPrizes";
     }
-    //Done
+
     @GetMapping("/addPrize")
     public String addGameForm(Model model) {
         model.addAttribute("newPrize", new Prize());
         return "staticLoggedIn/addPrizeForm";
     }
-    /*
-    @PostMapping("/addPrize")
-    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-
-        String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
-        Path uploadPath = Paths.get("src/main/resources/static/images");
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-        try (InputStream inputStream = imageFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
-        }
-
-        prizeManager.save(newPrize);
-        return "redirect:/prizes";
-    }*/
 
     @PostMapping("/addPrize")
     public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
         prizeManager.savePrize(newPrize, imageFile);
         return "redirect:/prizes";
     }
-
 
     @PostMapping("/deletePrize/{id}")
     public String deletePrize(@PathVariable int id, Model model) {
