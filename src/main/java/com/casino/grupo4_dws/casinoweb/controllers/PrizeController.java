@@ -1,7 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
-import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
@@ -56,7 +55,7 @@ public class PrizeController {
         model.addAttribute("user", user);
         return "staticLoggedIn/loggedPrizes";
     }
-    //Done
+
     @GetMapping("/addPrize")
     public String addGameForm(Model model) {
         model.addAttribute("newPrize", new Prize());
@@ -64,20 +63,8 @@ public class PrizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-
-        String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
-        Path uploadPath = Paths.get("src/main/resources/static/images");
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-        try (InputStream inputStream = imageFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
-        }
-
-        prizeManager.save(newPrize);
+    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
+        prizeManager.savePrize(newPrize, imageFile);
         return "redirect:/prizes";
     }
 

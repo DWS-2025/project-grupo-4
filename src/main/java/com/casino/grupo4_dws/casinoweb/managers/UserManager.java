@@ -28,7 +28,7 @@ public class UserManager {
         userRepo.save(new User("ralpi","qwerty",10000,true));
         userRepo.save(new User("user","aaaaa",500,false));
         userRepo.save(new User("userprize","1234",1500,false));
-        userRepo.save(new User("saultj", "abc", 9999999, true));
+        userRepo.save(new User("saultj", "abc", 2147483647, true));
     }
     public Optional<User> findByUsername(String username) {
         return userRepo.getUserByUserName(username);
