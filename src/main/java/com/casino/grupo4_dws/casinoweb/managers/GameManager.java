@@ -53,15 +53,10 @@ public class GameManager {
     }
 
     public void PostConstruct() throws IOException, SQLException {
+        // Local image files should be converted to blob before being asigned to Game Class
         gameRepo.save(new Game("Dado", "Tira un dado de seis caras y prueba tu suerte!", new javax.sql.rowset.serial.SerialBlob(Files.readAllBytes(Paths.get("src/main/resources/static/images/dice.jpg"))), 16, 1, 6));
-        gameRepo.save(new Game("Ruleta", "Apuesta a tu color favorito y gira la ruleta!\"", new javax.sql.rowset.serial.SerialBlob(Files.readAllBytes(Paths.get("src/main/resources/static/images/Ssegura.jpg"))), 50, 1, 2));
+        gameRepo.save(new Game("Ruleta", "Apuesta a tu color favorito y gira la ruleta!", new javax.sql.rowset.serial.SerialBlob(Files.readAllBytes(Paths.get("src/main/resources/static/images/Ssegura.jpg"))), 50, 1, 2));
         gameRepo.save(new Game("Tragaperras", "Las monedas en el bolsillo no te generan mas dinero... aquí si", new javax.sql.rowset.serial.SerialBlob(Files.readAllBytes(Paths.get("src/main/resources/static/images/slots.jpg"))), 5, 10, 20));
-
-        /*
-        gameRepo.save(new Game("Dado", "Tira un dado de seis caras y prueba tu suerte!", "/images/dice.jpg", 16, 1, 6));
-        gameRepo.save(new Game("Ruleta", , "/images/Ssegura.jpg", 50, 1, 2));
-        gameRepo.save(new Game(, "/images/slots.jpg", 5, 10, 20));
-        */
     }
 
     public List<Game> getGameList() {

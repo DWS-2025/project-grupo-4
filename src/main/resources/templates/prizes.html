@@ -43,7 +43,7 @@
         <div id="grid-container">
             <section class="game-section" th:each="item : ${prizes}">
                 <h2 th:text="${item.getTitle()}">Nombre del juego</h2>
-                <img th:src="${item.getImage()}" width="190" height="190">
+                <img th:if="${item.getImage()}" th:src="@{/prize/{id}/image(id=${item.getId()})}" alt="Prize Img" class="prize-image" width="230" height="230">
                 <p th:text="${item.getDescription()}">Descripción</p>
             </section>
         </div>

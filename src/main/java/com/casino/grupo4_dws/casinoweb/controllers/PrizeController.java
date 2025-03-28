@@ -1,14 +1,18 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
+import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
-import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,13 +37,16 @@ public class PrizeController {
     @Autowired
     private UserManager userManager;
 
-    //Done
     public PrizeController(PrizeManager prizeManager) {
         this.prizeManager = prizeManager;
     }
     @PostConstruct
-    public void init() {
-        prizeManager.postConstruct();
+    public void init() throws SQLException, IOException {
+        try {
+            prizeManager.postConstruct();
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     //Done
     @GetMapping("/prizes")
@@ -61,7 +68,8 @@ public class PrizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addGame(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+
         String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
         Path uploadPath = Paths.get("src/main/resources/static/images");
         if (!Files.exists(uploadPath)) {
@@ -70,15 +78,16 @@ public class PrizeController {
         try (InputStream inputStream = imageFile.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            newPrize.setImage("/images/" + fileName);
+            newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
+
         prizeManager.save(newPrize);
         return "redirect:/prizes";
     }
 
     @PostMapping("/deletePrize/{id}")
     public String deletePrize(@PathVariable int id, Model model) {
-        Optional<Prize> op = prizeManager.findPrizeById(id);
+        Optional<Prize> op = prizeManager.getPrizeById(id);
         if(op.isPresent()){
             prizeManager.deletePrize(op.get());
             model.addAttribute("prizes", prizeManager.findAllPrizes());
@@ -88,7 +97,7 @@ public class PrizeController {
 
     @GetMapping("/editPrize/{id}")
     public String editPrize(Model model, @PathVariable int id) {
-        Optional <Prize> editado = prizeManager.findPrizeById(id);
+        Optional <Prize> editado = prizeManager.getPrizeById(id);
         if (editado.isPresent()) {
             model.addAttribute("prize", editado.get());
             return "staticLoggedIn/editPrizeForm";
@@ -103,10 +112,9 @@ public class PrizeController {
                               Model model) throws IOException {
 
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = UUID.randomUUID().toString() + "-" +
-                    Paths.get(imageFile.getOriginalFilename()).getFileName().toString();
+            String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
 
-            Path uploadPath = Paths.get("uploads/");
+            Path uploadPath = Paths.get("src/main/resources/static/images");
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -114,7 +122,7 @@ public class PrizeController {
             try (InputStream inputStream = imageFile.getInputStream()) {
                 Path filePath = uploadPath.resolve(fileName);
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                updatedPrize.setImage("/uploads/" + fileName);
+                updatedPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
             }
         }
 
@@ -132,7 +140,7 @@ public class PrizeController {
             return "redirect:/login";
         }
 
-        Optional<Prize> op = prizeManager.findPrizeById(id);
+        Optional<Prize> op = prizeManager.getPrizeById(id);
         if (!op.isPresent()) {
             redirectAttributes.addFlashAttribute("errorMessage", "El premio no existe.");
             return "redirect:/prizes";
@@ -148,5 +156,20 @@ public class PrizeController {
         }
 
         return "redirect:/prizes";
+    }
+
+    @GetMapping("/prize/{id}/image")
+    public ResponseEntity<Object> downloadImage(@PathVariable int id) throws SQLException {
+
+        Optional<Prize> op = prizeManager.getPrizeById(id);
+
+        if (op.isPresent() && op.get().getImage() != null) {
+            Blob image = op.get().getImage();
+            Resource file =  new InputStreamResource(image.getBinaryStream());
+
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").contentLength(image.length()).body(file);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 }
