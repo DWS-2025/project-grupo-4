@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.sql.Blob;
 
@@ -10,7 +11,8 @@ public class Prize {
     private String title;
     private int price;
     private String description;
-    @Lob    // Image defined as Blob and Lob tag to operate with database
+    @Lob
+
     private Blob image;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
