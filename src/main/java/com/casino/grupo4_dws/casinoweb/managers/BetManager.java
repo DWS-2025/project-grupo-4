@@ -3,6 +3,8 @@ package com.casino.grupo4_dws.casinoweb.managers;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.User;
+import com.casino.grupo4_dws.casinoweb.repos.BetRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,6 +12,9 @@ import java.util.Random;
 
 @Service
 public class BetManager {
+
+    @Autowired
+    private BetRepository betRepo;
 
     public Bet playBet(Game gamePlayed, User player, int amount) {
         if (amount < gamePlayed.getMinInput()) {
@@ -28,7 +33,7 @@ public class BetManager {
 
         Bet bet = new Bet();
         bet.setAmount(amount);
-        bet.setUser(player);
+        bet.setUserPlayer(player);
         bet.setGame(gamePlayed);
         boolean win = playGame(bet);
         if (win) {
@@ -36,10 +41,12 @@ public class BetManager {
             bet.setRevenue(revenue);
             player.setMoney(player.getMoney() + revenue);
             bet.setStatus(true);
+            betRepo.save(bet);
         } else {
             bet.setRevenue(0);
             player.setMoney(player.getMoney() - amount);
             bet.setStatus(false);
+            betRepo.save(bet);
         }
 
         if (player.getBetHistory() == null) {
@@ -54,6 +61,10 @@ public class BetManager {
         Random rand = new Random();
         int randomValue = rand.nextInt(100) + 1;
         return randomValue <= activeBet.GetGame().getChance();
+    }
+
+    public void Save(Bet bet) {
+        betRepo.save(bet);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
 import jakarta.persistence.*;
+import java.sql.Blob;
 
 import java.sql.Blob;
 

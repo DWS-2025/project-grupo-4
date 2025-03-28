@@ -1,8 +1,10 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +38,8 @@ public class GamesController {
 
     @Autowired
     private GameManager gameManager;
+    @Autowired
+    private UserManager userManager;
 
     @PostConstruct
     public void init()  {
@@ -82,13 +86,25 @@ public class GamesController {
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
         }
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
+
+        User userSession = (User) session.getAttribute("user");
+        User user = userManager.findByIdMeta(userSession.getId());
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         if (user.getGamesLiked() == null) {
             user.setGamesLiked(new ArrayList<>());
         }
-        List<Game> games = user.getGamesLiked();
-        model.addAttribute("games", games);
+
+        // Force initialize the collection
+        user.getGamesLiked().size();
+
+        session.setAttribute("user", user);
+        model.addAttribute("user", user);
+        model.addAttribute("games", user.getGamesLiked());
+
         return "GamesMyLiked";
     }
 
@@ -150,7 +166,7 @@ public class GamesController {
     }
 
     @PostMapping("/user/favourites/add/{id}")
-    public String addGameFav(@PathVariable int id, Model model, HttpSession session) {
+    public String addGameFav(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
@@ -159,66 +175,80 @@ public class GamesController {
         if (game == null) {
             return "redirect:/NGames";
         }
-        if (game.getUsersLiked() == null) {
-            game.setUsersLiked(new ArrayList<>());
+        try{
+            userManager.setFav(user, game);
+            model.addAttribute("user", user);
+        } catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        if (user.getGamesLiked() == null) {
-            user.setGamesLiked(new ArrayList<>());
-        }
-        if (user.getGamesLiked().contains(game)) {
-            return "redirect:/game/" + id;
-        }
-        user.getGamesLiked().add(game);
-        game.getUsersLiked().add(user);
-
-
-        model.addAttribute("user", user);
         return "redirect:/game/" + id;
     }
 
+    @Transactional
     @PostMapping("/user/favourites/remove/{id}")
-    public String removeFavoriteGame(@RequestParam int gameId, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        Game game = gameManager.getGame(gameId);
+    public String removeFavoriteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        User userSession = (User) session.getAttribute("user");
+        if (userSession == null) {
+            return "redirect:/login";
+        }
+
+        // Get fresh instances from database
+        User user = userManager.findByIdMeta(userSession.getId());
+        Game game = gameManager.getGame(id);
+
         if (user == null) {
             return "redirect:/login";
         }
         if (game == null) {
             return "redirect:/NGames";
         }
-        user.getGamesLiked().remove(game);
-        game.getUsersLiked().remove(user);
-        model.addAttribute("user", user);
 
-        return "redirect:/game/" + gameId;
+        try {
+            userManager.deleteFav(user, game);
+            session.setAttribute("user", user);
+            model.addAttribute("user", user);
+        } catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/game/" + id;
     }
 
     //Adaptado a H2
+    @Transactional
     @GetMapping("/game/{id}")
-    public String showGameDetails(@PathVariable int id, Model model, HttpSession session) {
+    public String showGameDetails(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        User userSession = (User) session.getAttribute("user");
+        if (userSession == null) {
+            return "redirect:/login";
+        }
+        User user = userManager.findByIdMeta(userSession.getId());
+        if (user == null) {
+            return "redirect:/login";
+        }
+        user.getGamesLiked().size();
+        session.setAttribute("user", user);
+        model.addAttribute("user", user);
+
         Optional<Game> op = gameManager.getGameById(id);
         if (op.isPresent()) {
             Game game = op.get();
             if (game.getUsersLiked() == null) {
                 game.setUsersLiked(new ArrayList<>());
             }
+            game.getUsersLiked().size();
             model.addAttribute("game", game);
-            User user = (User) session.getAttribute("user");
-            if (user != null) {
-                model.addAttribute("user", user);
-            } else {
-                return "redirect:/NGames";
-            }
-            if (user.getGamesLiked() == null) {
-                user.setGamesLiked(new ArrayList<>());
-            }
-            model.addAttribute("game", game);
-            model.addAttribute("user", user);
             return "game-details";
         } else {
+            redirectAttributes.addFlashAttribute("error", "El juego seleccionado no existe");
             return "redirect:/NGames";
         }
+
+
+
+
+
     }
+
 
     // To download and access images, adapted to H2 and BLOP typefile
     @GetMapping("/game/{id}/image")

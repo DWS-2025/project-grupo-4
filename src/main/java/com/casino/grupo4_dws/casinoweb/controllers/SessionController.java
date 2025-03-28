@@ -31,8 +31,13 @@ public class SessionController {
     }
 
     @GetMapping("/login")
-    public String loadLoginPage() {
-        return "login";
+    public String loadLoginPage(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "login";
+        } else {
+            return "redirect:/";
+        }
     }
 
     @PostMapping("/login")
