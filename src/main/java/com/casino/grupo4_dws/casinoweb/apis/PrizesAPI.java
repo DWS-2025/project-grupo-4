@@ -40,14 +40,13 @@ public class PrizesAPI {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Create new prize
     @PostMapping("")
     public ResponseEntity<Prize> createPrize(@RequestBody Prize prize) {
         try {
-            Prize savedPrize = prizeManager.save(prize);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedPrize);
+            prizeManager.savePrize(prize, null);
+            return ResponseEntity.status(HttpStatus.CREATED).body(prize);
         } catch (Exception e) {
-            e.printStackTrace(); // For debugging
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

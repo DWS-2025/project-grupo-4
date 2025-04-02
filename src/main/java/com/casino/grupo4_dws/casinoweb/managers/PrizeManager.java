@@ -26,7 +26,7 @@ public class PrizeManager {
     }
 
     public void savePrize(Prize newPrize, MultipartFile imageFile) throws IOException {
-        if (!imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
         prizeRepo.save(newPrize);

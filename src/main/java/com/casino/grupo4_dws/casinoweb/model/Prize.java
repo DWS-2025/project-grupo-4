@@ -12,7 +12,7 @@ public class Prize {
     private int price;
     private String description;
     @Lob
-
+    @JsonIgnore
     private Blob image;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
