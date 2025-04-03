@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Blob;
@@ -13,6 +14,7 @@ public class Game {
     private String title;
     private String description;
     @Lob    // Image defined as Blob and Lob tag to operate with database
+    @JsonIgnore
     private Blob image;
     private int chance;
     private int minInput;

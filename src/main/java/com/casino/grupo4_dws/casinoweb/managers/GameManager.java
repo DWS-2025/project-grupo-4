@@ -64,7 +64,7 @@ public class GameManager {
     }
 
     public void saveGame(Game game, MultipartFile imageFile) throws IOException {
-        if(!imageFile.isEmpty()){
+        if (imageFile != null && !imageFile.isEmpty()) {
             game.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
         gameRepo.save(game);
