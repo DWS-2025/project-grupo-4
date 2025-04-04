@@ -1364,3 +1364,73 @@ ul {
     max-width: 100%;
     height: auto;
 }
+
+/* Filter Container Styling */
+.container.mt-4 {
+    background: linear-gradient(45deg, #2c2c2c, #1a1a1a);
+    border: 2px solid #ffd700;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    max-width: 1000px;
+    margin: 20px auto;
+}
+
+.container.mt-4 input {
+    background-color: #333;
+    border: 1px solid #ffd700;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.container.mt-4 input::placeholder {
+    color: #999;
+}
+
+.container.mt-4 input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    border-color: #ffed4a;
+    background-color: #404040;
+}
+
+.container.mt-4 .row {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.container.mt-4 .col {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Number input arrows styling */
+.container.mt-4 input[type="number"]::-webkit-inner-spin-button,
+.container.mt-4 input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    opacity: 1;
+    background: #ffd700;
+    border-left: 1px solid #ffd700;
+    height: 40px;
+    position: relative;
+    right: 4px;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container.mt-4 .row {
+        flex-direction: column;
+    }
+
+    .container.mt-4 .col {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

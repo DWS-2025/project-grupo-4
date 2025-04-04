@@ -67,6 +67,9 @@ public class GameManager {
         if (imageFile != null && !imageFile.isEmpty()) {
             game.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
+        if (game.getChance() < 1 || game.getChance() > 100) {
+            throw new IllegalArgumentException("Esta creacion de juego es ilegal");
+        }
         gameRepo.save(game);
     }
 

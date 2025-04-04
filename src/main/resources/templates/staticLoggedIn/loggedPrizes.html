@@ -87,11 +87,11 @@
 
     <main>
         <div id="grid-container">
-            <section class="game-section" th:each="item : ${prizes}">
-                <h2 th:text="${item.getTitle()}">Nombre del juego</h2>
+            <section class="game-section prize-item" th:each="item : ${prizes}">
+                <h2 class="prize-title" th:text="${item.getTitle()}">Nombre del juego</h2>
                 <img th:if="${item.getImage()}" th:src="@{/prize/{id}/image(id=${item.getId()})}" alt="Prize Img" class="prize-image" width="230" height="230">
                 <p th:text="${item.getDescription()}">Descripción</p>
-                <p th:text="${item.getPrice()} + ' $'"></p>
+                <p class="prize-price" th:text="${item.getPrice()} + ' $'"></p>
                 <form th:action="@{/buy/{id}(id=${item.getId()})}" method="post">
                     <button type="submit" class="golden-button">Comprar</button>
                 </form>
@@ -103,7 +103,6 @@
                 </form>
             </section>
         </div>
-    </main>
     </main>
 
     <footer class="footer">

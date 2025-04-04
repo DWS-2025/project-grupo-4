@@ -116,25 +116,41 @@ public class GamesController {
 
     //Adaptada a H2
     @PostMapping("/add")
-    public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        gameManager.saveGame(newGame, imageFile);
+    public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes) throws IOException {
+        try {
+            gameManager.saveGame(newGame, imageFile);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/add";
+        }
         return "redirect:/NGames";
     }
 
     //Adaptada a H2
     @PostMapping("/delete/{id}")
     public String deleteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        User user = (User) session.getAttribute("user");
-        if (user.getGamesLiked() == null) {
-            user.setGamesLiked(new ArrayList<>());
+        try {
+            User usuario = (User) session.getAttribute("user");
+            if (usuario == null) {
+                return "redirect:/login";
+            }
+            Game game = gameManager.getGame(id);
+            if (game != null) {
+                // Remove the game from all users' liked games
+                for (User user : game.getUsersLiked()) {
+                    user.getGamesLiked().remove(game);
+                    userManager.save(user);
+                }
+                gameManager.deleteGame(id);
+            }
+            User usuarioActualizado = userManager.findByIdMeta(usuario.getId());
+            session.setAttribute("user", usuarioActualizado);
+            model.addAttribute("user", usuarioActualizado);
+            return "redirect:/NGames";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al borrar el juego: " + e.getMessage());
+            return "redirect:/NGames";
         }
-        try{
-            gameManager.deleteGame(id);
-            model.addAttribute("games", gameManager.getGameList());
-        } catch (IllegalArgumentException e){
-            redirectAttributes.addFlashAttribute("error", "El juego a borrar no existe");
-        }
-        return "redirect:/NGames";
     }
 
     @PostMapping("/user/favourites/add/{id}")

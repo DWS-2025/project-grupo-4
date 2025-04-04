@@ -39,7 +39,7 @@ public class BetManager {
         if (win) {
             int revenue = amount * gamePlayed.getMultiplier();
             bet.setRevenue(revenue);
-            player.setMoney(player.getMoney() + revenue);
+            player.setMoney(player.getMoney() + revenue - amount);
             bet.setStatus(true);
             betRepo.save(bet);
         } else {
