@@ -28,6 +28,7 @@ public class GameManager {
     public GameManager() {
         this.gameList = new ArrayList<Game>();
     }
+
     public void deleteGame(int id){
         Optional<Game> game = gameRepo.findGameById(id);
         if(game.isPresent()){
@@ -36,6 +37,7 @@ public class GameManager {
             throw new IllegalArgumentException("El juego introducido no existe");
         }
     }
+
     public void removeGameId(int id) {
         gameList.removeIf(g -> g.getId() == id);
     }
@@ -43,6 +45,7 @@ public class GameManager {
     public Optional<Game> getGameById(int id) {
         return gameRepo.findGameById(id);
     }
+
     public Game getGame(int id) {
         Optional<Game> game = gameRepo.findGameById(id);
         if (game.isPresent()) {

@@ -17,12 +17,15 @@ public class UserManager {
 
     @Autowired
     private UserRepository userRepo;
-    public List<User> findAll() {
+
+    public List<User> getUserList() {
         return userRepo.findAll();
     }
+
     public User save(User user) {
         return userRepo.save(user);
     }
+
     public void postConstruct(){
         userRepo.save(new User("gigandres","1234",5000,true));
         userRepo.save(new User("ralpi","qwerty",10000,true));
@@ -30,9 +33,24 @@ public class UserManager {
         userRepo.save(new User("userprize","1234",1500,false));
         userRepo.save(new User("saultj", "abc", 2147483647, true));
     }
+
+    public Optional<User> findById(int id) {
+        return userRepo.getUserById(id);
+    }
+
     public Optional<User> findByUsername(String username) {
         return userRepo.getUserByUserName(username);
     }
+
+    public void deleteUser(int id){
+        Optional<User> user = userRepo.getUserById(id);
+        if(user.isPresent()){
+            userRepo.delete(user.get());
+        } else {
+            throw new IllegalArgumentException("El usuario introducido no existe");
+        }
+    }
+
     public boolean isUserCorrect(String username, String password) {
         Optional<User> user = userRepo.getUserByUserName(username);
         if (user.isPresent()) {
@@ -45,6 +63,7 @@ public class UserManager {
             return false;
         }
     }
+
     public void saveUser(String username, String password) {
         Optional<User> user = userRepo.getUserByUserName(username);
         if (user.isPresent()) {
@@ -78,9 +97,11 @@ public class UserManager {
 
         return prize;
     }
+
     public User getUserWithGamesLiked(int id) {
         return userRepo.findByIdWithGamesLiked(id);
     }
+
     public User findByIdMeta(int id) {
         return userRepo.findByIdWithGamesLiked(id);
     }

@@ -18,7 +18,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Override
     <S extends User> List<S> findAll(Example<S> example);
 
-    Optional <User> getUserByUserName(String userName);
+    Optional<User> getUserByUserName(String userName);
+
+    Optional<User> getUserById(int id);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.gamesLiked WHERE u.id = :id")
     User findByIdWithGamesLiked(@Param("id") int id);
