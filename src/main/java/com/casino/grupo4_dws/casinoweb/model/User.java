@@ -22,7 +22,7 @@ public class User {
     @ManyToMany
     private List<Game> gamesLiked;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "userPlayer", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Bet> betHistory;
 
     public User() {

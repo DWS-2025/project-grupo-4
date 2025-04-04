@@ -6,9 +6,11 @@ import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.repos.BetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class BetManager {
@@ -33,7 +35,7 @@ public class BetManager {
 
         Bet bet = new Bet();
         bet.setAmount(amount);
-        bet.setUserPlayer(player);
+        bet.setUserPlayer(player.getId());
         bet.setGame(gamePlayed);
         boolean win = playGame(bet);
         if (win) {
@@ -60,11 +62,22 @@ public class BetManager {
     private boolean playGame(Bet activeBet) {
         Random rand = new Random();
         int randomValue = rand.nextInt(100) + 1;
-        return randomValue <= activeBet.GetGame().getChance();
+        return randomValue <= activeBet.getGame().getChance();
     }
 
     public void Save(Bet bet) {
         betRepo.save(bet);
     }
 
+    public List<Bet> findAll() {
+        return betRepo.findAll();
+    }
+
+    public Optional<Bet> findById(long id) {
+        return betRepo.findById(id);
+    }
+
+    public void delete(long id) {
+        betRepo.deleteById(id);
+    }
 }
