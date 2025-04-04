@@ -49,7 +49,7 @@ public class BetController {
                 redirectAttributes.addFlashAttribute("user", user);
                 betManager.Save(bet);
                 userManager.save(user);
-                boolean status = bet.GetStatus();
+                boolean status = bet.getStatus();
                 redirectAttributes.addFlashAttribute("status", status);
             } catch (IllegalArgumentException e) {
                 redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());

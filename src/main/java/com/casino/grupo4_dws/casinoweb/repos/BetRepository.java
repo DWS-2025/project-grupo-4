@@ -12,4 +12,5 @@ public interface BetRepository extends JpaRepository<Bet, Long> {
 
     @Override
     <S extends Bet> List<S> findAll(Example<S> example);
+
 }

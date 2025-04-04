@@ -10,15 +10,14 @@ public class Bet {
     private int amount;
     private int revenue = 0;
     private int date;
-    @ManyToOne
-    private User userPlayer;
+    private int userID;
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
     private boolean status;
 
 
-    public int GetAmount() {
+    public int getAmount() {
         return amount;
     }
 
@@ -26,7 +25,7 @@ public class Bet {
         this.amount = amount;
     }
 
-    public int GetRevenue() {
+    public int getRevenue() {
         return revenue;
     }
 
@@ -34,15 +33,15 @@ public class Bet {
         this.revenue = revenue;
     }
 
-    public User GetUser() {
-        return userPlayer;
+    public int getUser() {
+        return userID;
     }
 
-    public void setUserPlayer(User activeUser) {
-        this.userPlayer = activeUser;
+    public void setUserPlayer(int activeUser) {
+        this.userID = activeUser;
     }
 
-    public int GetDate() {
+    public int getDate() {
         return date;
     }
 
@@ -50,7 +49,7 @@ public class Bet {
         this.date = date;
     }
 
-    public boolean GetStatus() {
+    public boolean getStatus() {
         return status;
     }
 
@@ -58,14 +57,14 @@ public class Bet {
         this.status = status;
     }
 
-    public Game GetGame() {
+    public Game getGame() {
         return game;
     }
 
     public void setGame(Game gamePlayed) {
         this.game = gamePlayed;
     }
-    public long GetId() {
+    public long getId() {
         return id;
     }
     public void setId(long id) {
