@@ -10,7 +10,6 @@ public class Bet {
     private long id;
     private int amount;
     private int revenue = 0;
-    private int date;
     @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
