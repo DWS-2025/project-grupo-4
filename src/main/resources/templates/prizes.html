@@ -40,6 +40,17 @@
     </header>
 
     <main>
+        <form th:action="@{/filterPrizes}" method="post" class="prize-filter-form">
+            <div class="filter-container">
+                <input type="text" name="title" th:value="${title}" placeholder="Título" class="filter-input">
+                <input type="number" name="minPrice" th:value="${minPrice}" placeholder="Precio mínimo" class="filter-input">
+                <input type="number" name="maxPrice" th:value="${maxPrice}" placeholder="Precio máximo" class="filter-input">
+                <div class="filter-buttons">
+                    <button type="submit" class="filter-btn">Filtrar</button>
+                    <a th:href="@{/prizes}" class="filter-btn clear-btn">Limpiar filtros</a>
+                </div>
+            </div>
+        </form>
         <div id="grid-container">
             <section class="game-section" th:each="item : ${prizes}">
                 <h2 th:text="${item.getTitle()}">Nombre del juego</h2>

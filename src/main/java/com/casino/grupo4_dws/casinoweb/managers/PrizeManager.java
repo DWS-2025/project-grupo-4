@@ -25,6 +25,16 @@ public class PrizeManager {
         return prizeRepo.findAllByOwnerIsNull();
     }
 
+    public List<Prize> findPrizesByFilters(String title, int minPrice, int maxPrice) {
+        if (title != null && title.trim().isEmpty()) {
+            title = null;
+        }
+        if(minPrice > maxPrice) {
+            minPrice = maxPrice;
+        }
+        return prizeRepo.findByFilters(title, minPrice, maxPrice);
+    }
+
     public void savePrize(Prize newPrize, MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
             newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));

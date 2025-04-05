@@ -1434,3 +1434,93 @@ input[type="number"] {
         margin-bottom: 10px;
     }
 }
+
+.prize-filter-form {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #FFD700;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-input {
+    padding: 10px 15px;
+    border: 1px solid #FFD700;
+    background: rgba(0, 0, 0, 0.5);
+    color: #FFD700;
+    border-radius: 5px;
+    font-size: 16px;
+    min-width: 200px;
+}
+
+.filter-input::placeholder {
+    color: rgba(255, 215, 0, 0.6);
+}
+
+.filter-input:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    border-color: #FFA500;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    border: none;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background: linear-gradient(45deg, #FFA500, #FFD700);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+.clear-btn {
+    background: linear-gradient(45deg, #808080, #A9A9A9);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-btn:hover {
+    background: linear-gradient(45deg, #A9A9A9, #808080);
+}
+
+@media (max-width: 768px) {
+    .filter-container {
+        flex-direction: column;
+    }
+
+    .filter-input {
+        width: 100%;
+    }
+
+    .filter-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+}

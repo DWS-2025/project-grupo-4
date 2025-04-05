@@ -56,6 +56,21 @@ public class PrizeController {
         return "staticLoggedIn/loggedPrizes";
     }
 
+    @PostMapping("/filterPrizes")
+    public String filterPrizes(Model model, HttpSession session, @RequestParam(required = false) String title,
+                               @RequestParam(required = false, defaultValue = "0") Integer minPrice,
+                               @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
+
+        model.addAttribute("prizes", prizeManager.findPrizesByFilters(title, minPrice, maxPrice));
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            return "prizes";
+        }
+        model.addAttribute("user", user);
+        return "staticLoggedIn/loggedPrizes";
+    }
+
     @GetMapping("/addPrize")
     public String addGameForm(Model model) {
         model.addAttribute("newPrize", new Prize());
