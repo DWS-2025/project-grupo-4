@@ -107,6 +107,9 @@
             <p th:if="${bet.getRevenue() != 0}" th:text="'Ganancia: '+${bet.getRevenue()}+' $'"></p>
             <h2 th:if="${bet.getStatus()}" style="color: #4caf50">Ganada</h2>
             <h2 th:if="${!bet.getStatus()}" style="color: red">Perdida</h2>
+            <form th:action="@{/deleteBet/{id}(id=${bet.getId()})}" method="post">
+                <button type="submit" class="golden-button">Ocultar del historial</button>
+            </form>
         </section>
     </div>
 </div>

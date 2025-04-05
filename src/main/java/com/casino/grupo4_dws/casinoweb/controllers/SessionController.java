@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class SessionController {
@@ -100,30 +101,33 @@ public class SessionController {
     }
 
 //NO FUNCIONA ESTA PARTE, MIRAR CUANDO HAYAMOS AJUSTADO TODAS LAS ENTIDADES Y RELACIONES
-    @GetMapping("/user")
-    public String showUser(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("user", user);
-        if (user.getInventory() == null) {
-            user.setInventory(new ArrayList<>());
-        }
-        if (user.getBetHistory() == null) {
-            user.setBetHistory(new ArrayList<>());
-        }
-
-        List<Prize> userInventory = user.getInventory();
-        List<Bet> betHistory = new ArrayList<>(user.getBetHistory());
-
-        if (!betHistory.isEmpty()) {
-            Collections.reverse(betHistory);
-        }
-
-        model.addAttribute("user", user);
-        model.addAttribute("betHistory", betHistory);
-        model.addAttribute("inventory", userInventory);
-        return "staticLoggedIn/user";
+@GetMapping("/user")
+public String showUser(Model model, HttpSession session) {
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+        return "redirect:/login";
     }
+
+    // Get fresh user data from database
+    user = userManager.findById(user.getId()).orElse(user);
+    session.setAttribute("user", user);
+
+    if (user.getInventory() == null) {
+        user.setInventory(new ArrayList<>());
+    }
+    if (user.getBetHistory() == null) {
+        user.setBetHistory(new ArrayList<>());
+    }
+
+    List<Prize> userInventory = user.getInventory();
+    List<Bet> betHistory = user.getBetHistory().stream()
+            .filter(Bet::isShow)
+            .sorted((b1, b2) -> Long.compare(b2.getId(), b1.getId()))
+            .collect(Collectors.toList());
+
+    model.addAttribute("user", user);
+    model.addAttribute("betHistory", betHistory);
+    model.addAttribute("inventory", userInventory);
+    return "staticLoggedIn/user";
+}
 }

@@ -66,4 +66,20 @@ public class BetController {
 
         return "redirect:/game/" + id;
     }
+
+    @PostMapping("/deleteBet/{id}")
+    public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Bet> bet = betManager.findById(id);
+        if (bet.isPresent() && bet.get().getUserId() == user.getId()) {
+            Bet betToHide = bet.get();
+            betToHide.setShow(false);
+            betManager.Save(betToHide);
+        }
+        return "redirect:/user";
+    }
 }
