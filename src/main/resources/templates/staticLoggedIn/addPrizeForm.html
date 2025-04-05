@@ -55,6 +55,9 @@
                     <label for="minAge">Precio del producto:</label>
                     <input type="number" id="minAge" th:field="*{price}" required>
                 </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                    <span th:text="${errorMessage}"></span>
+                </div>
                 <div>
                     <button type="submit" class="golden-button">Crear Recompensa</button>
                 </div>

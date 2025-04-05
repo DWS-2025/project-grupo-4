@@ -92,7 +92,7 @@
         <section class="game-section" th:each="item : ${inventory}">
             <h2 th:text="${item.getTitle()}"></h2>
             <p th:text="${item.getDescription()}"></p>
-            <img th:if="${item.getImage()}" th:src="${item.getImage()}" alt="Imagen del juego" class="game-image"/>
+            <img th:if="${item.getImage()}" th:src="@{/prize/{id}/image(id=${item.getId()})}" alt="Prize Img" class="prize-image" width="230" height="230">
         </section>
     </div>
 </div>
@@ -102,7 +102,7 @@
     <div id="grid-container2">
         <h2 th:if="${betHistory.isEmpty()}">Historial de apuestas vacío. ¿A qué esperas para jugar?</h2>
         <section class="game-section" th:each="bet : ${betHistory}">
-            <p th:text="'Apuesta a '+${bet.getGame().getTitle()}"></p>
+            <p th:text="'Apuesta a '+${bet.gameTitle}"></p>
             <p th:text="'Cantidad de dinero jugada: '+${bet.getAmount()}+' $'"></p>
             <p th:if="${bet.getRevenue() != 0}" th:text="'Ganancia: '+${bet.getRevenue()}+' $'"></p>
             <h2 th:if="${bet.getStatus()}" style="color: #4caf50">Ganada</h2>

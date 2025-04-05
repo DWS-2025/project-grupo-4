@@ -1,6 +1,9 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.managers.BetManager;
+import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
+import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import jakarta.annotation.PostConstruct;
@@ -40,6 +43,8 @@ public class GamesController {
     private GameManager gameManager;
     @Autowired
     private UserManager userManager;
+    @Autowired
+    private BetManager betManager;
 
     @PostConstruct
     public void init()  {
@@ -128,24 +133,26 @@ public class GamesController {
 
     //Adaptada a H2
     @PostMapping("/delete/{id}")
+    @Transactional
     public String deleteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
-            User usuario = (User) session.getAttribute("user");
-            if (usuario == null) {
-                return "redirect:/login";
-            }
             Game game = gameManager.getGame(id);
             if (game != null) {
-                // Remove the game from all users' liked games
+                // Detach game from bets but keep bet history
+                List<Bet> bets = betManager.findAll();
+                for (Bet bet : bets) {
+                    bet.setGame(null);
+                    betManager.Save(bet);
+                }
+
+                // Remove from users' liked games
                 for (User user : game.getUsersLiked()) {
                     user.getGamesLiked().remove(game);
                     userManager.save(user);
                 }
+
                 gameManager.deleteGame(id);
             }
-            User usuarioActualizado = userManager.findByIdMeta(usuario.getId());
-            session.setAttribute("user", usuarioActualizado);
-            model.addAttribute("user", usuarioActualizado);
             return "redirect:/NGames";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al borrar el juego: " + e.getMessage());

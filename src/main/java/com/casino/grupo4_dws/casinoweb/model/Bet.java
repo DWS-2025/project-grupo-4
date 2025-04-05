@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,13 +11,24 @@ public class Bet {
     private int amount;
     private int revenue = 0;
     private int date;
-    private int userID;
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
+    @JsonIgnore
+    @ManyToOne(optional = true)
     @JoinColumn(name = "game_id")
     private Game game;
+    private String gameTitle;
     private boolean status;
+    private boolean show;
 
-
+    public String getGameTitle() {
+        return gameTitle;
+    }
+    public void setGameTitle(String gameTitle) {
+        this.gameTitle = gameTitle;
+    }
     public int getAmount() {
         return amount;
     }
@@ -33,20 +45,24 @@ public class Bet {
         this.revenue = revenue;
     }
 
-    public int getUser() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserPlayer(int activeUser) {
-        this.userID = activeUser;
+    public int getUserId() {
+        return user != null ? user.getId() : 0;
     }
 
-    public int getDate() {
-        return date;
+    public String getUserName() {
+        return user != null ? user.getUserName() : null;
     }
 
-    public void setDate(int date) {
-        this.date = date;
+    public Integer getGameId() {
+        return game != null ? game.getId() : null;
+    }
+
+    public void setUserPlayer(User activeUser) {
+        this.user = activeUser;
     }
 
     public boolean getStatus() {
@@ -63,12 +79,21 @@ public class Bet {
 
     public void setGame(Game gamePlayed) {
         this.game = gamePlayed;
+        if (gamePlayed != null) {
+            this.gameTitle = gamePlayed.getTitle();
+        }
     }
     public long getId() {
         return id;
     }
     public void setId(long id) {
         this.id = id;
+    }
+    public boolean isShow() {
+        return show;
+    }
+    public void setShow(boolean show) {
+        this.show = show;
     }
 
 }

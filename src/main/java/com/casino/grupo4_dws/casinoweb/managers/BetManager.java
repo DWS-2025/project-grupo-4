@@ -34,8 +34,9 @@ public class BetManager {
 
 
         Bet bet = new Bet();
+        bet.setShow(true);
         bet.setAmount(amount);
-        bet.setUserPlayer(player.getId());
+        bet.setUserPlayer(player);
         bet.setGame(gamePlayed);
         boolean win = playGame(bet);
         if (win) {
@@ -79,5 +80,9 @@ public class BetManager {
 
     public void delete(long id) {
         betRepo.deleteById(id);
+    }
+
+    public void notShow(Bet bet) {
+        bet.setShow(false);
     }
 }
