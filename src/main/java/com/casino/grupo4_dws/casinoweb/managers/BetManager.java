@@ -85,4 +85,8 @@ public class BetManager {
     public void notShow(Bet bet) {
         bet.setShow(false);
     }
+
+    public void notShowByID(long id) {
+        betRepo.findById(id).ifPresent(bet -> bet.setShow(false));
+    }
 }
