@@ -1,0 +1,59 @@
+package com.casino.grupo4_dws.casinoweb.dto;
+
+public class GameDTO {
+    private int id;
+    private String title;
+    private String description;
+    private int minInput;
+    private int multiplier;
+
+    public GameDTO() {}
+
+    public GameDTO(int id, String title, String description, int minInput, int multiplier) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.minInput = minInput;
+        this.multiplier = multiplier;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getMinInput() {
+        return minInput;
+    }
+
+    public void setMinInput(int minInput) {
+        this.minInput = minInput;
+    }
+
+    public int getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(int maxInput) {
+        this.multiplier = maxInput;
+    }
+}
