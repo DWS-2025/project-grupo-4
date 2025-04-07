@@ -8,7 +8,8 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -90,8 +91,53 @@ public class PrizeManager {
             prize2.setPrice(3500);
             prize2.setDescription("Viaje deluxe a un pueblo perdido de la mano de dios por ahi para dos personas");
             savePrize(prize2, null);
+
+            PrizeDTO prize3 = new PrizeDTO();
+            prize3.setTitle("PlayStation 5");
+            prize3.setPrice(2000);
+            prize3.setDescription("Consola PlayStation 5 con dos mandos DualSense y 3 juegos a elegir");
+            savePrize(prize3, null);
+
+            PrizeDTO prize4 = new PrizeDTO();
+            prize4.setTitle("Rolex Submariner");
+            prize4.setPrice(5000);
+            prize4.setDescription("Reloj Rolex Submariner Date en acero inoxidable, edición limitada");
+            savePrize(prize4, null);
+
+            PrizeDTO prize5 = new PrizeDTO();
+            prize5.setTitle("MacBook Pro");
+            prize5.setPrice(3000);
+            prize5.setDescription("MacBook Pro 16' con chip M2 Pro, 32GB RAM y 1TB SSD");
+            savePrize(prize5, null);
+
+            PrizeDTO prize6 = new PrizeDTO();
+            prize6.setTitle("RTX 4090");
+            prize6.setPrice(2500);
+            prize6.setDescription("NVIDIA GeForce RTX 4090 24GB GDDR6X Gaming OC");
+            savePrize(prize6, null);
+
+            PrizeDTO prize7 = new PrizeDTO();
+            prize7.setTitle("Viaje a Las Vegas");
+            prize7.setPrice(4000);
+            prize7.setDescription("Viaje todo incluido a Las Vegas para dos personas, 7 días en hotel 5 estrellas");
+            savePrize(prize7, null);
+
+            PrizeDTO prize8 = new PrizeDTO();
+            prize8.setTitle("iPhone 15 Pro Max");
+            prize8.setPrice(2000);
+            prize8.setDescription("iPhone 15 Pro Max 256GB Titanio Natural con AppleCare+");
+            savePrize(prize8, null);
+
+            PrizeDTO prize9 = new PrizeDTO();
+            prize9.setTitle("Cena Gourmet");
+            prize9.setPrice(1000);
+            prize9.setDescription("Experiencia gastronómica para dos en restaurante con 3 estrellas Michelin");
+            savePrize(prize9, null);
         } catch (IOException e) {
             System.err.println("Error al leer el archivo de imagen: " + e.getMessage());
         }
+    }
+    public Page<Prize> findAllPrizes(Pageable pageable) {
+        return prizeRepo.findAllByOwnerIsNull(pageable);
     }
 }

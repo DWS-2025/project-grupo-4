@@ -51,12 +51,18 @@
                 </div>
             </div>
         </form>
-        <div id="grid-container">
-            <section class="game-section" th:each="item : ${prizes}">
-                <h2 th:text="${item.getTitle()}">Nombre del juego</h2>
-                <img th:if="${item.getImage()}" th:src="@{/prize/{id}/image(id=${item.getId()})}" alt="Prize Img" class="prize-image" width="230" height="230">
-                <p th:text="${item.getDescription()}">Descripción</p>
-            </section>
+
+        <div id="prizes-container" class="prizes-container">
+            <!-- Los premios se cargarán aquí -->
+        </div>
+
+        <div class="text-center mt-4 mb-4">
+            <button id="loadMoreBtn" class="btn btn-primary">
+                Cargar Más
+            </button>
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
         </div>
     </main>
 
@@ -64,5 +70,115 @@
         <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
     </footer>
 </div>
+
+<script>
+    let currentPage = 0;
+    const pageSize = 3;
+    let loading = false;
+
+    // Cargar premios inicialmente
+    loadPrizes();
+
+    document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);
+
+    function loadPrizes() {
+        if (loading) return;
+
+        loading = true;
+        const spinner = document.getElementById('spinner');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+        spinner.classList.remove('d-none');
+        loadMoreBtn.classList.add('d-none');
+
+        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)
+            .then(response => response.json())
+            .then(data => {
+                const prizesContainer = document.getElementById('prizes-container');
+
+                // Agregar los premios cargados
+                data.content.forEach(prize => {
+                    const prizeElement = createPrizeElement(prize);
+                    prizesContainer.appendChild(prizeElement);
+                });
+
+                currentPage++;
+
+                // Si no hay más páginas, ocultar el botón
+                if (currentPage >= data.totalPages) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            })
+            .finally(() => {
+                loading = false;
+                spinner.classList.add('d-none');
+                loadMoreBtn.classList.remove('d-none');
+            });
+    }
+
+    function createPrizeElement(prize) {
+        const div = document.createElement('div');
+        div.className = 'prize-card';
+        div.innerHTML = `
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/prizes/${prize.id}/image" class="img-fluid rounded-start" alt="${prize.name}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">${prize.name}</h5>
+                            <p class="card-text">${prize.description}</p>
+                            <p class="card-text"><small class="text-muted">Precio: ${prize.price} puntos</small></p>
+                            <a href="/prizes/${prize.id}" class="btn btn-primary">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        return div;
+    }
+</script>
+
+<!-- Agrega estos estilos -->
+<style>
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin: 1rem auto;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+
+    .prizes-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+    }
+
+    .prize-card {
+        width: 300px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 16px;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+</style>
+
 </body>
 </html>

@@ -10,20 +10,13 @@
 <body>
 <div class="transparent-container">
     <div class="template">
-        <div
-                tabindex="0"
-                class="popup button"
-                style="padding:0 0.225rem  0; border-top-right-radius: 1.2rem;
-    border-bottom-right-radius: 1.2rem;"
-        >
+        <div tabindex="0" class="popup button" style="padding:0 0.225rem  0; border-top-right-radius: 1.2rem;
+    border-bottom-right-radius: 1.2rem;">
             <div class="popup-header">
-                <p
-                        style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
-                        th:text="${user.getUserName()}"
-                >
+                <p style="letter-spacing: 1px; font-weight: 600; padding: 0.625rem 0rem 0.625rem 0.825rem;"
+                   th:text="${user.getUserName()}">
                     User
                 </p>
-
                 <img src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Profile picture"
                      style="height: 32px; width: 32px; border-radius: 50%;">
             </div>
@@ -39,13 +32,11 @@
         </div>
     </div>
     <button class="Btn" onclick="location.href='/logout'">
-
         <div class="sign">
             <svg viewBox="0 0 512 512">
                 <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
             </svg>
         </div>
-
         <div class="text">Logout</div>
     </button>
 </div>
@@ -79,9 +70,9 @@
             <img src="/images/rick_dinero.jpg" alt="rick" width=681 height=511 id="rick"/>
         </div>
         <center>
-        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
-            <span th:text="${errorMessage}"></span>
-        </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                <span th:text="${errorMessage}"></span>
+            </div>
         </center>
     </header>
 
@@ -98,21 +89,15 @@
             </div>
         </form>
         <div id="grid-container">
-            <section class="game-section prize-item" th:each="item : ${prizes}">
-                <h2 class="prize-title" th:text="${item.getTitle()}">Nombre del juego</h2>
-                <img th:if="${item.getImage()}" th:src="@{/prize/{id}/image(id=${item.getId()})}" alt="Prize Img" class="prize-image" width="230" height="230">
-                <p th:text="${item.getDescription()}">Descripción</p>
-                <p class="prize-price" th:text="${item.getPrice()} + ' $'"></p>
-                <form th:action="@{/buy/{id}(id=${item.getId()})}" method="post">
-                    <button type="submit" class="golden-button">Comprar</button>
-                </form>
-                <form th:action="@{/editPrize/{id}(id=${item.getId()})}" method="get">
-                    <button type="submit" class="golden-button">Editar Recompensa</button>
-                </form>
-                <form th:action="@{/deletePrize/{id}(id=${item.getId()})}" method="post">
-                    <button type="submit" class="golden-button">Eliminar Recompensa</button>
-                </form>
-            </section>
+            <!-- Los premios cargados dinámicamente irán aquí -->
+        </div>
+        <div class="text-center mt-4 mb-4">
+            <button id="loadMoreBtn" class="btn btn-primary">
+                Cargar Más
+            </button>
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
         </div>
     </main>
 
@@ -120,5 +105,61 @@
         <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
     </footer>
 </div>
+
+<script>
+    let currentPage = 0;
+    const pageSize = 3;
+
+    function loadPrizes() {
+        document.getElementById('spinner').classList.remove('d-none');
+        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById("grid-container");
+
+                data.content.forEach(prize => {
+                    const div = document.createElement("section");
+                    div.classList.add("game-section", "prize-item");
+                    div.innerHTML = `
+                        <h2 class="prize-title">${prize.title}</h2>
+                        <img src="/prize/${prize.id}/image" alt="Prize Img" class="prize-image" width="230" height="230">
+                        <p>${prize.description}</p>
+                        <p class="prize-price">${prize.price} $</p>
+                        <form action="/buy/${prize.id}" method="post">
+                            <button type="submit" class="golden-button">Comprar</button>
+                        </form>
+                    `;
+                    container.appendChild(div);
+                });
+
+                if (data.last) {
+                    document.getElementById("loadMoreBtn").style.display = "none";
+                } else {
+                    currentPage++;
+                }
+
+                document.getElementById('spinner').classList.add('d-none');
+            })
+            .catch(error => console.error("Error al cargar premios:", error));
+    }
+
+    document.getElementById("loadMoreBtn").addEventListener("click", loadPrizes);
+
+    // Cargar los 3 primeros premios al iniciar
+    window.onload = loadPrizes;
+</script>
+
+<style>
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin: 1rem auto;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+</style>
+
 </body>
 </html>
