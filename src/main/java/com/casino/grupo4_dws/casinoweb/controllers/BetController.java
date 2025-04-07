@@ -70,7 +70,7 @@ public class BetController {
         return "redirect:/game/" + id;
     }
 
-    @PostMapping("/deleteBet/{id}")
+    @PutMapping("/deleteBet/{id}")
     public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
