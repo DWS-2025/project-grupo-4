@@ -30,22 +30,15 @@ public class GameManager {
     @Autowired
     private GameMapper gameMapper;
 
-    private List<Game> gameList;
 
-    public GameManager() {
-        this.gameList = new ArrayList<Game>();
-    }
+
+
 
     public void deleteGame(long id) {
         if (!gameRepo.existsById(id)) {
             throw new IllegalArgumentException("El juego introducido no existe");
         }
         gameRepo.deleteById(id);
-        removeGameId((int)id);
-    }
-
-    public void removeGameId(int id) {
-        gameList.removeIf(g -> g.getId() == id);
     }
 
     public Optional<GameDTO> getGameById(int id) {
@@ -61,6 +54,9 @@ public class GameManager {
 
     @PostConstruct
     public void postConstruct() throws IOException, SQLException {
+        if (!gameRepo.findAll().isEmpty()) {
+            return; // Games already initialized
+        }
         GameDTO diceGame = new GameDTO();
         diceGame.setTitle("Dado");
         diceGame.setDescription("Tira un dado de seis caras y prueba tu suerte!");
