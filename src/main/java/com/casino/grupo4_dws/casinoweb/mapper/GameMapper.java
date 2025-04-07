@@ -13,7 +13,7 @@ public interface GameMapper {
     @Mapping(target = "multiplier", source = "multiplier")
     GameDTO toDTO(Game game);
 
-    @Mapping(target = "image", ignore = true)
+    @Mapping(target = "image", source = "image")
     @Mapping(target = "chance", constant = "50")
     @Mapping(target = "usersLiked", ignore = true)
     Game toEntity(GameDTO gameDTO);
