@@ -16,7 +16,7 @@ public interface UserMapper {
 
     @Mapping(target = "userName", source = "username")
     @Mapping(target = "money", source = "balance")
-    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "password", source = "password")
     @Mapping(target = "isadmin", constant = "false")
     @Mapping(target = "inventory", ignore = true)
     @Mapping(target = "gamesLiked", ignore = true)

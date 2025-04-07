@@ -21,7 +21,7 @@
             <div class="popup-header">
                 <p
                         style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
-                        th:text="${user.getUserName()}"
+                        th:text="${user.username}"
                 >
                     User
                 </p>
@@ -34,7 +34,7 @@
                 <ul class="list-box">
                     <li class="button item" onclick="location.href='/user'">Mi zona</li>
                     <li class="button item">
-                        Saldo: <span th:text="${user.getMoney()}"></span>
+                        Saldo: <span th:text="${user.balance}"></span>
                     </li>
                 </ul>
             </div>
@@ -78,11 +78,11 @@
     </nav>
 </div>
 <div id="Welcome">
-    <h1 class="golden-subtitle">Hola, <span th:text="${user.getUserName()}"></span></h1>
+    <h1 class="golden-subtitle">Hola, <span th:text="${user.username}"></span></h1>
     <p>Aquí podras acceder a la información relacionada con tu cuenta, ya sea un historial de apuestas o el balance en $
         que tienes.</p>
     <img src="/images/vanilla.jpeg" alt="vanilla" width=512 height=512 id="vanilla"/>
-    <h1 class="golden-subtitle"> Tienes un total de <span th:text="${user.getMoney()}"></span>$</h1>
+    <h1 class="golden-subtitle"> Tienes un total de <span th:text="${user.balance}"></span>$</h1>
 </div>
 
 <div class="backpack" id="Backpack">
