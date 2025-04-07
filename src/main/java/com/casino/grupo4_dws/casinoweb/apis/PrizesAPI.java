@@ -8,6 +8,7 @@ import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
+import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 @RestController
 @RequestMapping("/api/prizes")
 public class PrizesAPI {
@@ -36,11 +39,10 @@ public class PrizesAPI {
     @Autowired
     private UserMapper userMapper;
 
-    // Get all prizes
     @GetMapping("")
-    public ResponseEntity<List<PrizeDTO>> getAllPrizes() {
-        List<PrizeDTO> prizes = prizeManager.findAllPrizes();
-        return ResponseEntity.ok(prizes);
+    public ResponseEntity<Page<PrizeDTO>> getAllPrizes(Pageable pageable) {
+        Page<Prize> prizePage = prizeManager.findAllPrizes(pageable);
+        return ResponseEntity.ok(prizePage.map(prize -> prizeMapper.toDTO(prize)));
     }
 
     // Get prize by id

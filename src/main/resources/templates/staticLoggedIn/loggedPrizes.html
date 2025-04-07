@@ -19,7 +19,7 @@
             <div class="popup-header">
                 <p
                         style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
-                        th:text="${user.username}"
+                        th:text="${user.getUserName()}"
                 >
                     User
                 </p>
@@ -32,7 +32,7 @@
                 <ul class="list-box">
                     <li class="button item" onclick="location.href='/user'">Mi zona</li>
                     <li class="button item">
-                        Saldo: <span th:text="${user.balance}"></span>
+                        Saldo: <span th:text="${user.getMoney()}"></span>
                     </li>
                 </ul>
             </div>

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
     <S extends Prize> List<S> findAll(Example<S> example);
     Optional<Prize> findPrizeById(int id);
     List<Prize> findAllByOwnerIsNull();
+    Page<Prize> findAllByOwnerIsNull(Pageable pageable);
     @Query("SELECT p FROM Prize p WHERE " +
             "(:title is null OR LOWER(p.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
             "(:minPrice is null OR p.price >= :minPrice) AND " +
@@ -25,4 +28,5 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
             @Param("minPrice") Integer minPrice,
             @Param("maxPrice") Integer maxPrice
     );
+
 }
