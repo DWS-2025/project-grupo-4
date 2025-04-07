@@ -2,6 +2,7 @@ package com.casino.grupo4_dws.casinoweb.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import java.sql.Blob;
 
 import java.sql.Blob;
@@ -73,6 +74,7 @@ public class Prize {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
     public User getOwner() {
         return owner;
     }

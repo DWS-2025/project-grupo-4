@@ -20,6 +20,7 @@ public class IndexController {
     public IndexController(GameManager services) {
         Services = services;
     }
+
     @Autowired
     public UserRepository userRepo;
 

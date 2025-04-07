@@ -103,13 +103,10 @@
         <h2 th:if="${betHistory.isEmpty()}">Historial de apuestas vacío. ¿A qué esperas para jugar?</h2>
         <section class="game-section" th:each="bet : ${betHistory}">
             <p th:text="'Apuesta a '+${bet.gameTitle}"></p>
-            <p th:text="'Cantidad de dinero jugada: '+${bet.getAmount()}+' $'"></p>
-            <p th:if="${bet.getRevenue() != 0}" th:text="'Ganancia: '+${bet.getRevenue()}+' $'"></p>
-            <h2 th:if="${bet.getStatus()}" style="color: #4caf50">Ganada</h2>
-            <h2 th:if="${!bet.getStatus()}" style="color: red">Perdida</h2>
-            <form th:action="@{/deleteBet/{id}(id=${bet.getId()})}" method="post">
-                <button type="submit" class="golden-button">Ocultar del historial</button>
-            </form>
+            <p th:text="'Cantidad de dinero jugada: '+${bet.amount}+' $'"></p>
+            <p th:if="${bet.revenue != 0}" th:text="'Ganancia: '+${bet.revenue}+' $'"></p>
+            <h2 th:if="${bet.status}" style="color: #4caf50">Ganada</h2>
+            <h2 th:if="${!bet.status}" style="color: red">Perdida</h2>
         </section>
     </div>
 </div>

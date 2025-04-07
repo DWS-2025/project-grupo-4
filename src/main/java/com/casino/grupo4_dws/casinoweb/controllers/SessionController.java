@@ -84,53 +84,53 @@ public class SessionController {
     @PostMapping("/register")
     public String registerUser(Model model, @RequestParam String loginUsername, @RequestParam String loginPassword, RedirectAttributes redirectAttributes) {
         if (loginUsername == null || loginUsername.trim().isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage","Rellena todos los campos");
+            redirectAttributes.addFlashAttribute("errorMessage", "Rellena todos los campos");
             return "redirect:/register";
         }
         if (loginPassword == null || loginPassword.trim().isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage","Rellena todos los campos");
+            redirectAttributes.addFlashAttribute("errorMessage", "Rellena todos los campos");
             return "redirect:/register";
         }
-        try{
+        try {
             userManager.saveUser(loginUsername, loginPassword);
         } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/register";
         } catch (NullPointerException e) {
-            redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        redirectAttributes.addFlashAttribute("message","Usuario registrado con exito");
+        redirectAttributes.addFlashAttribute("message", "Usuario registrado con exito");
         return "redirect:/login";
     }
 
-//NO FUNCIONA ESTA PARTE, MIRAR CUANDO HAYAMOS AJUSTADO TODAS LAS ENTIDADES Y RELACIONES
-@GetMapping("/user")
-public String showUser(Model model, HttpSession session) {
-    UserDTO user = (UserDTO) session.getAttribute("user");
-    if (user == null) {
-        return "redirect:/login";
+    //NO FUNCIONA ESTA PARTE, MIRAR CUANDO HAYAMOS AJUSTADO TODAS LAS ENTIDADES Y RELACIONES
+    @GetMapping("/user")
+    public String showUser(Model model, HttpSession session) {
+        UserDTO user = (UserDTO) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        // Get fresh user data from database
+        user = userManager.findById(user.getId()).orElse(user);
+        session.setAttribute("user", user);
+
+        if (user.getInventory() == null) {
+            user.setInventory(new ArrayList<>());
+        }
+        if (user.getBetHistory() == null) {
+            user.setBetHistory(new ArrayList<>());
+        }
+
+        List<PrizeDTO> userInventory = user.getInventory();
+        List<BetDTO> betHistory = user.getBetHistory().stream()
+                .filter(BetDTO::isShow)
+                .sorted((b1, b2) -> Long.compare(b2.getId(), b1.getId()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("user", user);
+        model.addAttribute("betHistory", betHistory);
+        model.addAttribute("inventory", userInventory);
+        return "staticLoggedIn/user";
     }
-
-    // Get fresh user data from database
-    user = userManager.findById(user.getId()).orElse(user);
-    session.setAttribute("user", user);
-
-    if (user.getInventory() == null) {
-        user.setInventory(new ArrayList<>());
-    }
-    if (user.getBetHistory() == null) {
-        user.setBetHistory(new ArrayList<>());
-    }
-
-    List<PrizeDTO> userInventory = user.getInventory();
-    List<BetDTO> betHistory = user.getBetHistory().stream()
-            .filter(BetDTO::isShow)
-            .sorted((b1, b2) -> Long.compare(b2.getId(), b1.getId()))
-            .collect(Collectors.toList());
-
-    model.addAttribute("user", user);
-    model.addAttribute("betHistory", betHistory);
-    model.addAttribute("inventory", userInventory);
-    return "staticLoggedIn/user";
-}
 }

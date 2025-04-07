@@ -10,8 +10,10 @@ import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.repos.BetRepository;
+import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
@@ -29,6 +31,9 @@ public class BetManager {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserRepository userRepo;
 
     @Autowired
     private GameMapper gameMapper;
@@ -71,10 +76,13 @@ public class BetManager {
 
         Bet savedBet = betRepo.save(bet);
 
+
         if (player.getBetHistory() == null) {
             player.setBetHistory(new ArrayList<>());
         }
         player.getBetHistory().add(savedBet);
+
+        userRepo.save(player);
 
         return betMapper.toDTO(savedBet);
     }

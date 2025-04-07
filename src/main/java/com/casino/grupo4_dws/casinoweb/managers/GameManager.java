@@ -32,9 +32,6 @@ public class GameManager {
     private GameMapper gameMapper;
 
 
-
-
-
     public void deleteGame(long id) {
         if (!gameRepo.existsById(id)) {
             throw new IllegalArgumentException("El juego introducido no existe");

@@ -27,6 +27,7 @@ public class User {
 
     public User() {
     }
+
     public User(String userName, String password, int money, boolean isadmin) {
         this.userName = userName;
         this.password = password;
@@ -89,9 +90,11 @@ public class User {
     public void setInventory(List<Prize> Inventory) {
         this.Inventory = Inventory;
     }
+
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }

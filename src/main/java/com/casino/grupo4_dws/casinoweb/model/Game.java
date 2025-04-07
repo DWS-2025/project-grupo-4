@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.sql.Blob;
 import java.util.List;
 import java.util.Random;
+
 @Entity
 public class Game {
     @Id

@@ -51,7 +51,7 @@ public class GamesController {
     private BetManager betManager;
 
     @PostConstruct
-    public void init()  {
+    public void init() {
         try {
             gameManager.postConstruct();
         } catch (IOException | SQLException e) {
@@ -61,7 +61,7 @@ public class GamesController {
 
     @GetMapping("/NGames")
     public String showGames(Model model, HttpSession session) {
-        model.addAttribute("games",gameManager.getGameList()); // Pasar la lista de juegos a la vista
+        model.addAttribute("games", gameManager.getGameList()); // Pasar la lista de juegos a la vista
 
         UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
@@ -174,7 +174,7 @@ public class GamesController {
         if (game == null) {
             return "redirect:/NGames";
         }
-        try{
+        try {
             userManager.setFav(user, game);
             model.addAttribute("user", user);
             List<Long> favoriteGameIds = user.getFavoriteGames()
@@ -186,7 +186,7 @@ public class GamesController {
 
 
             model.addAttribute("favoriteGameIds", favoriteGameIds);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/game/" + id;
@@ -215,7 +215,7 @@ public class GamesController {
             userManager.deleteFav(user, game);
             session.setAttribute("user", user);
             model.addAttribute("user", user);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/game/" + id;
@@ -275,10 +275,10 @@ public class GamesController {
 
         if (op.isPresent() && op.get().getImage() != null) {
             Blob image = op.get().getImage();
-            Resource file =  new InputStreamResource(image.getBinaryStream());
+            Resource file = new InputStreamResource(image.getBinaryStream());
 
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").contentLength(image.length()).body(file);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

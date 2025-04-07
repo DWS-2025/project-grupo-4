@@ -20,5 +20,6 @@ public interface PrizeMapper {
     Prize toEntity(PrizeDTO prizeDTO);
 
     List<PrizeDTO> toDTOList(List<Prize> prizes);
+
     List<Prize> toEntityList(List<PrizeDTO> prizeDTOs);
 }

@@ -17,7 +17,8 @@ public class GameDTO {
     @JsonIgnore
     private Blob image;
 
-    public GameDTO() {}
+    public GameDTO() {
+    }
 
     public GameDTO(int id, String title, String description, int minInput, int multiplier, int chance) {
         this.id = id;
@@ -62,11 +63,11 @@ public class GameDTO {
         this.minInput = minInput;
     }
 
-    public int getChance(){
+    public int getChance() {
         return chance;
     }
 
-    public void setChance(int chance){
+    public void setChance(int chance) {
         this.chance = chance;
     }
 
@@ -81,12 +82,15 @@ public class GameDTO {
     public List<UserDTO> getUsersLiked() {
         return usersLiked;
     }
+
     public void setUsersLiked(List<UserDTO> usersLiked) {
         this.usersLiked = usersLiked;
     }
+
     public Blob getImage() {
         return image;
     }
+
     public void setImage(Blob image) {
         this.image = image;
     }

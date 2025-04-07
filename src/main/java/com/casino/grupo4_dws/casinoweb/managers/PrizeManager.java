@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,7 +38,7 @@ public class PrizeManager {
         if (title != null && title.trim().isEmpty()) {
             title = null;
         }
-        if(minPrice > maxPrice) {
+        if (minPrice > maxPrice) {
             minPrice = maxPrice;
         }
         return prizeRepo.findByFilters(title, minPrice, maxPrice).stream()
@@ -79,7 +80,7 @@ public class PrizeManager {
         return prizeMapper.toDTO(updatedPrize);
     }
 
-    public void postConstruct(){
+    public void postConstruct() {
         try {
             PrizeDTO prize1 = new PrizeDTO();
             prize1.setTitle("AWP Dragon Lore");
@@ -138,6 +139,7 @@ public class PrizeManager {
             System.err.println("Error al leer el archivo de imagen: " + e.getMessage());
         }
     }
+
     public Page<Prize> findAllPrizes(Pageable pageable) {
         return prizeRepo.findAllByOwnerIsNull(pageable);
     }

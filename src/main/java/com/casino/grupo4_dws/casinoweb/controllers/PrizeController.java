@@ -43,10 +43,12 @@ public class PrizeController {
     public PrizeController(PrizeManager prizeManager) {
         this.prizeManager = prizeManager;
     }
+
     @PostConstruct
     public void init() throws SQLException, IOException {
         prizeManager.postConstruct();
     }
+
     //Done
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {
@@ -91,7 +93,7 @@ public class PrizeController {
     @PostMapping("/deletePrize/{id}")
     public String deletePrize(@PathVariable int id, Model model) {
         Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
-        if(op.isPresent()){
+        if (op.isPresent()) {
             prizeManager.deletePrize(id);
             model.addAttribute("prizes", prizeManager.findAllPrizes());
         }
@@ -100,7 +102,7 @@ public class PrizeController {
 
     @GetMapping("/editPrize/{id}")
     public String editPrize(Model model, @PathVariable int id) {
-        Optional <PrizeDTO> editado = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> editado = prizeManager.getPrizeById(id);
         if (editado.isPresent()) {
             model.addAttribute("prize", editado.get());
             return "staticLoggedIn/editPrizeForm";
@@ -114,7 +116,7 @@ public class PrizeController {
                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                               Model model) throws IOException {
 
-        prizeManager.updatePrizeDetails(updatedPrize, id,imageFile);
+        prizeManager.updatePrizeDetails(updatedPrize, id, imageFile);
         model.addAttribute("prizes", prizeManager.findAllPrizes());
         return "redirect:/prizes";
     }
@@ -153,10 +155,10 @@ public class PrizeController {
 
         if (op.isPresent() && op.get().getImage() != null) {
             Blob image = op.get().getImage();
-            Resource file =  new InputStreamResource(image.getBinaryStream());
+            Resource file = new InputStreamResource(image.getBinaryStream());
 
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").contentLength(image.length()).body(file);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

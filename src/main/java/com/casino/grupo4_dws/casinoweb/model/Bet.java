@@ -25,9 +25,11 @@ public class Bet {
     public String getGameTitle() {
         return gameTitle;
     }
+
     public void setGameTitle(String gameTitle) {
         this.gameTitle = gameTitle;
     }
+
     public int getAmount() {
         return amount;
     }
@@ -82,15 +84,19 @@ public class Bet {
             this.gameTitle = gamePlayed.getTitle();
         }
     }
+
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
+
     public boolean isShow() {
         return show;
     }
+
     public void setShow(boolean show) {
         this.show = show;
     }

@@ -13,7 +13,8 @@ public class UserDTO {
     private List<PrizeDTO> inventory;
     private List<BetDTO> betHistory;
 
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public UserDTO(int id, String username, int balance) {
         this.id = id;
@@ -49,12 +50,15 @@ public class UserDTO {
     public boolean isAdmin() {
         return admin;
     }
+
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -66,15 +70,19 @@ public class UserDTO {
     public void setFavoriteGames(List<GameDTO> favoriteGames) {
         this.gamesLiked = favoriteGames;
     }
+
     public List<PrizeDTO> getInventory() {
         return inventory;
     }
+
     public void setInventory(List<PrizeDTO> inventory) {
         this.inventory = inventory;
     }
+
     public List<BetDTO> getBetHistory() {
         return betHistory;
     }
+
     public void setBetHistory(List<BetDTO> betHistory) {
         this.betHistory = betHistory;
     }

@@ -11,7 +11,8 @@ public class PrizeDTO {
     private int price;
     private Blob image;
 
-    public PrizeDTO() {}
+    public PrizeDTO() {
+    }
 
     public PrizeDTO(long id, String title, String description, int price) {
         this.id = id;

@@ -34,41 +34,54 @@ public class BetController {
     public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmount") int amout, RedirectAttributes redirectAttributes) {
         UserDTO user = (UserDTO) session.getAttribute("user");
 
+        // Case there's no user
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         // Case user has no money
         if (amout < 0) {
             redirectAttributes.addFlashAttribute("errorMessage", "Prohibido apostar en negativo");
             return "redirect:/game/" + id;
-        }
-        // Case there's no user
-        if (user == null) {
-            return "redirect:/login";
         }
 
         Optional<GameDTO> op = gameManager.getGameById(id);
         if (op.isPresent()) {
             GameDTO gamePlayed = op.get();
             try {
-                BetDTO bet = betManager.playBet(gamePlayed, user, amout);
-                redirectAttributes.addFlashAttribute("user", user);
-                betManager.save(bet);
+                // First save the user to ensure it exists in the database
                 userManager.save(user);
-                boolean status = bet.isStatus();
-                redirectAttributes.addFlashAttribute("status", status);
+
+                BetDTO bet = betManager.playBet(gamePlayed, user, amout);
+
+                if (bet == null) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Error creando la apuesta");
+                    return "redirect:/game/" + id;
+                }
+
+                // Asegúrate de que el usuario esté seteado en la apuesta
+                bet.setUserPlayer(user); // <-- Esta es la línea clave
+
+                // Guardar la apuesta
+                betManager.save(bet);
+
+                // Update user in session
+                session.setAttribute("user", user);
+                redirectAttributes.addFlashAttribute("user", user);
+                redirectAttributes.addFlashAttribute("status", bet.isStatus());
+
             } catch (IllegalArgumentException e) {
-                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-                return "redirect:/game/" + id;
-            } catch (Exception e) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error: " + e.getMessage());
                 return "redirect:/game/" + id;
             }
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Game not found");
+            redirectAttributes.addFlashAttribute("errorMessage", "Juego no encontrado");
             return "redirect:/NGames";
         }
 
-
         return "redirect:/game/" + id;
     }
+
 
     @PutMapping("/deleteBet/{id}")
     public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {

@@ -11,6 +11,7 @@ public class BetDTO {
     private boolean show;
     private GameDTO game;
     private UserDTO userPlayer;
+    private String gameTitle;
 
     // Getters y Setters
     public long getId() {
@@ -67,5 +68,13 @@ public class BetDTO {
 
     public void setUserPlayer(UserDTO userPlayer) {
         this.userPlayer = userPlayer;
+    }
+
+    public String getGameTitle() {
+        return gameTitle;
+    }
+
+    public void setGameTitle(String gameTitle) {
+        this.gameTitle = gameTitle;
     }
 }
