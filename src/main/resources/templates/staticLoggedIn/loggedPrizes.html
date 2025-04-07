@@ -136,34 +136,25 @@
     const pageSize = 3;
     let loading = false;
 
-    // Cargar premios inicialmente
-    document.addEventListener('DOMContentLoaded', loadPrizes);
+    window.onload = function() {
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        loadPrizes();
+    };
 
     document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);
 
     function loadPrizes() {
         if (loading) return;
-
         loading = true;
+
         const spinner = document.getElementById('spinner');
         const loadMoreBtn = document.getElementById('loadMoreBtn');
 
         spinner.classList.remove('d-none');
         loadMoreBtn.classList.add('d-none');
 
-        // Obtener parámetros de filtro de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const title = urlParams.get('title');
-        const minPrice = urlParams.get('minPrice');
-        const maxPrice = urlParams.get('maxPrice');
-
-        // Construir URL de la API con parámetros de filtro
-        let apiUrl = `/api/prizes?page=${currentPage}&size=${pageSize}`;
-        if (title) apiUrl += `&title=${encodeURIComponent(title)}`;
-        if (minPrice) apiUrl += `&minPrice=${minPrice}`;
-        if (maxPrice) apiUrl += `&maxPrice=${maxPrice}`;
-
-        fetch(apiUrl)
+        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)
             .then(response => response.json())
             .then(data => {
                 const prizesContainer = document.getElementById('grid-container');
@@ -175,14 +166,13 @@
 
                 currentPage++;
 
-                // Si no hay más páginas, ocultar el botón
                 if (currentPage >= data.totalPages) {
                     loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'block';
                 }
             })
-            .catch(error => {
-                console.error('Error al cargar premios:', error);
-            })
+            .catch(error => console.error('Error:', error))
             .finally(() => {
                 loading = false;
                 spinner.classList.add('d-none');
@@ -191,29 +181,72 @@
     }
 
     function createPrizeElement(prize) {
-        const section = document.createElement('section');
+        const section = document.createElement('div');
         section.className = 'game-section prize-item';
 
-        section.innerHTML = `
-            <h2 class="prize-title">${prize.title}</h2>
-            ${prize.image ? `<img src="/prize/${prize.id}/image" alt="Prize Img" class="prize-image" width="230" height="230">` : ''}
-            <p>${prize.description}</p>
-            <p class="prize-price">${prize.price} $</p>
-            <form action="/buy/${prize.id}" method="post">
-                <button type="submit" class="golden-button">Comprar</button>
-            </form>
-            <form action="/editPrize/${prize.id}" method="get">
-                <button type="submit" class="golden-button">Editar Recompensa</button>
-            </form>
-            <form action="/deletePrize/${prize.id}" method="post">
-                <button type="submit" class="golden-button">Eliminar Recompensa</button>
-            </form>
-        `;
+        const title = document.createElement('h2');
+        title.className = 'prize-title';
+        title.textContent = prize.title;
+        section.appendChild(title);
+
+        const img = document.createElement('img');
+        img.src = `/prize/${prize.id}/image`;
+        img.alt = 'Prize Img';
+        img.className = 'prize-image';
+        img.width = 230;
+        img.height = 230;
+        section.appendChild(img);
+
+        const description = document.createElement('p');
+        description.textContent = prize.description;
+        section.appendChild(description);
+
+        const price = document.createElement('p');
+        price.className = 'prize-price';
+        price.textContent = `${prize.price} $`;
+        section.appendChild(price);
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'prize-buttons';
+
+        // Buy button
+        const buyForm = document.createElement('form');
+        buyForm.action = `/buy/${prize.id}`;
+        buyForm.method = 'post';
+        const buyButton = document.createElement('button');
+        buyButton.type = 'submit';
+        buyButton.className = 'golden-button';
+        buyButton.textContent = 'Comprar';
+        buyForm.appendChild(buyButton);
+        buttonsContainer.appendChild(buyForm);
+
+        // Edit button
+        const editForm = document.createElement('form');
+        editForm.action = `/editPrize/${prize.id}`;
+        editForm.method = 'get';
+        const editButton = document.createElement('button');
+        editButton.type = 'submit';
+        editButton.className = 'golden-button';
+        editButton.textContent = 'Editar Recompensa';
+        editForm.appendChild(editButton);
+        buttonsContainer.appendChild(editForm);
+
+        // Delete button
+        const deleteForm = document.createElement('form');
+        deleteForm.action = `/deletePrize/${prize.id}`;
+        deleteForm.method = 'post';
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'submit';
+        deleteButton.className = 'golden-button';
+        deleteButton.textContent = 'Eliminar Recompensa';
+        deleteForm.appendChild(deleteButton);
+        buttonsContainer.appendChild(deleteForm);
+
+        section.appendChild(buttonsContainer);
+
 
         return section;
     }
 </script>
-
 <!-- Estilos para la paginación -->
 <style>
     .spinner-border {
