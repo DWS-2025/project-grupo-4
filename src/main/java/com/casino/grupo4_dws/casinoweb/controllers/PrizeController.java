@@ -50,7 +50,7 @@ public class PrizeController {
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {
         model.addAttribute("prizes", prizeManager.findAllPrizes());
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
 
         if (user == null) {
             return "prizes";
@@ -65,7 +65,7 @@ public class PrizeController {
                                @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
 
         model.addAttribute("prizes", prizeManager.findPrizesByFilters(title, minPrice, maxPrice));
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
 
         if (user == null) {
             return "prizes";

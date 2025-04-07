@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO {
@@ -18,6 +19,7 @@ public class UserDTO {
         this.id = id;
         this.username = username;
         this.balance = balance;
+        this.gamesLiked = new ArrayList<>();
     }
 
     public int getId() {
