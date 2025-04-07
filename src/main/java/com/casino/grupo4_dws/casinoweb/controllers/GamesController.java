@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.BetManager;
@@ -141,10 +142,10 @@ public class GamesController {
             GameDTO game = gameManager.getGame(id);
             if (game != null) {
                 // Detach game from bets but keep bet history
-                List<Bet> bets = betManager.findAll();
-                for (Bet bet : bets) {
+                List<BetDTO> bets = betManager.findAll();
+                for (BetDTO bet : bets) {
                     bet.setGame(null);
-                    betManager.Save(bet);
+                    betManager.save(bet);
                 }
 
                 // Remove from users' liked games

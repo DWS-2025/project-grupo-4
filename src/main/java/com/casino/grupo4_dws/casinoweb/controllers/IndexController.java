@@ -1,6 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
@@ -24,7 +25,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String inicio(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return "inicio";
         }
