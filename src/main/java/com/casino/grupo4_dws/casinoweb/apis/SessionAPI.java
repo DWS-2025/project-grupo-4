@@ -2,6 +2,8 @@ package com.casino.grupo4_dws.casinoweb.apis;
 
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.User;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
+import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,38 +19,41 @@ public class SessionAPI {
     @Autowired
     private UserManager userManager;
 
-    @GetMapping("")
-    public ResponseEntity<List<User>> getAllUsers(){
-        List<User> users = userManager.getUserList();
+    @Autowired
+    private UserMapper userMapper;
 
-        return ResponseEntity.ok(users);
+    @GetMapping("")
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
+        List<User> users = userManager.getUserList();
+        return ResponseEntity.ok(userMapper.toDTOList(users));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable int id){
+    public ResponseEntity<UserDTO> getUser(@PathVariable int id){
         Optional<User> user = userManager.findById(id);
-
-        return user.map(ResponseEntity::ok)
+        return user.map(u -> ResponseEntity.ok(userMapper.toDTO(u)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
         try {
+            User user = userMapper.toEntity(userDTO);
             userManager.save(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDTO(user));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user){
+    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO){
         try {
             if (userManager.findById(id).isPresent()) {
+                User user = userMapper.toEntity(userDTO);
                 user.setId(id);
                 userManager.save(user);
-                return ResponseEntity.ok(user);
+                return ResponseEntity.ok(userMapper.toDTO(user));
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {

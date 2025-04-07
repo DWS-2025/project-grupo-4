@@ -1,7 +1,10 @@
 package com.casino.grupo4_dws.casinoweb.apis;
 
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
+import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
 import com.casino.grupo4_dws.casinoweb.model.Game;
+import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
+import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,43 +19,42 @@ public class GamesAPI {
 
     @Autowired
     private GameManager gameManager;
+    @Autowired
+    private GameMapper gameMapper;
+
 
     @GetMapping("")
-    public ResponseEntity<List<Game>> getAllGames() {
+    public ResponseEntity<List<GameDTO>> getAllGames() {
         List<Game> games = gameManager.getGameList();
-        // Ensure images are properly handled before sending response
-        games.forEach(game -> {
-            if (game.getImage() != null) {
-                game.setImage(null); // Temporarily remove image for JSON serialization
-            }
-        });
-        return ResponseEntity.ok(games);
+        return ResponseEntity.ok(gameMapper.toDTOList(games));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGame(@PathVariable int id) {
+    public ResponseEntity<GameDTO> getGame(@PathVariable int id) {
         Optional<Game> game = gameManager.getGameById(id);
-        return game.map(ResponseEntity::ok)
+        return game.map(g -> ResponseEntity.ok(gameMapper.toDTO(g)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
-    public ResponseEntity<Game> createGame(@RequestBody Game game) {
+    public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO gameDTO) {
         try {
+            Game game = gameMapper.toEntity(gameDTO);
             gameManager.saveGame(game,null);
-            return ResponseEntity.status(HttpStatus.CREATED).body(game);
+            return ResponseEntity.status(HttpStatus.CREATED).body(gameMapper.toDTO(game));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable int id, @RequestBody Game game) {
+    public ResponseEntity<GameDTO> updateGame(@PathVariable int id, @RequestBody GameDTO gameDTO) {
         try {
             if (gameManager.getGameById(id).isPresent()) {
+                Game game = gameMapper.toEntity(gameDTO);
                 game.setId(id);
                 gameManager.saveGame(game,null);
-                return ResponseEntity.ok(game);
+                return ResponseEntity.ok(gameMapper.toDTO(game));
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {

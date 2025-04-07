@@ -4,6 +4,8 @@ import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
+import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
+import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,25 +28,30 @@ public class PrizesAPI {
     @Autowired
     private UserManager userManager;
 
+    @Autowired
+    private PrizeMapper prizeMapper;
+
     // Get all prizes
     @GetMapping("")
-    public ResponseEntity<List<Prize>> getAllPrizes() {
-        return ResponseEntity.ok(prizeManager.findAllPrizes());
+    public ResponseEntity<List<PrizeDTO>> getAllPrizes() {
+        List<Prize> prizes = prizeManager.findAllPrizes();
+        return ResponseEntity.ok(prizeMapper.toDTOList(prizes));
     }
 
     // Get prize by id
     @GetMapping("/{id}")
-    public ResponseEntity<Prize> getPrize(@PathVariable int id) {
+    public ResponseEntity<PrizeDTO> getPrize(@PathVariable int id) {
         Optional<Prize> prize = prizeManager.getPrizeById(id);
-        return prize.map(ResponseEntity::ok)
+        return prize.map(p -> ResponseEntity.ok(prizeMapper.toDTO(p)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
-    public ResponseEntity<Prize> createPrize(@RequestBody Prize prize) {
+    public ResponseEntity<PrizeDTO> createPrize(@RequestBody PrizeDTO prizeDTO) {
         try {
+            Prize prize = prizeMapper.toEntity(prizeDTO);
             prizeManager.savePrize(prize, null);
-            return ResponseEntity.status(HttpStatus.CREATED).body(prize);
+            return ResponseEntity.status(HttpStatus.CREATED).body(prizeMapper.toDTO(prize));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -53,10 +60,11 @@ public class PrizesAPI {
 
     // Update prize
     @PutMapping("/{id}")
-    public ResponseEntity<Prize> updatePrize(@PathVariable int id, @RequestBody Prize prize) {
+    public ResponseEntity<PrizeDTO> updatePrize(@PathVariable int id, @RequestBody PrizeDTO prizeDTO) {
         try {
+            Prize prize = prizeMapper.toEntity(prizeDTO);
             prizeManager.updatePrizeDetails(prize, id);
-            return ResponseEntity.ok(prize);
+            return ResponseEntity.ok(prizeMapper.toDTO(prize));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

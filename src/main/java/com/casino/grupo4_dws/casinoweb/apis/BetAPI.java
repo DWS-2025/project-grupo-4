@@ -2,6 +2,8 @@ package com.casino.grupo4_dws.casinoweb.apis;
 
 import com.casino.grupo4_dws.casinoweb.managers.BetManager;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
+import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
+import com.casino.grupo4_dws.casinoweb.mapper.BetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,35 +19,41 @@ public class BetAPI {
     @Autowired
     private BetManager betManager;
 
+    @Autowired
+    private BetMapper betMapper;
+
     @GetMapping("")
-    public ResponseEntity<List<Bet>> getAllBets() {
-        return ResponseEntity.ok(betManager.findAll());
+    public ResponseEntity<List<BetDTO>> getAllBets() {
+        List<Bet> bets = betManager.findAll();
+        return ResponseEntity.ok(betMapper.toDTOList(bets));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Bet> getBet(@PathVariable int id) {
+    public ResponseEntity<BetDTO> getBet(@PathVariable int id) {
         Optional<Bet> bet = betManager.findById(id);
-        return bet.map(ResponseEntity::ok)
+        return bet.map(b -> ResponseEntity.ok(betMapper.toDTO(b)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
-    public ResponseEntity<Bet> createBet(@RequestBody Bet bet) {
+    public ResponseEntity<BetDTO> createBet(@RequestBody BetDTO betDTO) {
         try {
+            Bet bet = betMapper.toEntity(betDTO);
             betManager.Save(bet);
-            return ResponseEntity.status(HttpStatus.CREATED).body(bet);
+            return ResponseEntity.status(HttpStatus.CREATED).body(betMapper.toDTO(bet));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Bet> updateBet(@PathVariable int id, @RequestBody Bet bet) {
+    public ResponseEntity<BetDTO> updateBet(@PathVariable int id, @RequestBody BetDTO betDTO) {
         try {
             if (betManager.findById(id).isPresent()) {
+                Bet bet = betMapper.toEntity(betDTO);
                 bet.setId(id);
                 betManager.Save(bet);
-                return ResponseEntity.ok(bet);
+                return ResponseEntity.ok(betMapper.toDTO(bet));
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
