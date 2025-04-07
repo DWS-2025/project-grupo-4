@@ -4,6 +4,8 @@ import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
+import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
+import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,22 +28,26 @@ public class PrizesAPI {
     @Autowired
     private UserManager userManager;
 
+    @Autowired
+    private PrizeMapper prizeMapper;
+
     // Get all prizes
     @GetMapping("")
-    public ResponseEntity<List<Prize>> getAllPrizes() {
-        return ResponseEntity.ok(prizeManager.findAllPrizes());
+    public ResponseEntity<List<PrizeDTO>> getAllPrizes() {
+        List<PrizeDTO> prizes = prizeManager.findAllPrizes();
+        return ResponseEntity.ok(prizes);
     }
 
     // Get prize by id
     @GetMapping("/{id}")
-    public ResponseEntity<Prize> getPrize(@PathVariable int id) {
-        Optional<Prize> prize = prizeManager.getPrizeById(id);
-        return prize.map(ResponseEntity::ok)
+    public ResponseEntity<PrizeDTO> getPrize(@PathVariable int id) {
+        Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
+        return prize.map(p -> ResponseEntity.ok(p))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
-    public ResponseEntity<Prize> createPrize(@RequestBody Prize prize) {
+    public ResponseEntity<PrizeDTO> createPrize(@RequestBody PrizeDTO prize) {
         try {
             prizeManager.savePrize(prize, null);
             return ResponseEntity.status(HttpStatus.CREATED).body(prize);
@@ -53,9 +59,9 @@ public class PrizesAPI {
 
     // Update prize
     @PutMapping("/{id}")
-    public ResponseEntity<Prize> updatePrize(@PathVariable int id, @RequestBody Prize prize) {
+    public ResponseEntity<PrizeDTO> updatePrize(@PathVariable int id, @RequestBody PrizeDTO prize, MultipartFile file) {
         try {
-            prizeManager.updatePrizeDetails(prize, id);
+            prizeManager.updatePrizeDetails(prize, id, file);
             return ResponseEntity.ok(prize);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -65,9 +71,9 @@ public class PrizesAPI {
     // Delete prize
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePrize(@PathVariable int id) {
-        Optional<Prize> prize = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
         if (prize.isPresent()) {
-            prizeManager.deletePrize(prize.get());
+            prizeManager.deletePrize(prize.get().getId());
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -76,13 +82,13 @@ public class PrizesAPI {
     // Buy prize
     @PostMapping("/{id}/buy")
     public ResponseEntity<?> buyPrize(@PathVariable int id, @RequestBody User user) {
-        Optional<Prize> prizeOpt = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> prizeOpt = prizeManager.getPrizeById(id);
         if (!prizeOpt.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
         try {
-            Prize boughtPrize = userManager.buyPrize(prizeOpt.get(), user);
+            Prize boughtPrize = userManager.buyPrize(prizeMapper.toEntity(prizeOpt.get()), user);
             return ResponseEntity.ok(boughtPrize);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
