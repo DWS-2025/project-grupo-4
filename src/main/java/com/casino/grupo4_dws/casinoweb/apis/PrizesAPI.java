@@ -34,24 +34,23 @@ public class PrizesAPI {
     // Get all prizes
     @GetMapping("")
     public ResponseEntity<List<PrizeDTO>> getAllPrizes() {
-        List<Prize> prizes = prizeManager.findAllPrizes();
-        return ResponseEntity.ok(prizeMapper.toDTOList(prizes));
+        List<PrizeDTO> prizes = prizeManager.findAllPrizes();
+        return ResponseEntity.ok(prizes);
     }
 
     // Get prize by id
     @GetMapping("/{id}")
     public ResponseEntity<PrizeDTO> getPrize(@PathVariable int id) {
-        Optional<Prize> prize = prizeManager.getPrizeById(id);
-        return prize.map(p -> ResponseEntity.ok(prizeMapper.toDTO(p)))
+        Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
+        return prize.map(p -> ResponseEntity.ok(p))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
-    public ResponseEntity<PrizeDTO> createPrize(@RequestBody PrizeDTO prizeDTO) {
+    public ResponseEntity<PrizeDTO> createPrize(@RequestBody PrizeDTO prize) {
         try {
-            Prize prize = prizeMapper.toEntity(prizeDTO);
             prizeManager.savePrize(prize, null);
-            return ResponseEntity.status(HttpStatus.CREATED).body(prizeMapper.toDTO(prize));
+            return ResponseEntity.status(HttpStatus.CREATED).body(prize);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -60,11 +59,10 @@ public class PrizesAPI {
 
     // Update prize
     @PutMapping("/{id}")
-    public ResponseEntity<PrizeDTO> updatePrize(@PathVariable int id, @RequestBody PrizeDTO prizeDTO) {
+    public ResponseEntity<PrizeDTO> updatePrize(@PathVariable int id, @RequestBody PrizeDTO prize, MultipartFile file) {
         try {
-            Prize prize = prizeMapper.toEntity(prizeDTO);
-            prizeManager.updatePrizeDetails(prize, id);
-            return ResponseEntity.ok(prizeMapper.toDTO(prize));
+            prizeManager.updatePrizeDetails(prize, id, file);
+            return ResponseEntity.ok(prize);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -73,9 +71,9 @@ public class PrizesAPI {
     // Delete prize
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePrize(@PathVariable int id) {
-        Optional<Prize> prize = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
         if (prize.isPresent()) {
-            prizeManager.deletePrize(prize.get());
+            prizeManager.deletePrize(prize.get().getId());
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -84,13 +82,13 @@ public class PrizesAPI {
     // Buy prize
     @PostMapping("/{id}/buy")
     public ResponseEntity<?> buyPrize(@PathVariable int id, @RequestBody User user) {
-        Optional<Prize> prizeOpt = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> prizeOpt = prizeManager.getPrizeById(id);
         if (!prizeOpt.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
         try {
-            Prize boughtPrize = userManager.buyPrize(prizeOpt.get(), user);
+            Prize boughtPrize = userManager.buyPrize(prizeMapper.toEntity(prizeOpt.get()), user);
             return ResponseEntity.ok(boughtPrize);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
