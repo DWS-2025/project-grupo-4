@@ -1,5 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Blob;
 
 public class PrizeDTO {

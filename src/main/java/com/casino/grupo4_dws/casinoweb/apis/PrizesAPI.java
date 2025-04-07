@@ -40,17 +40,61 @@ public class PrizesAPI {
     private UserMapper userMapper;
 
     @GetMapping("")
-    public ResponseEntity<Page<PrizeDTO>> getAllPrizes(Pageable pageable) {
-        Page<Prize> prizePage = prizeManager.findAllPrizes(pageable);
-        return ResponseEntity.ok(prizePage.map(prize -> prizeMapper.toDTO(prize)));
+    public ResponseEntity<?> getAllPrizes(Pageable pageable) {
+        try {
+            Page<Prize> prizePage = prizeManager.findAllPrizes(pageable);
+            if (prizePage.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            Page<PrizeDTO> dtoPage = prizePage.map(prize -> {
+                PrizeDTO dto = prizeMapper.toDTO(prize);
+                // Prevent serialization issues with Blob/InputStream
+                if (dto.getImage() != null) {
+                    dto.setImage(null);
+                }
+                return dto;
+            });
+
+            return ResponseEntity.ok(dtoPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error retrieving prizes: " + e.getMessage());
+        }
     }
 
     // Get prize by id
     @GetMapping("/{id}")
     public ResponseEntity<PrizeDTO> getPrize(@PathVariable int id) {
-        Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
-        return prize.map(p -> ResponseEntity.ok(p))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            Optional<PrizeDTO> prizeOpt = prizeManager.getPrizeById(id);
+            if (prizeOpt.isPresent()) {
+                PrizeDTO dto = prizeOpt.get();
+                if (dto.getImage() != null) {
+                    dto.setImage(null);
+                }
+                return ResponseEntity.ok(dto);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/{id}/image")
+    public ResponseEntity<?> getPrizeImage(@PathVariable int id) {
+        try {
+            Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
+            if (prize.isPresent() && prize.get().getImage() != null) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(prize.get().getImage());
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping("")
