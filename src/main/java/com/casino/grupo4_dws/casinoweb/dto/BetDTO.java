@@ -4,6 +4,7 @@ public class BetDTO {
     private int id;
     private int amount;
     private boolean result;
+    private boolean show;
 
     public BetDTO() {}
 
@@ -35,5 +36,12 @@ public class BetDTO {
 
     public void setResult(boolean result) {
         this.result = result;
+    }
+
+    public boolean isShow() {
+        return show;
+    }
+    public void setShow(boolean show) {
+        this.show = show;
     }
 }

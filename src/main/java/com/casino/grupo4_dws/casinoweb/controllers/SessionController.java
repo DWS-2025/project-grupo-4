@@ -1,5 +1,8 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
+import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
@@ -50,7 +53,7 @@ public class SessionController {
             return "redirect:/login";
         }
         if (userManager.isUserCorrect(loginUsername, loginPassword)) {
-            Optional<User> user = userManager.findByUsername(loginUsername);
+            Optional<UserDTO> user = userManager.findByUsername(loginUsername);
             user.ifPresent(user1 -> session.setAttribute("user", user1));
             return "redirect:/NGames";
         } else {
@@ -61,7 +64,7 @@ public class SessionController {
 
     @GetMapping("/logout")
     public String loggingOut(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user != null) {
             session.removeAttribute("user");
         }
@@ -103,7 +106,7 @@ public class SessionController {
 //NO FUNCIONA ESTA PARTE, MIRAR CUANDO HAYAMOS AJUSTADO TODAS LAS ENTIDADES Y RELACIONES
 @GetMapping("/user")
 public String showUser(Model model, HttpSession session) {
-    User user = (User) session.getAttribute("user");
+    UserDTO user = (UserDTO) session.getAttribute("user");
     if (user == null) {
         return "redirect:/login";
     }
@@ -119,9 +122,9 @@ public String showUser(Model model, HttpSession session) {
         user.setBetHistory(new ArrayList<>());
     }
 
-    List<Prize> userInventory = user.getInventory();
-    List<Bet> betHistory = user.getBetHistory().stream()
-            .filter(Bet::isShow)
+    List<PrizeDTO> userInventory = user.getInventory();
+    List<BetDTO> betHistory = user.getBetHistory().stream()
+            .filter(BetDTO::isShow)
             .sorted((b1, b2) -> Long.compare(b2.getId(), b1.getId()))
             .collect(Collectors.toList());
 
