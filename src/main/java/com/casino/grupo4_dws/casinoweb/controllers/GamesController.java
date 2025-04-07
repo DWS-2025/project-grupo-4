@@ -1,5 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.BetManager;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
@@ -49,7 +51,7 @@ public class GamesController {
     @PostConstruct
     public void init()  {
         try {
-            gameManager.PostConstruct();
+            gameManager.postConstruct();
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -59,7 +61,7 @@ public class GamesController {
     public String showGames(Model model, HttpSession session) {
         model.addAttribute("games",gameManager.getGameList()); // Pasar la lista de juegos a la vista
 
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return "NGames";
         }
@@ -70,7 +72,7 @@ public class GamesController {
     //Adaptada a H2
     @GetMapping("/NGames/mostLiked")
     public String mostLiked(Model model, HttpSession session) {
-        List<Game> games = new ArrayList<>(gameManager.getGameList());
+        List<GameDTO> games = new ArrayList<>(gameManager.getGameList());
 
         games.sort((g1, g2) -> {
             int size1 = g1.getUsersLiked() != null ? g1.getUsersLiked().size() : 0;
@@ -78,7 +80,7 @@ public class GamesController {
             return Integer.compare(size2, size1);
         });
         model.addAttribute("mostLikedGames", games);
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return "redirect:/NGames";
         }
@@ -92,23 +94,23 @@ public class GamesController {
             return "redirect:/login";
         }
 
-        User userSession = (User) session.getAttribute("user");
-        User user = userManager.findByIdMeta(userSession.getId());
+        UserDTO userSession = (UserDTO) session.getAttribute("user");
+        UserDTO user = userManager.findByIdMeta(userSession.getId());
 
         if (user == null) {
             return "redirect:/login";
         }
 
-        if (user.getGamesLiked() == null) {
-            user.setGamesLiked(new ArrayList<>());
+        if (user.getFavoriteGames() == null) {
+            user.setFavoriteGames(new ArrayList<>());
         }
 
         // Force initialize the collection
-        user.getGamesLiked().size();
+        user.getFavoriteGames().size();
 
         session.setAttribute("user", user);
         model.addAttribute("user", user);
-        model.addAttribute("games", user.getGamesLiked());
+        model.addAttribute("games", user.getFavoriteGames());
 
         return "GamesMyLiked";
     }
@@ -121,7 +123,7 @@ public class GamesController {
 
     //Adaptada a H2
     @PostMapping("/add")
-    public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes) throws IOException {
+    public String addGame(@ModelAttribute GameDTO newGame, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes) throws IOException {
         try {
             gameManager.saveGame(newGame, imageFile);
         } catch (IllegalArgumentException e) {
@@ -136,7 +138,7 @@ public class GamesController {
     @Transactional
     public String deleteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
-            Game game = gameManager.getGame(id);
+            GameDTO game = gameManager.getGame(id);
             if (game != null) {
                 // Detach game from bets but keep bet history
                 List<Bet> bets = betManager.findAll();
@@ -146,8 +148,8 @@ public class GamesController {
                 }
 
                 // Remove from users' liked games
-                for (User user : game.getUsersLiked()) {
-                    user.getGamesLiked().remove(game);
+                for (UserDTO user : game.getUsersLiked()) {
+                    user.getFavoriteGames().remove(game);
                     userManager.save(user);
                 }
 
@@ -162,11 +164,11 @@ public class GamesController {
 
     @PostMapping("/user/favourites/add/{id}")
     public String addGameFav(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
         }
-        Game game = gameManager.getGame(id);
+        GameDTO game = gameManager.getGame(id);
         if (game == null) {
             return "redirect:/NGames";
         }
@@ -182,14 +184,14 @@ public class GamesController {
     @Transactional
     @PostMapping("/user/favourites/remove/{id}")
     public String removeFavoriteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        User userSession = (User) session.getAttribute("user");
+        UserDTO userSession = (UserDTO) session.getAttribute("user");
         if (userSession == null) {
             return "redirect:/login";
         }
 
         // Get fresh instances from database
-        User user = userManager.findByIdMeta(userSession.getId());
-        Game game = gameManager.getGame(id);
+        UserDTO user = userManager.findByIdMeta(userSession.getId());
+        GameDTO game = gameManager.getGame(id);
 
         if (user == null) {
             return "redirect:/login";
@@ -216,17 +218,17 @@ public class GamesController {
         if (userSession == null) {
             return "redirect:/login";
         }
-        User user = userManager.findByIdMeta(userSession.getId());
+        UserDTO user = userManager.findByIdMeta(userSession.getId());
         if (user == null) {
             return "redirect:/login";
         }
-        user.getGamesLiked().size();
+        user.getFavoriteGames().size();
         session.setAttribute("user", user);
         model.addAttribute("user", user);
 
-        Optional<Game> op = gameManager.getGameById(id);
+        Optional<GameDTO> op = gameManager.getGameById(id);
         if (op.isPresent()) {
-            Game game = op.get();
+            GameDTO game = op.get();
             if (game.getUsersLiked() == null) {
                 game.setUsersLiked(new ArrayList<>());
             }
@@ -249,7 +251,7 @@ public class GamesController {
     @GetMapping("/game/{id}/image")
     public ResponseEntity<Object> downloadImage(@PathVariable int id) throws SQLException {
 
-        Optional<Game> op = gameManager.getGameById(id);
+        Optional<GameDTO> op = gameManager.getGameById(id);
 
         if (op.isPresent() && op.get().getImage() != null) {
             Blob image = op.get().getImage();
