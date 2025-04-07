@@ -3,7 +3,7 @@ package com.casino.grupo4_dws.casinoweb.dto;
 import java.sql.Blob;
 
 public class PrizeDTO {
-    private int id;
+    private long id;
     private String title;
     private String description;
     private int price;
@@ -11,18 +11,18 @@ public class PrizeDTO {
 
     public PrizeDTO() {}
 
-    public PrizeDTO(int id, String title, String description, int price) {
+    public PrizeDTO(long id, String title, String description, int price) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
