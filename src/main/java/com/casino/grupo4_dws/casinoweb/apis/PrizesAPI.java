@@ -2,9 +2,11 @@ package com.casino.grupo4_dws.casinoweb.apis;
 
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
+import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,9 @@ public class PrizesAPI {
 
     @Autowired
     private PrizeMapper prizeMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     // Get all prizes
     @GetMapping("")
@@ -86,9 +91,8 @@ public class PrizesAPI {
         if (!prizeOpt.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-
         try {
-            Prize boughtPrize = userManager.buyPrize(prizeMapper.toEntity(prizeOpt.get()), user);
+            PrizeDTO boughtPrize = userManager.buyPrize(prizeOpt.get() , userMapper.toDTO(user));
             return ResponseEntity.ok(boughtPrize);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
