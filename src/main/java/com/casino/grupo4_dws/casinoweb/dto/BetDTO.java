@@ -1,24 +1,23 @@
 package com.casino.grupo4_dws.casinoweb.dto;
 
+import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
+
 public class BetDTO {
-    private int id;
+    private long id;
     private int amount;
-    private boolean result;
+    private int revenue;
+    private boolean status;
     private boolean show;
+    private GameDTO game;
+    private UserDTO userPlayer;
 
-    public BetDTO() {}
-
-    public BetDTO(int id, int amount, boolean result) {
-        this.id = id;
-        this.amount = amount;
-        this.result = result;
-    }
-
-    public int getId() {
+    // Getters y Setters
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -30,18 +29,43 @@ public class BetDTO {
         this.amount = amount;
     }
 
-    public boolean isResult() {
-        return result;
+    public int getRevenue() {
+        return revenue;
     }
 
-    public void setResult(boolean result) {
-        this.result = result;
+    public void setRevenue(int revenue) {
+        this.revenue = revenue;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public boolean isShow() {
         return show;
     }
+
     public void setShow(boolean show) {
         this.show = show;
+    }
+
+    public GameDTO getGame() {
+        return game;
+    }
+
+    public void setGame(GameDTO game) {
+        this.game = game;
+    }
+
+    public UserDTO getUserPlayer() {
+        return userPlayer;
+    }
+
+    public void setUserPlayer(UserDTO userPlayer) {
+        this.userPlayer = userPlayer;
     }
 }

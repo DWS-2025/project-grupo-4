@@ -1,5 +1,8 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
+import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
@@ -29,7 +32,7 @@ public class BetController {
     // ENDPOINT TO PLACE A BET
     @PostMapping("/playGame/{id}")
     public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmount") int amout, RedirectAttributes redirectAttributes) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
 
         // Case user has no money
         if (amout < 0) {
@@ -41,15 +44,15 @@ public class BetController {
             return "redirect:/login";
         }
 
-        Optional<Game> op = gameManager.getGameById(id);
+        Optional<GameDTO> op = gameManager.getGameById(id);
         if (op.isPresent()) {
-            Game gamePlayed = op.get();
+            GameDTO gamePlayed = op.get();
             try {
-                Bet bet = betManager.playBet(gamePlayed, user, amout);
+                BetDTO bet = betManager.playBet(gamePlayed, user, amout);
                 redirectAttributes.addFlashAttribute("user", user);
-                betManager.Save(bet);
+                betManager.save(bet);
                 userManager.save(user);
-                boolean status = bet.getStatus();
+                boolean status = bet.isStatus();
                 redirectAttributes.addFlashAttribute("status", status);
             } catch (IllegalArgumentException e) {
                 redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -69,16 +72,16 @@ public class BetController {
 
     @PostMapping("/deleteBet/{id}")
     public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
         }
 
-        Optional<Bet> bet = betManager.findById(id);
-        if (bet.isPresent() && bet.get().getUserId() == user.getId()) {
-            Bet betToHide = bet.get();
+        Optional<BetDTO> bet = betManager.findById(id);
+        if (bet.isPresent() && bet.get().getId() == user.getId()) {
+            BetDTO betToHide = bet.get();
             betToHide.setShow(false);
-            betManager.Save(betToHide);
+            betManager.save(betToHide);
         }
         return "redirect:/user";
     }
