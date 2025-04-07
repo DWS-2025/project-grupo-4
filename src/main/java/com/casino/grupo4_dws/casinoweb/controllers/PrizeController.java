@@ -29,6 +29,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,7 +50,8 @@ public class PrizeController {
     //Done
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {
-        model.addAttribute("prizes", prizeManager.findAllPrizes());
+        List<PrizeDTO> prizes = prizeManager.findAllPrizes();
+        model.addAttribute("prizes", prizes);
         UserDTO user = (UserDTO) session.getAttribute("user");
 
         if (user == null) {

@@ -11,12 +11,11 @@ public class PrizeDTO {
 
     public PrizeDTO() {}
 
-    public PrizeDTO(int id, String title, String description, int price, Blob image) {
+    public PrizeDTO(int id, String title, String description, int price) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
-        this.image = image;
     }
 
     public int getId() {
@@ -51,11 +50,12 @@ public class PrizeDTO {
         this.price = price;
     }
 
+    public Blob getImage() {
+        return image;
+    }
+
     public void setImage(Blob image) {
         this.image = image;
     }
 
-    public Blob getImage() {
-        return image;
-    }
 }

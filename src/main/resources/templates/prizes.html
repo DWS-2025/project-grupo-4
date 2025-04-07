@@ -58,7 +58,12 @@
         </form>
 
         <div id="grid-container" class="prizes-container">
-            <!-- Los premios se cargarán aquí dinámicamente -->
+            <div th:each="prize : ${prizes}" class="game-section prize-item">
+                <h2 class="prize-title" th:text="${prize.title}">Título del Premio</h2>
+                <img th:if="${prize.image}" th:src="@{'/prize/' + ${prize.id} + '/image'}" alt="Prize Img" class="prize-image" width="230" height="230">
+                <p th:text="${prize.description}">Descripción del Premio</p>
+                <p class="prize-price" th:text="${prize.price + ' $'}">Precio</p>
+            </div>
         </div>
 
         <div class="text-center mt-4 mb-4">
