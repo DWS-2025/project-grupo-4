@@ -9,18 +9,16 @@ public class PrizeDTO {
     private int price;
     private Blob image;
 
-    // Default constructor
     public PrizeDTO() {}
 
-    // Constructor with parameters
-    public PrizeDTO(int id, String title, String description, int price) {
+    public PrizeDTO(int id, String title, String description, int price, Blob image) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
+        this.image = image;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -33,8 +31,8 @@ public class PrizeDTO {
         return title;
     }
 
-    public void setTitle(String name) {
-        this.title = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -53,11 +51,11 @@ public class PrizeDTO {
         this.price = price;
     }
 
-    public Blob getImage() {
-        return image;
-    }
-
     public void setImage(Blob image) {
         this.image = image;
+    }
+
+    public Blob getImage() {
+        return image;
     }
 }
