@@ -38,6 +38,7 @@ import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class GamesController {
@@ -176,6 +177,15 @@ public class GamesController {
         try{
             userManager.setFav(user, game);
             model.addAttribute("user", user);
+            List<Long> favoriteGameIds = user.getFavoriteGames()
+                    .stream()
+                    .map(dto -> dto.getId())
+                    .collect(Collectors.toList());
+
+            model.addAttribute("favoriteGameIds", favoriteGameIds);
+
+
+            model.addAttribute("favoriteGameIds", favoriteGameIds);
         } catch (IllegalArgumentException e){
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
@@ -215,15 +225,23 @@ public class GamesController {
     @Transactional
     @GetMapping("/game/{id}")
     public String showGameDetails(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        User userSession = (User) session.getAttribute("user");
+        UserDTO userSession = (UserDTO) session.getAttribute("user");
         if (userSession == null) {
             return "redirect:/login";
         }
+
+        // Get fresh user data from database
         UserDTO user = userManager.findByIdMeta(userSession.getId());
         if (user == null) {
             return "redirect:/login";
         }
-        user.getFavoriteGames().size();
+
+        // Force initialize favorite games collection
+        if (user.getFavoriteGames() != null) {
+            user.getFavoriteGames().size();
+        }
+
+        // Update session with fresh user data
         session.setAttribute("user", user);
         model.addAttribute("user", user);
 
@@ -233,18 +251,19 @@ public class GamesController {
             if (game.getUsersLiked() == null) {
                 game.setUsersLiked(new ArrayList<>());
             }
-            game.getUsersLiked().size();
+            game.getUsersLiked().size(); // Force initialize
             model.addAttribute("game", game);
+
+            // Add a boolean flag for favorite status
+            boolean isFavorite = user.getFavoriteGames().stream()
+                    .anyMatch(g -> g.getId() == game.getId());
+            model.addAttribute("isFavorite", isFavorite);
+
             return "game-details";
         } else {
             redirectAttributes.addFlashAttribute("error", "El juego seleccionado no existe");
             return "redirect:/NGames";
         }
-
-
-
-
-
     }
 
 

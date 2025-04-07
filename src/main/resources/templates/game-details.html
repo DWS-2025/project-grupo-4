@@ -134,26 +134,25 @@
                             <span class="bet-label">Multiplicador:</span>
                             <span class="bet-value" th:text="'x'+${game.multiplier}">0</span>
                         </div>
-                        <form th:if="${game != null and user != null and user.getUserName() != null and !#lists.contains(user.getGamesLiked(), game)}"
+                        <!-- Form to ADD to favorites -->
+                        <form th:if="${game != null and user != null and !isFavorite}"
                               th:action="@{/user/favourites/add/{id}(id=${game.id})}" method="post">
                             <label class="container">
-                                <input type="checkbox" name="id" th:value="${game.id}" onchange="this.form.submit()">
-                                <svg id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"
-                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"></path>
-        </svg>
+                                <input type="checkbox" th:value="${game.id}" onchange="this.form.submit()">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"/>
+                                </svg>
                             </label>
                         </form>
-                        <form th:if="${user != null and user.userName != null and #lists.contains(user.gamesLiked,game)}"
+
+                        <!-- Form to REMOVE from favorites -->
+                        <form th:if="${game != null and user != null and isFavorite}"
                               th:action="@{/user/favourites/remove/{id}(id=${game.id})}" method="post">
                             <label class="container">
-                                <input type="checkbox" name="id" th:value="${game.id}" onchange="this.form.submit()"
-                                       checked>
-                                <input type="hidden" name="id" th:value="${game.id}">
-                                <svg id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"
-                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"></path>
-        </svg>
+                                <input type="checkbox" th:value="${game.id}" onchange="this.form.submit()" checked>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z" fill="#E3474F"/>
+                                </svg>
                             </label>
                         </form>
                     </div>
@@ -168,7 +167,7 @@
             </button>
         </div>
         <center>
-            <form th:if="${game != null and user != null and user.userName != null}"
+            <form th:if="${game != null and user != null and user.username != null}"
                   th:action="@{/playGame/{id}(id=${game.id})}" method="post">
             <label for="playedAmount"></label>
                 <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647" oninput="validity.valid||(value='');" required>
