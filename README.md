@@ -39,6 +39,26 @@ Lista de entidades principales y sus relaciones:
 | **Recompensa** | 1 imágenen por registro |
 | **Apuesta** | Sin imágenes |
 
+## Diversificación del desarrollo
+# Andrés
+[]
+[]
+[]
+[]
+[]
+# Adrián
+[]
+[]
+[]
+[]
+[]
+# Saúl
+[d9cd015] Desarrollo de todas las API en paralelo a la implementación de los DTO para asegurar una transmisión de entidades segura. 
+[24029b6] Primer paso en el desarrollo de los DTO, creación de las clases DTO y sus respectivos Mappers con mapStruct
+[dd130e1] Creación de la API de sesión (API de usuario)
+[8bc9592] Implementación de la tabla de relación entre GAME y USER, representando una relación N:M
+[92f71a4] Este commit permitió representar las imagenes en bases de datos utilizando MultipartFile y Blob.
+
 ## Diagrama de la Base de Datos
 
 Se incluirá un diagrama con las entidades de la base de datos, sus campos y relaciones. Puede ser un diagrama entidad-relación o un diagrama UML de las clases Java.
