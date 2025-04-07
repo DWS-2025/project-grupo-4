@@ -79,9 +79,9 @@
             <img src="/images/rick_dinero.jpg" alt="rick" width=681 height=511 id="rick"/>
         </div>
         <center>
-        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
-            <span th:text="${errorMessage}"></span>
-        </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                <span th:text="${errorMessage}"></span>
+            </div>
         </center>
     </header>
 
@@ -97,22 +97,18 @@
                 </div>
             </div>
         </form>
-        <div id="grid-container">
-            <section class="game-section prize-item" th:each="item : ${prizes}">
-                <h2 class="prize-title" th:text="${item.title}">Nombre del juego</h2>
-                <img th:if="${item.image}" th:src="@{/prize/{id}/image(id=${item.id()})}" alt="Prize Img" class="prize-image" width="230" height="230">
-                <p th:text="${item.description}">Descripción</p>
-                <p class="prize-price" th:text="${item.price} + ' $'"></p>
-                <form th:action="@{/buy/{id}(id=${item.id})}" method="post">
-                    <button type="submit" class="golden-button">Comprar</button>
-                </form>
-                <form th:action="@{/editPrize/{id}(id=${item.id})}" method="get">
-                    <button type="submit" class="golden-button">Editar Recompensa</button>
-                </form>
-                <form th:action="@{/deletePrize/{id}(id=${item.id})}" method="post">
-                    <button type="submit" class="golden-button">Eliminar Recompensa</button>
-                </form>
-            </section>
+
+        <div id="grid-container" class="prizes-container">
+            <!-- Los premios se cargarán aquí dinámicamente -->
+        </div>
+
+        <div class="text-center mt-4 mb-4">
+            <button id="loadMoreBtn" class="golden-button">
+                <span class="golden-text">Cargar Más</span>
+            </button>
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
         </div>
     </main>
 
@@ -120,5 +116,121 @@
         <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
     </footer>
 </div>
+
+<script>
+    let currentPage = 0;
+    const pageSize = 3;
+    let loading = false;
+
+    // Cargar premios inicialmente
+    document.addEventListener('DOMContentLoaded', loadPrizes);
+
+    document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);
+
+    function loadPrizes() {
+        if (loading) return;
+
+        loading = true;
+        const spinner = document.getElementById('spinner');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+        spinner.classList.remove('d-none');
+        loadMoreBtn.classList.add('d-none');
+
+        // Obtener parámetros de filtro de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const title = urlParams.get('title');
+        const minPrice = urlParams.get('minPrice');
+        const maxPrice = urlParams.get('maxPrice');
+
+        // Construir URL de la API con parámetros de filtro
+        let apiUrl = `/api/prizes?page=${currentPage}&size=${pageSize}`;
+        if (title) apiUrl += `&title=${encodeURIComponent(title)}`;
+        if (minPrice) apiUrl += `&minPrice=${minPrice}`;
+        if (maxPrice) apiUrl += `&maxPrice=${maxPrice}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const prizesContainer = document.getElementById('grid-container');
+
+                data.content.forEach(prize => {
+                    const prizeElement = createPrizeElement(prize);
+                    prizesContainer.appendChild(prizeElement);
+                });
+
+                currentPage++;
+
+                // Si no hay más páginas, ocultar el botón
+                if (currentPage >= data.totalPages) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar premios:', error);
+            })
+            .finally(() => {
+                loading = false;
+                spinner.classList.add('d-none');
+                loadMoreBtn.classList.remove('d-none');
+            });
+    }
+
+    function createPrizeElement(prize) {
+        const section = document.createElement('section');
+        section.className = 'game-section prize-item';
+
+        section.innerHTML = `
+            <h2 class="prize-title">${prize.title}</h2>
+            ${prize.image ? `<img src="/prize/${prize.id}/image" alt="Prize Img" class="prize-image" width="230" height="230">` : ''}
+            <p>${prize.description}</p>
+            <p class="prize-price">${prize.price} $</p>
+            <form action="/buy/${prize.id}" method="post">
+                <button type="submit" class="golden-button">Comprar</button>
+            </form>
+            <form action="/editPrize/${prize.id}" method="get">
+                <button type="submit" class="golden-button">Editar Recompensa</button>
+            </form>
+            <form action="/deletePrize/${prize.id}" method="post">
+                <button type="submit" class="golden-button">Eliminar Recompensa</button>
+            </form>
+        `;
+
+        return section;
+    }
+</script>
+
+<!-- Estilos para la paginación -->
+<style>
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin: 1rem auto;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+
+    .prizes-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+</style>
+
 </body>
 </html>

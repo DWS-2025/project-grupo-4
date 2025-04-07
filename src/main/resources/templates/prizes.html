@@ -25,8 +25,8 @@
             <button role="button" class="golden-button" onclick="location.href='/prizes'">
                 <span class="golden-text">RECOMPENSAS</span>
             </button>
-            <button role="button" class="golden-button" onclick="location.href='/login'">
-                <span class="golden-text">LOGIN</span>
+            <button role="button" class="golden-button" onclick="location.href='/addPrize'">
+                <span class="golden-text">NUEVA RECOMPENSA</span>
             </button>
         </ul>
     </nav>
@@ -37,6 +37,11 @@
             <p>Escoge entre nuestros exóticos premios que podrás reclamar a través de el balance de tu cartera.</p>
             <img src="/images/rick_dinero.jpg" alt="rick" width=681 height=511 id="rick"/>
         </div>
+        <center>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                <span th:text="${errorMessage}"></span>
+            </div>
+        </center>
     </header>
 
     <main>
@@ -52,13 +57,13 @@
             </div>
         </form>
 
-        <div id="prizes-container" class="prizes-container">
-            <!-- Los premios se cargarán aquí -->
+        <div id="grid-container" class="prizes-container">
+            <!-- Los premios se cargarán aquí dinámicamente -->
         </div>
 
         <div class="text-center mt-4 mb-4">
-            <button id="loadMoreBtn" class="btn btn-primary">
-                Cargar Más
+            <button id="loadMoreBtn" class="golden-button">
+                <span class="golden-text">Cargar Más</span>
             </button>
             <div id="spinner" class="spinner-border text-primary d-none" role="status">
                 <span class="visually-hidden">Cargando...</span>
@@ -77,7 +82,7 @@
     let loading = false;
 
     // Cargar premios inicialmente
-    loadPrizes();
+    document.addEventListener('DOMContentLoaded', loadPrizes);
 
     document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);
 
@@ -91,12 +96,23 @@
         spinner.classList.remove('d-none');
         loadMoreBtn.classList.add('d-none');
 
-        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)
+        // Obtener parámetros de filtro de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const title = urlParams.get('title');
+        const minPrice = urlParams.get('minPrice');
+        const maxPrice = urlParams.get('maxPrice');
+
+        // Construir URL de la API con parámetros de filtro
+        let apiUrl = `/api/prizes?page=${currentPage}&size=${pageSize}`;
+        if (title) apiUrl += `&title=${encodeURIComponent(title)}`;
+        if (minPrice) apiUrl += `&minPrice=${minPrice}`;
+        if (maxPrice) apiUrl += `&maxPrice=${maxPrice}`;
+
+        fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                const prizesContainer = document.getElementById('prizes-container');
+                const prizesContainer = document.getElementById('grid-container');
 
-                // Agregar los premios cargados
                 data.content.forEach(prize => {
                     const prizeElement = createPrizeElement(prize);
                     prizesContainer.appendChild(prizeElement);
@@ -109,6 +125,9 @@
                     loadMoreBtn.style.display = 'none';
                 }
             })
+            .catch(error => {
+                console.error('Error al cargar premios:', error);
+            })
             .finally(() => {
                 loading = false;
                 spinner.classList.add('d-none');
@@ -117,30 +136,21 @@
     }
 
     function createPrizeElement(prize) {
-        const div = document.createElement('div');
-        div.className = 'prize-card';
-        div.innerHTML = `
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="/prizes/${prize.id}/image" class="img-fluid rounded-start" alt="${prize.name}">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">${prize.name}</h5>
-                            <p class="card-text">${prize.description}</p>
-                            <p class="card-text"><small class="text-muted">Precio: ${prize.price} puntos</small></p>
-                            <a href="/prizes/${prize.id}" class="btn btn-primary">Ver detalles</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        const section = document.createElement('section');
+        section.className = 'game-section prize-item';
+
+        section.innerHTML = `
+            <h2 class="prize-title">${prize.title}</h2>
+            ${prize.image ? `<img src="/prize/${prize.id}/image" alt="Prize Img" class="prize-image" width="230" height="230">` : ''}
+            <p>${prize.description}</p>
+            <p class="prize-price">${prize.price} $</p>
         `;
-        return div;
+
+        return section;
     }
 </script>
 
-<!-- Agrega estos estilos -->
+<!-- Estilos para la paginación -->
 <style>
     .spinner-border {
         width: 3rem;
@@ -159,24 +169,16 @@
         justify-content: center;
     }
 
-    .prize-card {
-        width: 300px;
-        margin-bottom: 20px;
+    .text-center {
+        text-align: center;
     }
 
-    .card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    .mt-4 {
+        margin-top: 1.5rem;
     }
 
-    .card-body {
-        padding: 16px;
-    }
-
-    .card-title {
-        font-size: 1.25rem;
-        margin-bottom: 10px;
+    .mb-4 {
+        margin-bottom: 1.5rem;
     }
 </style>
 
