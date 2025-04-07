@@ -103,9 +103,12 @@ public class BetManager {
     }
 
     public void delete(long id) {
-        betRepo.deleteById(id);
+        betRepo.findById(id).ifPresent(bet -> {
+            bet.setShow(false);
+            betRepo.save(bet);
+        });
     }
-
+    /*
     public void notShow(BetDTO betDTO) {
         Bet bet = betMapper.toEntity(betDTO);
         bet.setShow(false);
@@ -117,5 +120,5 @@ public class BetManager {
             bet.setShow(false);
             betRepo.save(bet);
         });
-    }
+    }*/
 }
