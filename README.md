@@ -1,4 +1,4 @@
-# Casino La Miel, donde tus sueños económicos se hacen realidad✨💵
+# Casino La Miel ✨💵
 
 ## Integrantes del Equipo de Desarrollo 📝
 
@@ -10,7 +10,7 @@
 
 ## Descripción de la Aplicación Web ✍️
 
-Página web de casino digital donde puedes interactuar con varios juegos (o crear los tuyos!) gracias a un completo sistema de balance y apuestas que permite además adquirir diferentes recompensas.
+Se trata de una página web de un casino digital donde puedes jugar diferentes apuestas, y, dependiendo de tu suerte, podrás llegar a comprar diferentes recompensas.
 
 ## Aspectos Principales
 

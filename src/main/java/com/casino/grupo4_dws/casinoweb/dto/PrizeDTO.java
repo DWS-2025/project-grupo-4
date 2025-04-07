@@ -1,13 +1,18 @@
 package com.casino.grupo4_dws.casinoweb.dto;
 
+import java.sql.Blob;
+
 public class PrizeDTO {
     private int id;
     private String title;
     private String description;
     private int price;
+    private Blob image;
 
+    // Default constructor
     public PrizeDTO() {}
 
+    // Constructor with parameters
     public PrizeDTO(int id, String title, String description, int price) {
         this.id = id;
         this.title = title;
@@ -15,6 +20,7 @@ public class PrizeDTO {
         this.price = price;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -27,8 +33,8 @@ public class PrizeDTO {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getDescription() {
@@ -45,5 +51,13 @@ public class PrizeDTO {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
     }
 }

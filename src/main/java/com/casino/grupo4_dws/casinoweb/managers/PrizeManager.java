@@ -1,5 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.managers;
 
+import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
+import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
 import org.hibernate.engine.jdbc.BlobProxy;
@@ -13,71 +15,83 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PrizeManager {
 
-
     @Autowired
     private PrizeRepository prizeRepo;
+    @Autowired
+    private PrizeMapper prizeMapper;
 
-    public List<Prize> findAllPrizes() {
-        return prizeRepo.findAllByOwnerIsNull();
+    public List<PrizeDTO> findAllPrizes() {
+        return prizeRepo.findAllByOwnerIsNull().stream()
+                .map(prize -> prizeMapper.toDTO(prize))
+                .collect(Collectors.toList());
     }
 
-    public List<Prize> findPrizesByFilters(String title, int minPrice, int maxPrice) {
+    public List<PrizeDTO> findPrizesByFilters(String title, int minPrice, int maxPrice) {
         if (title != null && title.trim().isEmpty()) {
             title = null;
         }
         if(minPrice > maxPrice) {
             minPrice = maxPrice;
         }
-        return prizeRepo.findByFilters(title, minPrice, maxPrice);
+        return prizeRepo.findByFilters(title, minPrice, maxPrice).stream()
+                .map(prize -> prizeMapper.toDTO(prize))
+                .collect(Collectors.toList());
     }
 
-    public void savePrize(Prize newPrize, MultipartFile imageFile) throws IOException {
+    public PrizeDTO savePrize(PrizeDTO prizeDTO, MultipartFile imageFile) throws IOException {
+        Prize newPrize = prizeMapper.toEntity(prizeDTO);
         if (imageFile != null && !imageFile.isEmpty()) {
             newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
-        prizeRepo.save(newPrize);
+        Prize savedPrize = prizeRepo.save(newPrize);
+        return prizeMapper.toDTO(savedPrize);
     }
 
-    public Optional<Prize> getPrizeById(int id) {
-        return prizeRepo.findPrizeById(id);
+    public Optional<PrizeDTO> getPrizeById(int id) {
+        return prizeRepo.findPrizeById(id)
+                .map(prize -> prizeMapper.toDTO(prize));
     }
 
-    public void deletePrize(Prize prize) {
-        prizeRepo.delete(prize);
+    public void deletePrize(long id) {
+        prizeRepo.deleteById(id);
     }
 
-    public void updatePrizeDetails(Prize updatedPrize, int id) {
+    public PrizeDTO updatePrizeDetails(PrizeDTO updatedPrizeDTO, int id, MultipartFile imageFile) throws IOException {
         Prize prize = prizeRepo.findPrizeById(id)
                 .orElseThrow(() -> new RuntimeException("Prize not found with id: " + id));
 
-        prize.setTitle(updatedPrize.getTitle());
-        prize.setDescription(updatedPrize.getDescription());
-        prize.setPrice(updatedPrize.getPrice());
+        prize.setTitle(updatedPrizeDTO.getTitle());
+        prize.setDescription(updatedPrizeDTO.getDescription());
+        prize.setPrice(updatedPrizeDTO.getPrice());
 
-        if (updatedPrize.getImage() != null) {
-            prize.setImage(updatedPrize.getImage());
+        if (imageFile != null && !imageFile.isEmpty()) {
+            prize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
-        prizeRepo.save(prize);
+
+        Prize updatedPrize = prizeRepo.save(prize);
+        return prizeMapper.toDTO(updatedPrize);
     }
 
     public void postConstruct(){
         try {
-            prizeRepo.save(new Prize("AWP Dragon Lore", 1500, "AWP Dragon Lore Souvenir FN",
-                    new javax.sql.rowset.serial.SerialBlob(Files.readAllBytes(Paths.get("src/main/resources/static/images/awp_lore.png")))));
+            PrizeDTO prize1 = new PrizeDTO();
+            prize1.setTitle("AWP Dragon Lore");
+            prize1.setPrice(1500);
+            prize1.setDescription("AWP Dragon Lore Souvenir FN");
+            savePrize(prize1, null);
 
-            prizeRepo.save(new Prize("Viaje Deluxe", 3500, "Viaje deluxe a un pueblo perdido de la mano de dios por ahi para dos personas",
-                    new javax.sql.rowset.serial.SerialBlob(Files.readAllBytes(Paths.get("src/main/resources/static/images/albacete.jpg")))));
+            PrizeDTO prize2 = new PrizeDTO();
+            prize2.setTitle("Viaje Deluxe");
+            prize2.setPrice(3500);
+            prize2.setDescription("Viaje deluxe a un pueblo perdido de la mano de dios por ahi para dos personas");
+            savePrize(prize2, null);
         } catch (IOException e) {
             System.err.println("Error al leer el archivo de imagen: " + e.getMessage());
-        } catch (SQLException e) {
-            System.err.println("Error al guardar en la base de datos: " + e.getMessage());
         }
-
     }
-
-
 }
