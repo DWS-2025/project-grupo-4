@@ -1,5 +1,9 @@
 package com.casino.grupo4_dws.casinoweb.managers;
 
+import com.casino.grupo4_dws.casinoweb.dto.*;
+import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
+import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
+import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserManager {
@@ -18,62 +23,106 @@ public class UserManager {
     @Autowired
     private UserRepository userRepo;
 
-    public List<User> getUserList() {
-        return userRepo.findAll();
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private GameMapper gameMapper;
+
+    @Autowired
+    private PrizeMapper prizeMapper;
+
+    public List<UserDTO> getUserList() {
+        return userRepo.findAll().stream()
+                .map(user -> userMapper.toDTO(user))
+                .collect(Collectors.toList());
     }
 
-    public User save(User user) {
-        return userRepo.save(user);
+    public UserDTO save(UserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
+        User savedUser = userRepo.save(user);
+        return userMapper.toDTO(savedUser);
     }
 
     public void postConstruct(){
-        userRepo.save(new User("gigandres","1234",5000,true));
-        userRepo.save(new User("ralpi","qwerty",10000,true));
-        userRepo.save(new User("user","aaaaa",500,false));
-        userRepo.save(new User("userprize","1234",1500,false));
-        userRepo.save(new User("saultj", "abc", 2147483647, true));
+        UserDTO user1 = new UserDTO();
+        user1.setUsername("gigandres");
+        user1.setPassword("1234");
+        user1.setBalance(5000);
+        user1.setAdmin(true);
+        save(user1);
+
+        UserDTO user2 = new UserDTO();
+        user2.setUsername("ralpi");
+        user2.setPassword("qwerty");
+        user2.setBalance(10000);
+        user2.setAdmin(true);
+        save(user2);
+
+        UserDTO user3 = new UserDTO();
+        user3.setUsername("user");
+        user3.setPassword("aaaaa");
+        user3.setBalance(500);
+        user3.setAdmin(false);
+        save(user3);
+
+        UserDTO user4 = new UserDTO();
+        user4.setUsername("userprize");
+        user4.setPassword("1234");
+        user4.setBalance(1500);
+        user4.setAdmin(false);
+        save(user4);
+
+        UserDTO user5 = new UserDTO();
+        user5.setUsername("saultj");
+        user5.setPassword("abc");
+        user5.setBalance(2147483647);
+        user5.setAdmin(true);
+        save(user5);
     }
 
-    public Optional<User> findById(int id) {
-        return userRepo.getUserById(id);
+    public Optional<UserDTO> findById(int id) {
+        return userRepo.getUserById(id)
+                .map(user -> userMapper.toDTO(user));
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepo.getUserByUserName(username);
+    public Optional<UserDTO> findByUsername(String username) {
+        return userRepo.getUserByUserName(username)
+                .map(user -> userMapper.toDTO(user));
     }
 
-    public void deleteUser(int id){
-        Optional<User> user = userRepo.getUserById(id);
-        if(user.isPresent()){
-            userRepo.delete(user.get());
-        } else {
+    public void deleteUser(long id){
+        if (!userRepo.existsById(id)) {
             throw new IllegalArgumentException("El usuario introducido no existe");
         }
+        userRepo.deleteById(id);
     }
 
     public boolean isUserCorrect(String username, String password) {
-        Optional<User> user = userRepo.getUserByUserName(username);
-        if (user.isPresent()) {
-            if (user.get().getPassword().equals(password)) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        return userRepo.getUserByUserName(username)
+                .map(user -> user.getPassword().equals(password))
+                .orElse(false);
     }
 
-    public void saveUser(String username, String password) {
-        Optional<User> user = userRepo.getUserByUserName(username);
-        if (user.isPresent()) {
+    public UserDTO saveUser(String username, String password) {
+        if (userRepo.getUserByUserName(username).isPresent()) {
             throw new IllegalArgumentException("Ya existe un usuario con ese nombre");
         }
-        userRepo.save(new User(username,password,500,false));
+
+        UserDTO newUserDTO = new UserDTO();
+        newUserDTO.setUsername(username);
+        newUserDTO.setPassword(password);
+        newUserDTO.setBalance(500);
+        newUserDTO.setAdmin(false);
+
+        return save(newUserDTO);
     }
 
     @Transactional
-    public Prize buyPrize(Prize prize, User user) {
+    public PrizeDTO buyPrize(PrizeDTO prizeDTO, UserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
+        Prize prize = prizeMapper.toEntity(prizeDTO);
+
         if (user.getInventory() == null) {
             user.setInventory(new ArrayList<>());
         }
@@ -86,27 +135,36 @@ public class UserManager {
         if (prize.getOwner() != null && !prize.getOwner().equals(user)) {
             throw new IllegalArgumentException("Este premio ya pertenece a otro usuario");
         }
+
         user.getInventory().add(prize);
         prize.setOwner(user);
         user.setMoney(user.getMoney() - prize.getPrice());
+
         try {
-            userRepo.save(user);
+            User savedUser = userRepo.save(user);
+            return prizeMapper.toDTO(prize);
         } catch (Exception e) {
             throw new RuntimeException("Error al guardar el usuario despues de comprar");
         }
-
-        return prize;
     }
 
-    public User getUserWithGamesLiked(int id) {
-        return userRepo.findByIdWithGamesLiked(id);
+    public UserDTO getUserWithGamesLiked(int id) {
+        User user = userRepo.findByIdWithGamesLiked(id);
+        UserDTO userGamesDTO = userMapper.toDTO(user);
+        userGamesDTO.setFavoriteGames(user.getGamesLiked().stream()
+                .map(game -> gameMapper.toDTO(game))
+                .collect(Collectors.toList()));
+        return userGamesDTO;
     }
 
-    public User findByIdMeta(int id) {
-        return userRepo.findByIdWithGamesLiked(id);
+    public UserDTO findByIdMeta(int id) {
+        return getUserWithGamesLiked(id);
     }
 
-    public void setFav(User user, Game game) {
+    public UserDTO setFav(UserDTO userDTO, GameDTO gameDTO) {
+        User user = userMapper.toEntity(userDTO);
+        Game game = gameMapper.toEntity(gameDTO);
+
         if (game.getUsersLiked() == null) {
             game.setUsersLiked(new ArrayList<>());
         }
@@ -116,12 +174,18 @@ public class UserManager {
         if (user.getGamesLiked().contains(game)) {
             throw new IllegalArgumentException("Ya tienes el juego en favoritos");
         }
+
         user.getGamesLiked().add(game);
-        userRepo.save(user);
+        User savedUser = userRepo.save(user);
+
+        return userMapper.toDTO(savedUser);
     }
 
     @Transactional
-    public void deleteFav(User user, Game game) {
+    public void deleteFav(UserDTO userDTO, GameDTO gameDTO) {
+        User user = userMapper.toEntity(userDTO);
+        Game game = gameMapper.toEntity(gameDTO);
+
         if (game.getUsersLiked() == null) {
             game.setUsersLiked(new ArrayList<>());
         }
@@ -133,21 +197,16 @@ public class UserManager {
         user.getGamesLiked().size();
         game.getUsersLiked().size();
 
-        boolean contains = false;
-        for (Game g : user.getGamesLiked()) {
-            if (g.getId() == game.getId()) {
-                contains = true;
-                break;
-            }
-        }
+        boolean contains = user.getGamesLiked().stream()
+                .anyMatch(g -> g.getId() == game.getId());
 
         if (!contains) {
             throw new IllegalArgumentException("El juego no está en tus favoritos");
         }
 
-        user.getGamesLiked().remove(game);
-        game.getUsersLiked().remove(user);
+        user.getGamesLiked().removeIf(g -> g.getId() == game.getId());
+        game.getUsersLiked().removeIf(u -> u.getId() == user.getId());
+
         userRepo.save(user);
     }
 }
-

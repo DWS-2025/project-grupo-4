@@ -1,6 +1,7 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
@@ -119,7 +120,7 @@ public class PrizeController {
 
     @PostMapping("/buy/{id}")
     public String buyPrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         if (user == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para comprar un premio.");
             return "redirect:/login";
@@ -133,7 +134,7 @@ public class PrizeController {
 
         PrizeDTO prize = op.get();
         try {
-            Prize boughtPrize = userManager.buyPrize(prize, user);
+            PrizeDTO boughtPrize = userManager.buyPrize(prize, user);
             model.addAttribute("user", user);
             redirectAttributes.addFlashAttribute("successMessage", "¡Compra realizada con éxito!");
         } catch (IllegalArgumentException e) {
