@@ -7,6 +7,7 @@ import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
+import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class UserManager {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private GameRepository gameRepo;
 
     @Autowired
     private UserMapper userMapper;
@@ -186,27 +190,27 @@ public class UserManager {
         User user = userMapper.toEntity(userDTO);
         Game game = gameMapper.toEntity(gameDTO);
 
-        if (game.getUsersLiked() == null) {
-            game.setUsersLiked(new ArrayList<>());
-        }
-        if (user.getGamesLiked() == null) {
-            user.setGamesLiked(new ArrayList<>());
-        }
+        // Get fresh entities from database to ensure collections are properly loaded
+        user = userRepo.findById((long) user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        game = gameRepo.findById((long) game.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Juego no encontrado"));
 
-        // Force load the collections
-        user.getGamesLiked().size();
-        game.getUsersLiked().size();
 
-        boolean contains = user.getGamesLiked().stream()
-                .anyMatch(g -> g.getId() == game.getId());
-
-        if (!contains) {
+        if (!user.getGamesLiked().contains(game)) {
             throw new IllegalArgumentException("El juego no está en tus favoritos");
         }
 
-        user.getGamesLiked().removeIf(g -> g.getId() == game.getId());
-        game.getUsersLiked().removeIf(u -> u.getId() == user.getId());
+        user.getGamesLiked().remove(game);
+        game.getUsersLiked().remove(user);
 
+        // Save both entities
         userRepo.save(user);
+        gameRepo.save(game);
+
+        // Update the DTO to reflect changes
+        userDTO.setFavoriteGames(user.getGamesLiked().stream()
+                .map(gameMapper::toDTO)
+                .collect(Collectors.toList()));
     }
 }

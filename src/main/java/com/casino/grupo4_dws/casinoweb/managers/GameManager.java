@@ -9,6 +9,7 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -63,7 +64,7 @@ public class GameManager {
         diceGame.setChance(16);
         diceGame.setMinInput(1);
         diceGame.setMultiplier(6);
-        saveGame(diceGame, null);
+        saveGame(diceGame, new MockMultipartFile("file", "Dados.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/dice.jpg"))));
 
         GameDTO rouletteGame = new GameDTO();
         rouletteGame.setTitle("Ruleta");
@@ -71,7 +72,7 @@ public class GameManager {
         rouletteGame.setChance(50);
         rouletteGame.setMinInput(1);
         rouletteGame.setMultiplier(2);
-        saveGame(rouletteGame, null);
+        saveGame(rouletteGame, new MockMultipartFile("file", "Ssegura.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/Ssegura.jpg"))));
 
         GameDTO slotsGame = new GameDTO();
         slotsGame.setTitle("Tragaperras");
@@ -79,7 +80,7 @@ public class GameManager {
         slotsGame.setChance(5);
         slotsGame.setMinInput(10);
         slotsGame.setMultiplier(20);
-        saveGame(slotsGame, null);
+        saveGame(slotsGame, new MockMultipartFile("file", "Slots.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/slots.jpg"))));
     }
 
     public List<GameDTO> getGameList() {
@@ -98,7 +99,6 @@ public class GameManager {
         if (game.getChance() < 1 || game.getChance() > 100) {
             throw new IllegalArgumentException("Esta creacion de juego es ilegal");
         }
-
         Game savedGame = gameRepo.save(game);
         return gameMapper.toDTO(savedGame);
     }

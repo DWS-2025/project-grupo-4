@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameDTO {
-    private int id;
+    private long id;
     private String title;
     private String description;
     private int minInput;
@@ -27,11 +27,11 @@ public class GameDTO {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
