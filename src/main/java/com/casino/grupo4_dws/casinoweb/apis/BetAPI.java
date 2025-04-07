@@ -24,23 +24,23 @@ public class BetAPI {
 
     @GetMapping("")
     public ResponseEntity<List<BetDTO>> getAllBets() {
-        List<Bet> bets = betManager.findAll();
-        return ResponseEntity.ok(betMapper.toDTOList(bets));
+        List<BetDTO> bets = betManager.findAll();
+        return ResponseEntity.ok(bets);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BetDTO> getBet(@PathVariable int id) {
-        Optional<Bet> bet = betManager.findById(id);
-        return bet.map(b -> ResponseEntity.ok(betMapper.toDTO(b)))
+        Optional<BetDTO> bet = betManager.findById(id);
+        return bet.map(b -> ResponseEntity.ok(b))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
     public ResponseEntity<BetDTO> createBet(@RequestBody BetDTO betDTO) {
         try {
-            Bet bet = betMapper.toEntity(betDTO);
-            betManager.Save(bet);
-            return ResponseEntity.status(HttpStatus.CREATED).body(betMapper.toDTO(bet));
+            BetDTO bet = betDTO;
+            betManager.save(bet);
+            return ResponseEntity.status(HttpStatus.CREATED).body(bet);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -50,10 +50,10 @@ public class BetAPI {
     public ResponseEntity<BetDTO> updateBet(@PathVariable int id, @RequestBody BetDTO betDTO) {
         try {
             if (betManager.findById(id).isPresent()) {
-                Bet bet = betMapper.toEntity(betDTO);
+                BetDTO bet = betDTO;
                 bet.setId(id);
-                betManager.Save(bet);
-                return ResponseEntity.ok(betMapper.toDTO(bet));
+                betManager.save(bet);
+                return ResponseEntity.ok(bet);
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {

@@ -25,23 +25,23 @@ public class GamesAPI {
 
     @GetMapping("")
     public ResponseEntity<List<GameDTO>> getAllGames() {
-        List<Game> games = gameManager.getGameList();
-        return ResponseEntity.ok(gameMapper.toDTOList(games));
+        List<GameDTO> games = gameManager.getGameList();
+        return ResponseEntity.ok(games);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GameDTO> getGame(@PathVariable int id) {
-        Optional<Game> game = gameManager.getGameById(id);
-        return game.map(g -> ResponseEntity.ok(gameMapper.toDTO(g)))
+        Optional<GameDTO> game = gameManager.getGameById(id);
+        return game.map(g -> ResponseEntity.ok(g))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
     public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO gameDTO) {
         try {
-            Game game = gameMapper.toEntity(gameDTO);
+            GameDTO game = gameDTO;
             gameManager.saveGame(game,null);
-            return ResponseEntity.status(HttpStatus.CREATED).body(gameMapper.toDTO(game));
+            return ResponseEntity.status(HttpStatus.CREATED).body(game);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -51,10 +51,10 @@ public class GamesAPI {
     public ResponseEntity<GameDTO> updateGame(@PathVariable int id, @RequestBody GameDTO gameDTO) {
         try {
             if (gameManager.getGameById(id).isPresent()) {
-                Game game = gameMapper.toEntity(gameDTO);
+                GameDTO game = gameDTO;
                 game.setId(id);
                 gameManager.saveGame(game,null);
-                return ResponseEntity.ok(gameMapper.toDTO(game));
+                return ResponseEntity.ok(game);
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
