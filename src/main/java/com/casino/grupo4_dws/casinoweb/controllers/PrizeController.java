@@ -1,6 +1,8 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
+import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
+import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
@@ -78,16 +80,16 @@ public class PrizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
+    public String addPrize(@ModelAttribute("newPrize") PrizeDTO newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
         prizeManager.savePrize(newPrize, imageFile);
         return "redirect:/prizes";
     }
 
     @PostMapping("/deletePrize/{id}")
     public String deletePrize(@PathVariable int id, Model model) {
-        Optional<Prize> op = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
         if(op.isPresent()){
-            prizeManager.deletePrize(op.get());
+            prizeManager.deletePrize(id);
             model.addAttribute("prizes", prizeManager.findAllPrizes());
         }
         return "redirect:/prizes";
@@ -95,7 +97,7 @@ public class PrizeController {
 
     @GetMapping("/editPrize/{id}")
     public String editPrize(Model model, @PathVariable int id) {
-        Optional <Prize> editado = prizeManager.getPrizeById(id);
+        Optional <PrizeDTO> editado = prizeManager.getPrizeById(id);
         if (editado.isPresent()) {
             model.addAttribute("prize", editado.get());
             return "staticLoggedIn/editPrizeForm";
@@ -105,26 +107,11 @@ public class PrizeController {
     }
 
     @PostMapping("/updatePrize/{id}")
-    public String updatePrize(@ModelAttribute("prize") Prize updatedPrize, @PathVariable int id,
+    public String updatePrize(@ModelAttribute("prize") PrizeDTO updatedPrize, @PathVariable int id,
                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                               Model model) throws IOException {
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = UUID.randomUUID().toString() + "-" + imageFile.getOriginalFilename();
-
-            Path uploadPath = Paths.get("src/main/resources/static/images");
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            try (InputStream inputStream = imageFile.getInputStream()) {
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                updatedPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
-            }
-        }
-
-        prizeManager.updatePrizeDetails(updatedPrize, id);
+        prizeManager.updatePrizeDetails(updatedPrize, id,imageFile);
         model.addAttribute("prizes", prizeManager.findAllPrizes());
         return "redirect:/prizes";
     }
@@ -138,13 +125,13 @@ public class PrizeController {
             return "redirect:/login";
         }
 
-        Optional<Prize> op = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
         if (!op.isPresent()) {
             redirectAttributes.addFlashAttribute("errorMessage", "El premio no existe.");
             return "redirect:/prizes";
         }
 
-        Prize prize = op.get();
+        PrizeDTO prize = op.get();
         try {
             Prize boughtPrize = userManager.buyPrize(prize, user);
             model.addAttribute("user", user);
@@ -159,7 +146,7 @@ public class PrizeController {
     @GetMapping("/prize/{id}/image")
     public ResponseEntity<Object> downloadImage(@PathVariable int id) throws SQLException {
 
-        Optional<Prize> op = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
 
         if (op.isPresent() && op.get().getImage() != null) {
             Blob image = op.get().getImage();
