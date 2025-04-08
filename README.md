@@ -14,9 +14,12 @@ Se trata de una página web de un casino digital donde puedes jugar diferentes a
 
 ## Aspectos Principales
 
-### Entidades
+### Entidades y Diagrama
 
 Lista de entidades principales y sus relaciones:
+
+![image](https://github.com/user-attachments/assets/a2226ccf-4078-4077-b7f1-fc11e4e1f04f)
+
 
 - **Juego** → Relación N:M con **Usuario**
 - **Usuario** → Relación 1:N con **Recompensa**
@@ -45,34 +48,29 @@ resumir todo en 5 commits. Muchos commits se han hecho varias veces para arregla
 que todos hemos participado activamente en la solucion de errores de todo el codigo, por ello 5 commits se hace demasiado corto
 como para englobar el trabajo individual de cada participante.
 # Andrés
-[]
-[]
-[]
-[]
-[]
+[d39f4a85a7be4c27b48107bb3a1759b694ae93ee](1) Se adapta el uso de los DTOs a los controladores de la API Web
+[59237575a352932d6e9cf15871f6ea3373f3bcca](2) En este Commit se establece y se hace funcional la relación N:M de nuestro proyecto
+[11c8b9b4379bb4c138d41766a1506b24a113dbb3](3) En este Commit se permite el borrado de los juegos a los que ya se ha jugado
+[1c1ea20219edfc54334b05dc87a1384fbacf81eb](4) Hace funcional la parte más importante de nuestra página web
+[bdf73844db0a6fe94a1cc97d0905e84c456044a5](5) Establece sesiones de usuarios con Usuario y Contraseña, además de registros y un par de restricciones sencillas para evitar errores, como que no puede haber dos usuarios con nombre repetido
 # Adrián
-[4de9f96548f6d873f38a6f597ab46d31cfe4c576] Solucion de errores en apartado de recompensas, para que la paginacion funcione y el mostrado de premios, a la vez que los gets funcionen tambien
-[b4644b64acdfa83a3e77960e5495df6833cc92a3] Solucion de errores haciendo el get en /api/Prizes
-[d36cd265258c2dbaf9b7c60982c5c8cae7494478] Implementacion de BetsAPI en su primera version
-[21bdba2820d68135b3eccfc1d7524406887c72b9] Implementacion de GamesAPI en su primera version
-[85c9062a6015c843229a92684fbdb40bdef1aea8] Implementacion de PrizesAPI en su primera version
+[4de9f96548f6d873f38a6f597ab46d31cfe4c576](1) Solucion de errores en apartado de recompensas, para que la paginacion funcione y el mostrado de premios, a la vez que los gets funcionen tambien
+[b4644b64acdfa83a3e77960e5495df6833cc92a3](2) Solucion de errores haciendo el get en /api/Prizes
+[d36cd265258c2dbaf9b7c60982c5c8cae7494478](3) Implementacion de BetsAPI en su primera version
+[21bdba2820d68135b3eccfc1d7524406887c72b9](4) Implementacion de GamesAPI en su primera version
+[85c9062a6015c843229a92684fbdb40bdef1aea8](5) Implementacion de PrizesAPI en su primera version
 
 # Saúl
-[d9cd015] Desarrollo de todas las API en paralelo a la implementación de los DTO para asegurar una transmisión de entidades segura. 
+[d9cd015](1) Desarrollo de todas las API en paralelo a la implementación de los DTO para asegurar una transmisión de entidades segura. 
 
-[24029b6] Primer paso en el desarrollo de los DTO, creación de las clases DTO y sus respectivos Mappers con mapStruct.
+[24029b6](2) Primer paso en el desarrollo de los DTO, creación de las clases DTO y sus respectivos Mappers con mapStruct.
 
-[dd130e1] Creación de la API de sesión (API de usuario).
+[dd130e1](3) Creación de la API de sesión (API de usuario).
 
-[8bc9592] Implementación de la tabla de relación entre GAME y USER, representando una relación N:M.
+[8bc9592](4) Implementación de la tabla de relación entre GAME y USER, representando una relación N:M.
 
-[92f71a4] Este commit permitió representar las imagenes en bases de datos utilizando MultipartFile y Blob.
+[92f71a4](4) Este commit permitió representar las imagenes en bases de datos utilizando MultipartFile y Blob.
 
-## Diagrama de la Base de Datos
-
-Se incluirá un diagrama con las entidades de la base de datos, sus campos y relaciones. Puede ser un diagrama entidad-relación o un diagrama UML de las clases Java.
-(**En desarrollo**)
-![Diagrama de la Base de Datos](ruta/a/diagrama.png)
 
 ## Instalación y Ejecución
 
@@ -89,8 +87,4 @@ npm install
 # Ejecutar la aplicación
 npm start
 ```
-
-## Licencia
-
-Este proyecto está bajo la licencia [Nombre de la Licencia](https://opensource.org/licenses/tipo).
 
