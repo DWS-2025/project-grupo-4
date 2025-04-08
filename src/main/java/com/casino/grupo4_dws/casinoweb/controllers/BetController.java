@@ -59,10 +59,10 @@ public class BetController {
                     return "redirect:/game/" + id;
                 }
 
-                // Asegúrate de que el usuario esté seteado en la apuesta
-                bet.setUserPlayer(user); // <-- Esta es la línea clave
+                // make sure the user is set on the bet
+                bet.setUserPlayer(user);
 
-                // Guardar la apuesta
+                // save bet
                 betManager.save(bet);
 
                 // Update user in session

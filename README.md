@@ -40,6 +40,10 @@ Lista de entidades principales y sus relaciones:
 | **Apuesta** | Sin imágenes |
 
 ## Diversificación del desarrollo
+Disclaimer: todos los integrantes hemos participado activamente en el desarrollo de la entrega de la practica, y es muy difícil
+resumir todo en 5 commits. Muchos commits se han hecho varias veces para arreglar un pequeño error o optimizar algo. Cabe destacar
+que todos hemos participado activamente en la solucion de errores de todo el codigo, por ello 5 commits se hace demasiado corto
+como para englobar el trabajo individual de cada participante.
 # Andrés
 []
 []
@@ -47,11 +51,12 @@ Lista de entidades principales y sus relaciones:
 []
 []
 # Adrián
-[]
-[]
-[]
-[]
-[]
+[4de9f96548f6d873f38a6f597ab46d31cfe4c576] Solucion de errores en apartado de recompensas, para que la paginacion funcione y el mostrado de premios, a la vez que los gets funcionen tambien
+[b4644b64acdfa83a3e77960e5495df6833cc92a3] Solucion de errores haciendo el get en /api/Prizes
+[d36cd265258c2dbaf9b7c60982c5c8cae7494478] Implementacion de BetsAPI en su primera version
+[21bdba2820d68135b3eccfc1d7524406887c72b9] Implementacion de GamesAPI en su primera version
+[85c9062a6015c843229a92684fbdb40bdef1aea8] Implementacion de PrizesAPI en su primera version
+
 # Saúl
 [d9cd015] Desarrollo de todas las API en paralelo a la implementación de los DTO para asegurar una transmisión de entidades segura. 
 
