@@ -62,14 +62,12 @@ public class BetController {
                 // Asegúrate de que el usuario esté seteado en la apuesta
                 bet.setUserPlayer(user); // <-- Esta es la línea clave
 
-                UserDTO updatedUser = userManager.findByIdMeta(user.getId());
-                session.setAttribute("user", updatedUser);
-                redirectAttributes.addFlashAttribute("user", updatedUser);
                 // Guardar la apuesta
                 betManager.save(bet);
 
                 // Update user in session
-
+                session.setAttribute("user", user);
+                redirectAttributes.addFlashAttribute("user", user);
                 redirectAttributes.addFlashAttribute("status", bet.isStatus());
 
             } catch (IllegalArgumentException e) {

@@ -103,7 +103,6 @@ public class SessionController {
         return "redirect:/login";
     }
 
-    //NO FUNCIONA ESTA PARTE, MIRAR CUANDO HAYAMOS AJUSTADO TODAS LAS ENTIDADES Y RELACIONES
     @GetMapping("/user")
     public String showUser(Model model, HttpSession session) {
         UserDTO user = (UserDTO) session.getAttribute("user");

@@ -17,6 +17,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     Optional<Game> findGameById(int id);
 
-    // de momento lo dejo asi
     //List<Game> findByUsersLiked_Id(Long userId);
 }
