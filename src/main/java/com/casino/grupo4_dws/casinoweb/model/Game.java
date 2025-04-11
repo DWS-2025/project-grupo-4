@@ -20,7 +20,7 @@ public class Game {
     private int chance;
     private int minInput;
     private int multiplier;
-    @ManyToMany(mappedBy = "gamesLiked")
+    @ManyToMany(mappedBy = "gamesLiked",fetch = FetchType.EAGER)
     private List<User> usersLiked;
 
 

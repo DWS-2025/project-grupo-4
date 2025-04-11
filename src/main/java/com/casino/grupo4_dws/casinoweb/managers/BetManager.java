@@ -11,6 +11,7 @@ import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.repos.BetRepository;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +39,11 @@ public class BetManager {
     @Autowired
     private GameMapper gameMapper;
 
+    @Transactional
     public BetDTO playBet(GameDTO gameDTO, UserDTO userDTO, int amount) {
         Game game = gameMapper.toEntity(gameDTO);
-        User player = userMapper.toEntity(userDTO);
+        User player = userRepo.findById((long)userDTO.getId())
+                .orElseThrow(() -> new RuntimeException("User not found")); // 🔄 aquí el cambio
 
         if (amount < game.getMinInput()) {
             throw new IllegalArgumentException("La apuesta debe de ser mayor o igual a " + game.getMinInput());
@@ -60,13 +63,13 @@ public class BetManager {
         bet.setAmount(amount);
         bet.setUserPlayer(player);
         bet.setGame(game);
-
+        bet.setUserPlayer(player);
         boolean win = playGame(bet);
 
         if (win) {
             int revenue = amount * game.getMultiplier();
             bet.setRevenue(revenue);
-            player.setMoney(player.getMoney() + revenue - amount);
+            player.setMoney(player.getMoney() + revenue);
             bet.setStatus(true);
         } else {
             bet.setRevenue(0);
@@ -76,16 +79,20 @@ public class BetManager {
 
         Bet savedBet = betRepo.save(bet);
 
-
+        // Ensure the user's bet history is initialized
         if (player.getBetHistory() == null) {
             player.setBetHistory(new ArrayList<>());
         }
+
+        // Update user's bet history
         player.getBetHistory().add(savedBet);
 
+        // Save the updated user
         userRepo.save(player);
 
         return betMapper.toDTO(savedBet);
     }
+
 
     private boolean playGame(Bet activeBet) {
         Random rand = new Random();

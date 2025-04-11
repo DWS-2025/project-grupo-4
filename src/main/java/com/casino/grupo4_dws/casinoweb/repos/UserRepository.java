@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> getUserByUserName(String userName);
 
-    Optional<User> getUserById(int id);
+    Optional<User> getONEUserById(int id);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.gamesLiked WHERE u.id = :id")
     User findByIdWithGamesLiked(@Param("id") int id);

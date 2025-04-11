@@ -86,7 +86,7 @@ public class UserManager {
     }
 
     public Optional<UserDTO> findById(int id) {
-        return userRepo.getUserById(id)
+        return userRepo.getONEUserById(id)
                 .map(user -> userMapper.toDTO(user));
     }
 

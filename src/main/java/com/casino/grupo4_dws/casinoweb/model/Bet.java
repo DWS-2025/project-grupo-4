@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "bet")
 public class Bet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +21,7 @@ public class Bet {
     private Game game;
     private String gameTitle;
     private boolean status;
+    @Column(name = "ver")
     private boolean show;
 
     public String getGameTitle() {
@@ -63,7 +65,13 @@ public class Bet {
     }
 
     public void setUserPlayer(User activeUser) {
+        if (this.user != null) {
+            this.user.getBetHistory().remove(this);
+        }
         this.user = activeUser;
+        if (activeUser != null && !activeUser.getBetHistory().contains(this)) {
+            activeUser.getBetHistory().add(this);
+        }
     }
 
     public boolean getStatus() {
