@@ -65,13 +65,7 @@ public class Bet {
     }
 
     public void setUserPlayer(User activeUser) {
-        if (this.user != null) {
-            this.user.getBetHistory().remove(this);
-        }
         this.user = activeUser;
-        if (activeUser != null && !activeUser.getBetHistory().contains(this)) {
-            activeUser.getBetHistory().add(this);
-        }
     }
 
     public boolean getStatus() {

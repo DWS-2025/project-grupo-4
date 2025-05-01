@@ -43,7 +43,7 @@ public class BetManager {
     public BetDTO playBet(GameDTO gameDTO, UserDTO userDTO, int amount) {
         Game game = gameMapper.toEntity(gameDTO);
         User player = userRepo.findById((long)userDTO.getId())
-                .orElseThrow(() -> new RuntimeException("User not found")); // 🔄 aquí el cambio
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (amount < game.getMinInput()) {
             throw new IllegalArgumentException("La apuesta debe de ser mayor o igual a " + game.getMinInput());
@@ -58,12 +58,14 @@ public class BetManager {
             throw new IllegalArgumentException("No puedes apostar en blanco");
         }
 
-        Bet bet = new Bet();
+        UserDTO playerDTO = userMapper.toDTO(player);
+        GameDTO gameDTO2 = gameMapper.toDTO(game);
+
+        BetDTO bet = new BetDTO();
         bet.setShow(true);
         bet.setAmount(amount);
-        bet.setUserPlayer(player);
-        bet.setGame(game);
-        bet.setUserPlayer(player);
+        bet.setUserPlayer(playerDTO);
+        bet.setGame(gameDTO2);
         boolean win = playGame(bet);
 
         if (win) {
@@ -77,14 +79,15 @@ public class BetManager {
             bet.setStatus(false);
         }
 
-        Bet savedBet = betRepo.save(bet);
-
         // Ensure the user's bet history is initialized
         if (player.getBetHistory() == null) {
             player.setBetHistory(new ArrayList<>());
         }
 
-        // Update user's bet history
+        // Save the bet only once
+        Bet savedBet = betRepo.save(betMapper.toEntity(bet));
+
+        // Update user's bet history with the saved bet
         player.getBetHistory().add(savedBet);
 
         // Save the updated user
@@ -94,7 +97,7 @@ public class BetManager {
     }
 
 
-    private boolean playGame(Bet activeBet) {
+    private boolean playGame(BetDTO activeBet) {
         Random rand = new Random();
         int randomValue = rand.nextInt(100) + 1;
         return randomValue <= activeBet.getGame().getChance();

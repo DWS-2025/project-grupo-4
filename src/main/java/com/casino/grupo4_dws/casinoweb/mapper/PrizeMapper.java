@@ -9,14 +9,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PrizeMapper {
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "title", source = "title")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "price", source = "price")
+
     PrizeDTO toDTO(Prize prize);
 
-    @Mapping(target = "image", ignore = true)
-    @Mapping(target = "owner", ignore = true)
     Prize toEntity(PrizeDTO prizeDTO);
 
     List<PrizeDTO> toDTOList(List<Prize> prizes);

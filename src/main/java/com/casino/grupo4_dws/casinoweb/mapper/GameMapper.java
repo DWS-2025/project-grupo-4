@@ -9,13 +9,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface GameMapper {
-    @Mapping(target = "minInput", source = "minInput")
-    @Mapping(target = "multiplier", source = "multiplier")
     GameDTO toDTO(Game game);
 
-    @Mapping(target = "image", source = "image")
-    @Mapping(target = "chance", constant = "50")
-    @Mapping(target = "usersLiked", ignore = true)
     Game toEntity(GameDTO gameDTO);
 
     List<GameDTO> toDTOList(List<Game> games);

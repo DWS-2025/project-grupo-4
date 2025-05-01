@@ -9,15 +9,16 @@ import java.sql.Blob;
 
 @Entity
 public class Prize {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String title;
     private int price;
     private String description;
     @Lob
     @JsonIgnore
     private Blob image;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+
     @ManyToOne
     private User owner;
 
