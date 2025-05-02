@@ -19,7 +19,7 @@
             <div class="popup-header">
                 <p
                         style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
-                        th:text="${user.username}"
+                        th:text="${user.userName()}"
                 >
                     User
                 </p>
@@ -32,7 +32,7 @@
                 <ul class="list-box">
                     <li class="button item" onclick="location.href='/user'">Mi zona</li>
                     <li class="button item">
-                        Saldo: <span th:text="${user.balance}"></span>
+                        Saldo: <span th:text="${user.money()}"></span>
                     </li>
                 </ul>
             </div>
@@ -75,7 +75,7 @@
     <header>
         <div id="GameTitles">
             <h1>Nuestros Juegos</h1>
-            <h2>Disfruta <span th:text="${user.username}">Usuario</span></h2>
+            <h2>Disfruta <span th:text="${user.userName()}">Usuario</span></h2>
             <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots</p>
             <img src="/images/luigiapuestas.jpg" alt="Luigi" width=681 height=511 id="Luigi"/>
         </div>
@@ -106,13 +106,13 @@
         </div>
         <div id="grid-container" th:if="${!games.isEmpty() && games != null}">
             <section class="game-section" th:each="game : ${games}">
-                <h2 th:text="${game.title}"></h2>
-                <p th:text="${game.description}"></p>
-                <img th:if="${game.image}" th:src="@{/game/{id}/image(id=${game.id})}" alt="Game Img" class="game-image">
-                <form th:action="@{/game/{id}(id=${game.id})}" method="get">
+                <h2 th:text="${game.title()}"></h2>
+                <p th:text="${game.description()}"></p>
+                <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img" class="game-image">
+                <form th:action="@{/game/{id}(id=${game.id()})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
-                <form th:action="@{/delete/{id}(id=${game.id})}" method="post">
+                <form th:action="@{/delete/{id}(id=${game.id()})}" method="post">
                     <button class="golden-button" type="submit">Eliminar Juego</button>
                 </form>
 

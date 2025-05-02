@@ -8,6 +8,7 @@ public record PrizeDTO(int id,
                        String title,
                        String description,
                        int price,
+                       int owner,
                        @JsonIgnore
                        Blob image) {
 }

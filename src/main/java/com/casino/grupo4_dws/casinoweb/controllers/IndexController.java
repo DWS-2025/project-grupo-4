@@ -2,14 +2,19 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 
 
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
+import com.casino.grupo4_dws.casinoweb.managers.UserManager;
+import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import org.jetbrains.annotations.ApiStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Optional;
 
 @Controller
 public class IndexController {
@@ -22,16 +27,21 @@ public class IndexController {
     }
 
     @Autowired
-    public UserRepository userRepo;
+    public UserManager userManager;
 
     @GetMapping("/")
     public String inicio(Model model, HttpSession session) {
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (user == null) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
             return "inicio";
         }
-        model.addAttribute("user", user);
-        return "staticLoggedIn/loggedMain";
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "inicio";
+        } else {
+            model.addAttribute("user", userOp.get());
+            return "staticLoggedIn/loggedMain";
+        }
     }
 
 

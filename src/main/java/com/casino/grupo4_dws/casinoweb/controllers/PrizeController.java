@@ -39,6 +39,8 @@ public class PrizeController {
     private PrizeManager prizeManager;
     @Autowired
     private UserManager userManager;
+    @Autowired
+    private PrizeMapper prizeMapper;
 
     public PrizeController(PrizeManager prizeManager) {
         this.prizeManager = prizeManager;
@@ -52,14 +54,16 @@ public class PrizeController {
     //Done
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session) {
-        List<PrizeDTO> prizes = prizeManager.findAllPrizes();
-        model.addAttribute("prizes", prizes);
-        UserDTO user = (UserDTO) session.getAttribute("user");
-
-        if (user == null) {
+        model.addAttribute("prizes", prizeManager.findAllPrizes());
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
             return "prizes";
         }
-        model.addAttribute("user", user);
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "prizes";
+        }
+        model.addAttribute("user", userOp.get());
         return "staticLoggedIn/loggedPrizes";
     }
 
@@ -69,12 +73,15 @@ public class PrizeController {
                                @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
 
         model.addAttribute("prizes", prizeManager.findPrizesByFilters(title, minPrice, maxPrice));
-        UserDTO user = (UserDTO) session.getAttribute("user");
-
-        if (user == null) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
             return "prizes";
         }
-        model.addAttribute("user", user);
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "prizes";
+        }
+        model.addAttribute("user", userOp.get());
         return "staticLoggedIn/loggedPrizes";
     }
 
@@ -85,7 +92,7 @@ public class PrizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addPrize(@ModelAttribute("newPrize") PrizeDTO newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
+    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
         prizeManager.savePrize(newPrize, imageFile);
         return "redirect:/prizes";
     }
@@ -124,12 +131,17 @@ public class PrizeController {
 
     @PostMapping("/buy/{id}")
     public String buyPrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (user == null) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para comprar un premio.");
             return "redirect:/login";
         }
-
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para comprar un premio.");
+            return "redirect:/login";
+        }
+        UserDTO userdto = userOp.get();
         Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
         if (!op.isPresent()) {
             redirectAttributes.addFlashAttribute("errorMessage", "El premio no existe.");
@@ -138,8 +150,7 @@ public class PrizeController {
 
         PrizeDTO prize = op.get();
         try {
-            PrizeDTO boughtPrize = userManager.buyPrize(prize, user);
-            model.addAttribute("user", user);
+            userManager.buyPrize(prize, userdto);
             redirectAttributes.addFlashAttribute("successMessage", "¡Compra realizada con éxito!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -153,8 +164,8 @@ public class PrizeController {
 
         Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
 
-        if (op.isPresent() && op.get().getImage() != null) {
-            Blob image = op.get().getImage();
+        if (op.isPresent() && prizeMapper.toEntity(op.get()).getImage() != null) {
+            Blob image = prizeMapper.toEntity(op.get()).getImage();
             Resource file = new InputStreamResource(image.getBinaryStream());
 
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").contentLength(image.length()).body(file);

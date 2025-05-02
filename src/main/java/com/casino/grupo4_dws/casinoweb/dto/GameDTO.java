@@ -6,13 +6,13 @@ import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
-public record GameDTO( long id,
-         String title,
-         String description,
-         int minInput,
-         int multiplier,
-         int chance,
-         List<Integer> usersLiked,
-        @JsonIgnore
-         Blob image) {
+public record GameDTO(long id,
+                      String title,
+                      String description,
+                      int minInput,
+                      int multiplier,
+                      int chance,
+                      List<Integer> usersLiked,
+                      @JsonIgnore
+                      Blob image) {
 }

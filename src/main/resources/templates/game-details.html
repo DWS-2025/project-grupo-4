@@ -46,7 +46,7 @@
 </script>
 <body>
 
-<div class="transparent-container" th:if="${user != null and user.username != null}">
+<div class="transparent-container" th:if="${user != null and user.userName() != null}">
     <div class="template">
         <div
                 tabindex="0"
@@ -57,7 +57,7 @@
             <div class="popup-header">
                 <p
                         style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
-                        th:text="${user.username}"
+                        th:text="${user.userName()}"
                 >
                     User
                 </p>
@@ -70,7 +70,7 @@
                 <ul class="list-box">
                     <li class="button item" onclick="location.href='/user'">Mi zona</li>
                     <li class="button item">
-                        Saldo: <span th:text="${user.balance}"></span>
+                        Saldo: <span th:text="${user.money()}"></span>
                     </li>
                 </ul>
             </div>
@@ -116,29 +116,29 @@
         <div class="game-details-container" th:if="${game != null}">
             <div class="game-card">
                 <div class="game-image-container">
-                    <img th:if="${game.image}" th:src="@{/game/{id}/image(id=${game.id})}" alt="Game Img" class="game-image">
+                    <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img" class="game-image">
                 </div>
                 <div class="game-info">
-                    <h1 class="game-title" th:if="${game != null}" th:text="${game.title}">Game Title</h1>
-                    <p class="game-description" th:if="${game != null}" th:text="${game.description}">Game description</p>
+                    <h1 class="game-title" th:if="${game != null}" th:text="${game.title()}">Game Title</h1>
+                    <p class="game-description" th:if="${game != null}" th:text="${game.description()}">Game description</p>
                     <div class="betting-info">
                         <div class="bet-limit">
                             <span class="bet-label">Apuesta Mínima:</span>
-                            <span class="bet-value" th:if="${game != null}" th:text="${game.minInput}+'$'">0</span>
+                            <span class="bet-value" th:if="${game != null}" th:text="${game.minInput()}+'$'">0</span>
                         </div>
                         <div class="bet-limit">
                             <span class="bet-label">Probabilidad:</span>
-                            <span class="bet-value" th:text="${game.chance}+'%'">0</span>
+                            <span class="bet-value" th:text="${game.chance()}+'%'">0</span>
                         </div>
                         <div class="bet-limit">
                             <span class="bet-label">Multiplicador:</span>
-                            <span class="bet-value" th:text="'x'+${game.multiplier}">0</span>
+                            <span class="bet-value" th:text="'x'+${game.multiplier()}">0</span>
                         </div>
                         <!-- Form to ADD to favorites -->
                         <form th:if="${game != null and user != null and !isFavorite}"
-                              th:action="@{/user/favourites/add/{id}(id=${game.id})}" method="post">
+                              th:action="@{/user/favourites/add/{id}(id=${game.id()})}" method="post">
                             <label class="container">
-                                <input type="checkbox" th:value="${game.id}" onchange="this.form.submit()">
+                                <input type="checkbox" th:value="${game.id()}" onchange="this.form.submit()">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"/>
                                 </svg>
@@ -147,9 +147,9 @@
 
                         <!-- Form to REMOVE from favorites -->
                         <form th:if="${game != null and user != null and isFavorite}"
-                              th:action="@{/user/favourites/remove/{id}(id=${game.id})}" method="post">
+                              th:action="@{/user/favourites/remove/{id}(id=${game.id()})}" method="post">
                             <label class="container">
-                                <input type="checkbox" th:value="${game.id}" onchange="this.form.submit()" checked>
+                                <input type="checkbox" th:value="${game.id()}" onchange="this.form.submit()" checked>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z" fill="#E3474F"/>
                                 </svg>
@@ -167,8 +167,8 @@
             </button>
         </div>
         <center>
-            <form th:if="${game != null and user != null and user.username != null}"
-                  th:action="@{/playGame/{id}(id=${game.id})}" method="post">
+            <form th:if="${game != null and user != null and user.userName() != null}"
+                  th:action="@{/playGame/{id}(id=${game.id()})}" method="post">
             <label for="playedAmount"></label>
                 <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647" oninput="validity.valid||(value='');" required>
                 <button class="golden-button" type="submit">Jugar</button>

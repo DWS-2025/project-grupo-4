@@ -4,6 +4,9 @@ import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
+import com.casino.grupo4_dws.casinoweb.mapper.BetMapper;
+import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
+import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
@@ -28,6 +31,12 @@ public class SessionController {
 
     @Autowired
     UserManager userManager;
+    @Autowired
+    UserMapper userMapper;
+    @Autowired
+    BetMapper betMapper;
+    @Autowired
+    PrizeMapper prizeMapper;
 
     @PostConstruct
     public void init() {
@@ -36,8 +45,12 @@ public class SessionController {
 
     @GetMapping("/login")
     public String loadLoginPage(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
             return "login";
         } else {
             return "redirect:/";
@@ -53,8 +66,8 @@ public class SessionController {
             return "redirect:/login";
         }
         if (userManager.isUserCorrect(loginUsername, loginPassword)) {
-            Optional<UserDTO> user = userManager.findByUsername(loginUsername);
-            user.ifPresent(user1 -> session.setAttribute("user", user1));
+            User active = userManager.findByUsername(loginUsername).get();
+            session.setAttribute("user", (Integer)active.getId());
             return "redirect:/NGames";
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Usuario o Contraseña incorrectos");
@@ -64,7 +77,7 @@ public class SessionController {
 
     @GetMapping("/logout")
     public String loggingOut(HttpSession session) {
-        UserDTO user = (UserDTO) session.getAttribute("user");
+        Integer user = (Integer) session.getAttribute("user");
         if (user != null) {
             session.removeAttribute("user");
         }
@@ -105,14 +118,16 @@ public class SessionController {
 
     @GetMapping("/user")
     public String showUser(Model model, HttpSession session) {
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (user == null) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
             return "redirect:/login";
         }
-
-        // Get fresh user data from database
-        user = userManager.findById(user.getId()).orElse(user);
-        session.setAttribute("user", user);
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        UserDTO userDTO = userOp.get();
+        User user = userMapper.toEntity(userDTO);
 
         if (user.getInventory() == null) {
             user.setInventory(new ArrayList<>());
@@ -121,13 +136,10 @@ public class SessionController {
             user.setBetHistory(new ArrayList<>());
         }
 
-        List<PrizeDTO> userInventory = user.getInventory();
-        List<BetDTO> betHistory = user.getBetHistory().stream()
-                .filter(BetDTO::isShow)
-                .sorted((b1, b2) -> Long.compare(b2.getId(), b1.getId()))
-                .collect(Collectors.toList());
-
-        model.addAttribute("user", user);
+        List<BetDTO> betHistory = betMapper.toDTOList(user.getBetHistory());
+        List<PrizeDTO> userInventory = prizeMapper.toDTOList(user.getInventory());
+        Collections.reverse(betHistory);
+        model.addAttribute("user", userDTO);
         model.addAttribute("betHistory", betHistory);
         model.addAttribute("inventory", userInventory);
         return "staticLoggedIn/user";

@@ -42,8 +42,7 @@ public class BetManager {
     @Transactional
     public BetDTO playBet(GameDTO gameDTO, UserDTO userDTO, int amount) {
         Game game = gameMapper.toEntity(gameDTO);
-        User player = userRepo.findById((long)userDTO.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User player = userMapper.toEntity(userDTO);
 
         if (amount < game.getMinInput()) {
             throw new IllegalArgumentException("La apuesta debe de ser mayor o igual a " + game.getMinInput());
@@ -58,20 +57,17 @@ public class BetManager {
             throw new IllegalArgumentException("No puedes apostar en blanco");
         }
 
-        UserDTO playerDTO = userMapper.toDTO(player);
-        GameDTO gameDTO2 = gameMapper.toDTO(game);
-
-        BetDTO bet = new BetDTO();
+        Bet bet = new Bet();
         bet.setShow(true);
         bet.setAmount(amount);
-        bet.setUserPlayer(playerDTO);
-        bet.setGame(gameDTO2);
+        bet.setUser(player);
+        bet.setGame(game);
         boolean win = playGame(bet);
 
         if (win) {
             int revenue = amount * game.getMultiplier();
             bet.setRevenue(revenue);
-            player.setMoney(player.getMoney() + revenue);
+            player.setMoney(player.getMoney() + revenue - amount);
             bet.setStatus(true);
         } else {
             bet.setRevenue(0);
@@ -79,32 +75,21 @@ public class BetManager {
             bet.setStatus(false);
         }
 
-        // Ensure the user's bet history is initialized
-        if (player.getBetHistory() == null) {
-            player.setBetHistory(new ArrayList<>());
-        }
 
-        // Save the bet only once
-        Bet savedBet = betRepo.save(betMapper.toEntity(bet));
-
-        // Update user's bet history with the saved bet
-        player.getBetHistory().add(savedBet);
-
-        // Save the updated user
+        bet = betRepo.save(bet);
         userRepo.save(player);
 
-        return betMapper.toDTO(savedBet);
+        return betMapper.toDTO(bet);
     }
 
 
-    private boolean playGame(BetDTO activeBet) {
+    private boolean playGame(Bet activeBet) {
         Random rand = new Random();
         int randomValue = rand.nextInt(100) + 1;
         return randomValue <= activeBet.getGame().getChance();
     }
 
-    public BetDTO save(BetDTO betDTO) {
-        Bet bet = betMapper.toEntity(betDTO);
+    public BetDTO save(Bet bet) {
         Bet savedBet = betRepo.save(bet);
         return betMapper.toDTO(savedBet);
     }
@@ -126,13 +111,20 @@ public class BetManager {
             betRepo.save(bet);
         });
     }
-    /*
-    public void notShow(BetDTO betDTO) {
-        Bet bet = betMapper.toEntity(betDTO);
-        bet.setShow(false);
-        betRepo.save(bet);
+
+    public boolean getStatusDTO(BetDTO betdto) {
+        return betMapper.toEntity(betdto).getStatus();
     }
 
+    public void notShow(BetDTO betDTO, UserDTO userdto) {
+        Bet bet = betMapper.toEntity(betDTO);
+        User user = userMapper.toEntity(userdto);
+        if (user.getId() == bet.getUser().getId()) {
+            bet.setShow(false);
+            betRepo.save(bet);
+        }
+    }
+/*
     public void notShowById(long id) {
         betRepo.findById(id).ifPresent(bet -> {
             bet.setShow(false);

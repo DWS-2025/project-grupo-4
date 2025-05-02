@@ -46,12 +46,11 @@ public class PrizeManager {
                 .collect(Collectors.toList());
     }
 
-    public PrizeDTO savePrize(PrizeDTO prizeDTO, MultipartFile imageFile) throws IOException {
-        Prize newPrize = prizeMapper.toEntity(prizeDTO);
+    public PrizeDTO savePrize(Prize prize, MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
-            newPrize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
+            prize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
-        Prize savedPrize = prizeRepo.save(newPrize);
+        Prize savedPrize = prizeRepo.save(prize);
         return prizeMapper.toDTO(savedPrize);
     }
 
@@ -67,70 +66,71 @@ public class PrizeManager {
     public PrizeDTO updatePrizeDetails(PrizeDTO updatedPrizeDTO, int id, MultipartFile imageFile) throws IOException {
         Prize prize = prizeRepo.findPrizeById(id)
                 .orElseThrow(() -> new RuntimeException("Prize not found with id: " + id));
+        Prize updatedPrize = prizeMapper.toEntity(updatedPrizeDTO);
 
-        prize.setTitle(updatedPrizeDTO.getTitle());
-        prize.setDescription(updatedPrizeDTO.getDescription());
-        prize.setPrice(updatedPrizeDTO.getPrice());
+        prize.setTitle(updatedPrize.getTitle());
+        prize.setDescription(updatedPrize.getDescription());
+        prize.setPrice(updatedPrize.getPrice());
 
         if (imageFile != null && !imageFile.isEmpty()) {
             prize.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
         }
 
-        Prize updatedPrize = prizeRepo.save(prize);
+        prizeRepo.save(prize);
         return prizeMapper.toDTO(updatedPrize);
     }
 
     public void postConstruct() {
         try {
-            PrizeDTO prize1 = new PrizeDTO();
+            Prize prize1 = new Prize();
             prize1.setTitle("AWP Dragon Lore");
             prize1.setPrice(1500);
             prize1.setDescription("AWP Dragon Lore Souvenir FN");
             savePrize(prize1, new MockMultipartFile("file", "awplore.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/awp_lore.png"))));
 
-            PrizeDTO prize2 = new PrizeDTO();
+            Prize prize2 = new Prize();
             prize2.setTitle("Viaje Deluxe");
             prize2.setPrice(3500);
             prize2.setDescription("Viaje deluxe a un pueblo perdido de la mano de dios por ahi para dos personas");
             savePrize(prize2, new MockMultipartFile("file", "albacete.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/albacete.jpg"))));
 
-            PrizeDTO prize3 = new PrizeDTO();
+            Prize prize3 = new Prize();
             prize3.setTitle("PlayStation 5");
             prize3.setPrice(2000);
             prize3.setDescription("Consola PlayStation 5 con dos mandos DualSense y 3 juegos a elegir");
             savePrize(prize3, new MockMultipartFile("file", "ps5.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/ps5.jpg"))));
 
-            PrizeDTO prize4 = new PrizeDTO();
+            Prize prize4 = new Prize();
             prize4.setTitle("Rolex Submariner");
             prize4.setPrice(5000);
             prize4.setDescription("Reloj Rolex Submariner Date en acero inoxidable, edición limitada");
             savePrize(prize4, new MockMultipartFile("file", "Rolex.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/rolex.jpg"))));
 
-            PrizeDTO prize5 = new PrizeDTO();
+            Prize prize5 = new Prize();
             prize5.setTitle("MacBook Pro");
             prize5.setPrice(3000);
             prize5.setDescription("MacBook Pro 16' con chip M2 Pro, 32GB RAM y 1TB SSD");
             savePrize(prize5, new MockMultipartFile("file", "macbook.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/macbook.jpg"))));
 
-            PrizeDTO prize6 = new PrizeDTO();
+            Prize prize6 = new Prize();
             prize6.setTitle("RTX 4090");
             prize6.setPrice(2500);
             prize6.setDescription("NVIDIA GeForce RTX 4090 24GB GDDR6X Gaming OC");
             savePrize(prize6, new MockMultipartFile("file", "rtx4090.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/rtx4090.jpg"))));
 
-            PrizeDTO prize7 = new PrizeDTO();
+            Prize prize7 = new Prize();
             prize7.setTitle("Viaje a Las Vegas");
             prize7.setPrice(4000);
             prize7.setDescription("Viaje todo incluido a Las Vegas para dos personas, 7 días en hotel 5 estrellas");
             savePrize(prize7, new MockMultipartFile("file", "vegas.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/vegas.jpg"))));
 
-            PrizeDTO prize8 = new PrizeDTO();
+            Prize prize8 = new Prize();
             prize8.setTitle("iPhone 15 Pro Max");
             prize8.setPrice(2000);
             prize8.setDescription("iPhone 15 Pro Max 256GB Titanio Natural con AppleCare+");
             savePrize(prize8, new MockMultipartFile("file", "iphone.jpg", "image/jpeg", Files.readAllBytes(Paths.get("src/main/resources/static/images/iphone.jpg"))));
 
-            PrizeDTO prize9 = new PrizeDTO();
+            Prize prize9 = new Prize();
             prize9.setTitle("Cena Gourmet");
             prize9.setPrice(1000);
             prize9.setDescription("Experiencia gastronómica para dos en restaurante con 3 estrellas Michelin");

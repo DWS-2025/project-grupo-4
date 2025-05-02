@@ -20,10 +20,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "owner", orphanRemoval = true)
     private List<Prize> Inventory;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Game> gamesLiked;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "user")
     private List<Bet> betHistory;
 
     public User() {

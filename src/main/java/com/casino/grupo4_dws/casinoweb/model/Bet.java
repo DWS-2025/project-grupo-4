@@ -1,6 +1,5 @@
 package com.casino.grupo4_dws.casinoweb.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,11 +10,9 @@ public class Bet {
     private long id;
     private int amount;
     private int revenue = 0;
-    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private User user;
-    @JsonIgnore
     @ManyToOne(optional = true)
     @JoinColumn(name = "game_id")
     private Game game;
@@ -64,7 +61,7 @@ public class Bet {
         return game != null ? game.getId() : null;
     }
 
-    public void setUserPlayer(User activeUser) {
+    public void setUser(User activeUser) {
         this.user = activeUser;
     }
 
