@@ -231,4 +231,21 @@ public class UserManager {
         }
         return gameMapper.toDTOList(user.getGamesLiked());
     }
+
+    public void deleteUser(UserDTO userdto) {
+        Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
+        if (userOp.isEmpty()) {
+            throw new IllegalArgumentException("El usuario introducido no existe");
+        }
+        userRepo.delete(userOp.get());
+    }
+
+    public boolean isAdmin(UserDTO userdto) {
+        Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
+        if (userOp.isEmpty()) {
+            throw new IllegalArgumentException("El usuario introducido no existe");
+        }
+        User user = userOp.get();
+        return user.getIsadmin();
+    }
 }

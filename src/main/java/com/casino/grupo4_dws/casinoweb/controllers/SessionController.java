@@ -144,4 +144,29 @@ public class SessionController {
         model.addAttribute("inventory", userInventory);
         return "staticLoggedIn/user";
     }
+
+    @PostMapping("/deleteUser/{id}")
+    public String deleteUser(Model model, @PathVariable Integer id, HttpSession session, RedirectAttributes redirectAttributes) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        UserDTO userdto = userOp.get();
+        if(userManager.isAdmin(userdto)) {
+            Optional<UserDTO> user2op = userManager.findById(userId);
+            if (user2op.isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorMessage","El usuario a borrar no ha sido encontrado");
+                return "redirect:/user";
+            }
+            UserDTO user2dto = user2op.get();
+            userManager.deleteUser(user2dto);
+            return "redirect:/user";
+        } else {
+            return "redirect:/user";
+        }
+    }
 }
