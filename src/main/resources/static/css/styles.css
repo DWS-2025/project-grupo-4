@@ -877,6 +877,7 @@ ul {
     align-items: center;
     text-align: center; /* Por si acaso */
     width: auto;
+    gap: 20px;
 }
 
 .gold-text:after {
@@ -902,6 +903,11 @@ ul {
     -webkit-text-fill-color: transparent;
     z-index: 1;
     width: 100%;
+}
+
+.gold-text img {
+    height: 60px;           /* Ajusta esto al tamaño que necesites */
+    width: auto;            /* Mantiene la proporción de la imagen */
 }
 
 #add-game-form {

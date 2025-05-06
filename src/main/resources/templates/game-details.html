@@ -62,7 +62,9 @@
                     User
                 </p>
 
-                <img src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                     style="height: 32px; width: 32px; border-radius: 50%;">
+                <img th:if="${user.isadmin() == true}" src="/images/CasinoLaMielLogo.png" alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
             </div>
 
