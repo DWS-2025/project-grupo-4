@@ -124,11 +124,20 @@ public class BetManager {
             betRepo.save(bet);
         }
     }
-/*
-    public void notShowById(long id) {
-        betRepo.findById(id).ifPresent(bet -> {
-            bet.setShow(false);
-            betRepo.save(bet);
-        });
-    }*/
+
+    public void deleteBet(BetDTO betDTO, UserDTO userDTO) {
+        Bet bet = betRepo.getONEBetById(betMapper.toEntity(betDTO).getId()).get();
+        Optional <User> userOp = userRepo.getONEUserById(userMapper.toEntity(userDTO).getId());
+        if (userOp.isEmpty()) {
+            throw new IllegalArgumentException("No se puede eliminar la bet");
+        }
+        User user = userOp.get();
+        if(user.getBetHistory().contains(bet)) {
+            betRepo.delete(bet);
+        } else if(user.getIsadmin()) {
+            betRepo.delete(bet);
+        } else {
+            throw new IllegalArgumentException("No se puede eliminar la bet");
+        }
+    }
 }

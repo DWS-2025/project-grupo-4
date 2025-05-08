@@ -68,7 +68,7 @@
             <button role="button" class="golden-button" onclick="location.href='/prizes'">
                 <span class="golden-text">RECOMPENSAS</span>
             </button>
-            <button role="button" class="golden-button" onclick="location.href='/add'">
+            <button role="button" class="golden-button" th:if="${user.isadmin()}" onclick="location.href='/add'">
                 <span class="golden-text">NUEVO JUEGO</span>
             </button>
         </ul>

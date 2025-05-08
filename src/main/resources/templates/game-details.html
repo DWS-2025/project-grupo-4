@@ -107,7 +107,7 @@
                 <span class="golden-text">RECOMPENSAS</span>
             </button>
             <th:block th:if="${user == null}">
-                <button role="button" class="golden-button" onclick="location.href='/login'">
+                <button role="button" class="golden-button" th:if="${user.isadmin()}" onclick="location.href='/login'">
                     <span class="golden-text">LOGIN</span>
                 </button>
             </th:block>

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BetRepository extends JpaRepository<Bet, Long> {
     @Override
@@ -12,5 +13,7 @@ public interface BetRepository extends JpaRepository<Bet, Long> {
 
     @Override
     <S extends Bet> List<S> findAll(Example<S> example);
+
+    Optional<Bet> getONEBetById(long id);
 
 }

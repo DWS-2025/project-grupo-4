@@ -81,10 +81,13 @@ public class BetController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-
         Optional<BetDTO> bet = betManager.findById(id);
         if (bet.isPresent()) {
-            betManager.notShow(bet.get(), userOp.get());
+           try{
+               betManager.deleteBet(bet.get(),userOp.get());
+           } catch (IllegalArgumentException e) {
+               redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error: " + e.getMessage());
+           }
         }
         return "redirect:/user";
     }
