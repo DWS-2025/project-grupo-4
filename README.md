@@ -10,7 +10,7 @@
 
 ## Descripción de la Aplicación Web ✍️
 
-Se trata de una página web de un casino digital donde puedes jugar diferentes apuestas, y, dependiendo de tu suerte, podrás llegar a comprar diferentes recompensas.
+Se trata de una página web de un casino digital donde puedes jugar diferentes apuestas en varios juegos y, partiendo de un dinero inicial, podrás llegar a comprar diferentes recompensas dependiendo de tu suerte.
 
 ## Aspectos Principales
 
@@ -48,11 +48,15 @@ resumir todo en 5 commits. Muchos commits se han hecho varias veces para arregla
 que todos hemos participado activamente en la solucion de errores de todo el codigo, por ello 5 commits se hace demasiado corto
 como para englobar el trabajo individual de cada participante.
 # Andrés
-[d39f4a85a7be4c27b48107bb3a1759b694ae93ee](1) Se adapta el uso de los DTOs a los controladores de la API Web
-[59237575a352932d6e9cf15871f6ea3373f3bcca](2) En este Commit se establece y se hace funcional la relación N:M de nuestro proyecto
-[11c8b9b4379bb4c138d41766a1506b24a113dbb3](3) En este Commit se permite el borrado de los juegos a los que ya se ha jugado
-[1c1ea20219edfc54334b05dc87a1384fbacf81eb](4) Hace funcional la parte más importante de nuestra página web
-[bdf73844db0a6fe94a1cc97d0905e84c456044a5](5) Establece sesiones de usuarios con Usuario y Contraseña, además de registros y un par de restricciones sencillas para evitar errores, como que no puede haber dos usuarios con nombre repetido
+[1. Reforma del backend](https://github.com/DWS-2025/project-grupo-4/commit/50d87590183f5885da2915bf7eeab873558ea761) Reforma de la estructura de la aplicación debido a un mal diseño. 
+
+[2. DTOs y Mappers corregidos](https://github.com/DWS-2025/project-grupo-4/commit/10afaba9b00ea3636c356ee09307921107fbdc38) Elemento importante para garantizar la securización de la información y el manejo de entidades. 
+
+[3. Relación N:M entre Juego y User](https://github.com/DWS-2025/project-grupo-4/commit/bba1574aad89160db23cb977f4139965aaf2d23e) Se establece la relación N:M de nuestro proyecto. 
+
+[4. Implementación de la búsqueda dinámica](https://github.com/DWS-2025/project-grupo-4/commit/f781b186390b185e081cc4da499648b70cf003a7) Establece una de las funcionalidades extras para la entrega 2. 
+
+[5. Login y Logout](https://github.com/DWS-2025/project-grupo-4/commit/bdf73844db0a6fe94a1cc97d0905e84c456044a5) Establece sesiones de usuarios con Usuario y Contraseña, además de registros y un par de restricciones sencillas para evitar errores, como que no puede haber dos usuarios con nombre repetido. 
 # Adrián
 [4de9f96548f6d873f38a6f597ab46d31cfe4c576](1) Solucion de errores en apartado de recompensas, para que la paginacion funcione y el mostrado de premios, a la vez que los gets funcionen tambien
 [b4644b64acdfa83a3e77960e5495df6833cc92a3](2) Solucion de errores haciendo el get en /api/Prizes
