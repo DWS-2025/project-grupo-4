@@ -278,7 +278,7 @@ public class UserManager {
         var possibleUser = findById(id);
 
         if(possibleUser.isPresent()){
-            var user = userMapper.toEntity(possibleUser.get());
+            User user = userMapper.toEntity(userDTO);
             user.setId(id);
             userRepo.save(user);
         }
