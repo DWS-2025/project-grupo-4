@@ -81,9 +81,9 @@
             <img src="/images/rick_dinero.jpg" alt="rick" width=681 height=511 id="rick"/>
         </div>
         <center>
-            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+            <h2 th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
                 <span th:text="${errorMessage}"></span>
-            </div>
+            </h2>
         </center>
     </header>
 
@@ -112,7 +112,7 @@
                 <form th:action="@{'/editPrize/' + ${prize.id()}}" method="get">
                     <button type="submit" class="golden-button">Editar Recompensa</button>
                 </form>
-                <form th:action="@{'/deletePrize/' + ${prize.id()}}" method="post">
+                <form th:if="${user.isadmin()}" th:action="@{'/deletePrize/' + ${prize.id()}}" method="post">
                     <button type="submit" class="golden-button">Eliminar Recompensa</button>
                 </form>
             </div>

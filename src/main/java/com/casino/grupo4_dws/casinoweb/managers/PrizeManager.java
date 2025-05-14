@@ -4,6 +4,7 @@ import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
+import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
@@ -28,6 +29,8 @@ public class PrizeManager {
     private PrizeRepository prizeRepo;
     @Autowired
     private PrizeMapper prizeMapper;
+    @Autowired
+    private UserRepository userRepo;
 
     public List<PrizeDTO> findAllPrizes() {
         return prizeRepo.findAllByOwnerIsNull().stream()
@@ -65,8 +68,15 @@ public class PrizeManager {
                 .map(prize -> prizeMapper.toDTO(prize));
     }
 
-    public void deletePrize(long id) {
-        prizeRepo.deleteById(id);
+    public void deletePrize(int id) {
+        Prize prize = prizeRepo.getPrizeById(id).get();
+        if(prize.getOwner() == null){
+            prizeRepo.deleteById((long)id);
+        } else {
+            prize.getOwner().getInventory().remove(prize);
+            prizeRepo.deleteById((long)id);
+            userRepo.save(prize.getOwner());
+        }
     }
 
     public PrizeDTO updatePrizeDetails(PrizeDTO updatedPrizeDTO, int id, MultipartFile imageFile) throws IOException {

@@ -5,11 +5,9 @@ import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
-import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
-import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -22,16 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Controller
 public class PrizeController {
@@ -98,13 +89,30 @@ public class PrizeController {
     }
 
     @PostMapping("/deletePrize/{id}")
-    public String deletePrize(@PathVariable int id, Model model) {
-        Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
-        if (op.isPresent()) {
-            prizeManager.deletePrize(id);
-            model.addAttribute("prizes", prizeManager.findAllPrizes());
+    public String deletePrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        Optional<UserDTO> userOp = userManager.findById((Integer) session.getAttribute("user"));
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
         }
-        return "redirect:/prizes";
+        Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
+        if (op.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "El prize no existe");
+            return "redirect:/prizes";
+        }
+        PrizeDTO prize = op.get();
+        if(userManager.isAdmin(userOp.get()) || userManager.isOwner(userOp.get(),prize)) {
+            try{
+                prizeManager.deletePrize(id);
+                redirectAttributes.addFlashAttribute("errorMessage", "Prize eliminado correctamente");
+                return "redirect:/prizes";
+            } catch (IllegalArgumentException e){
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+                return "redirect:/prizes";
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "No puedes realizar esta acción");
+            return "redirect:/prizes";
+        }
     }
 
     @GetMapping("/editPrize/{id}")

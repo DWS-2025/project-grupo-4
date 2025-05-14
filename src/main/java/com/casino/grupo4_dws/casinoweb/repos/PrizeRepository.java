@@ -29,4 +29,5 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
             @Param("maxPrice") Integer maxPrice
     );
 
+    Optional<Prize> getPrizeById(int id);
 }

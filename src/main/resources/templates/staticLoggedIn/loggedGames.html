@@ -111,7 +111,7 @@
                 <form th:action="@{/game/{id}(id=${game.id()})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
-                <form th:action="@{/delete/{id}(id=${game.id()})}" method="post">
+                <form th:if="${user.isadmin()}" th:action="@{/delete/{id}(id=${game.id()})}" method="post">
                     <button class="golden-button" type="submit">Eliminar Juego</button>
                 </form>
             </section>
