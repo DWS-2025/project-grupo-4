@@ -116,14 +116,37 @@ public class GamesController {
     }
 
     @GetMapping("/add")
-    public String addGameForm(Model model) {
+    public String addGameForm(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         model.addAttribute("newGame", new Game());
         return "staticLoggedIn/addGameForm";
     }
 
 
     @PostMapping("/add")
-    public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes) throws IOException {
+    public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile,
+                          RedirectAttributes redirectAttributes, HttpSession session) throws IOException {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         try {
             gameManager.saveGame(newGame, imageFile);
         } catch (IllegalArgumentException e) {
