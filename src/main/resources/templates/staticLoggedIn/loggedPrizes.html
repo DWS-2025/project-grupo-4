@@ -133,153 +133,152 @@
     </footer>
 </div>
 
-<!--<script>-->
-<!--    let currentPage = 0;-->
-<!--    const pageSize = 3;-->
-<!--    let loading = false;-->
+<script>
+    let currentPage = 0;
+    const pageSize = 3;
+    let loading = false;
 
-<!--    window.onload = function() {-->
-<!--        const container = document.getElementById('grid-container');-->
-<!--        container.innerHTML = '';-->
-<!--        loadPrizes();-->
-<!--    };-->
+    window.onload = function() {
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        loadPrizes();
+    };
 
-<!--    document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);-->
+    document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);
 
-<!--    function loadPrizes() {-->
-<!--        if (loading) return;-->
-<!--        loading = true;-->
+    function loadPrizes() {
+        if (loading) return;
+        loading = true;
 
-<!--        const spinner = document.getElementById('spinner');-->
-<!--        const loadMoreBtn = document.getElementById('loadMoreBtn');-->
+        const spinner = document.getElementById('spinner');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
 
-<!--        spinner.classList.remove('d-none');-->
-<!--        loadMoreBtn.classList.add('d-none');-->
+        spinner.classList.remove('d-none');
+        loadMoreBtn.classList.add('d-none');
 
-<!--        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)-->
-<!--            .then(response => response.json())-->
-<!--            .then(data => {-->
-<!--                const prizesContainer = document.getElementById('grid-container');-->
+        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)
+            .then(response => response.json())
+            .then(data => {
+                const prizesContainer = document.getElementById('grid-container');
 
-<!--                data.content.forEach(prize => {-->
-<!--                    const prizeElement = createPrizeElement(prize);-->
-<!--                    prizesContainer.appendChild(prizeElement);-->
-<!--                });-->
+                data.content.forEach(prize => {
+                    const prizeElement = createPrizeElement(prize);
+                    prizesContainer.appendChild(prizeElement);
+                });
 
-<!--                currentPage++;-->
+                currentPage++;
 
-<!--                if (currentPage >= data.totalPages) {-->
-<!--                    loadMoreBtn.style.display = 'none';-->
-<!--                } else {-->
-<!--                    loadMoreBtn.style.display = 'block';-->
-<!--                }-->
-<!--            })-->
-<!--            .catch(error => console.error('Error:', error))-->
-<!--            .finally(() => {-->
-<!--                loading = false;-->
-<!--                spinner.classList.add('d-none');-->
-<!--                loadMoreBtn.classList.remove('d-none');-->
-<!--            });-->
-<!--    }-->
+                if (currentPage >= data.totalPages) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                loading = false;
+                spinner.classList.add('d-none');
+                loadMoreBtn.classList.remove('d-none');
+            });
+    }
 
-<!--    function createPrizeElement(prize) {-->
-<!--        const section = document.createElement('div');-->
-<!--        section.className = 'game-section prize-item';-->
+    function createPrizeElement(prize) {
+        const section = document.createElement('div');
+        section.className = 'game-section prize-item';
 
-<!--        const title = document.createElement('h2');-->
-<!--        title.className = 'prize-title';-->
-<!--        title.textContent = prize.title;-->
-<!--        section.appendChild(title);-->
+        const title = document.createElement('h2');
+        title.className = 'prize-title';
+        title.textContent = prize.title;
+        section.appendChild(title);
 
-<!--        const img = document.createElement('img');-->
-<!--        img.src = `/prize/${prize.id}/image`;-->
-<!--        img.alt = 'Prize Img';-->
-<!--        img.className = 'prize-image';-->
-<!--        img.width = 230;-->
-<!--        img.height = 230;-->
-<!--        section.appendChild(img);-->
+        const img = document.createElement('img');
+        img.src = `/prize/${prize.id}/image`;
+        img.alt = 'Prize Img';
+        img.className = 'prize-image';
+        img.width = 230;
+        img.height = 230;
+        section.appendChild(img);
 
-<!--        const description = document.createElement('p');-->
-<!--        description.textContent = prize.description;-->
-<!--        section.appendChild(description);-->
+        const description = document.createElement('p');
+        description.textContent = prize.description;
+        section.appendChild(description);
 
-<!--        const price = document.createElement('p');-->
-<!--        price.className = 'prize-price';-->
-<!--        price.textContent = `${prize.price} $`;-->
-<!--        section.appendChild(price);-->
-<!--        const buttonsContainer = document.createElement('div');-->
-<!--        buttonsContainer.className = 'prize-buttons';-->
+        const price = document.createElement('p');
+        price.className = 'prize-price';
+        price.textContent = `${prize.price} $`;
+        section.appendChild(price);
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'prize-buttons';
 
-<!--        // Buy button-->
-<!--        const buyForm = document.createElement('form');-->
-<!--        buyForm.action = `/buy/${prize.id}`;-->
-<!--        buyForm.method = 'post';-->
-<!--        const buyButton = document.createElement('button');-->
-<!--        buyButton.type = 'submit';-->
-<!--        buyButton.className = 'golden-button';-->
-<!--        buyButton.textContent = 'Comprar';-->
-<!--        buyForm.appendChild(buyButton);-->
-<!--        buttonsContainer.appendChild(buyForm);-->
+        // Buy button
+        const buyForm = document.createElement('form');
+        buyForm.action = `/buy/${prize.id}`;
+        buyForm.method = 'post';
+        const buyButton = document.createElement('button');
+        buyButton.type = 'submit';
+        buyButton.className = 'golden-button';
+        buyButton.textContent = 'Comprar';
+        buyForm.appendChild(buyButton);
+        buttonsContainer.appendChild(buyForm);
 
-<!--        // Edit button-->
-<!--        const editForm = document.createElement('form');-->
-<!--        editForm.action = `/editPrize/${prize.id}`;-->
-<!--        editForm.method = 'get';-->
-<!--        const editButton = document.createElement('button');-->
-<!--        editButton.type = 'submit';-->
-<!--        editButton.className = 'golden-button';-->
-<!--        editButton.textContent = 'Editar Recompensa';-->
-<!--        editForm.appendChild(editButton);-->
-<!--        buttonsContainer.appendChild(editForm);-->
+        // Edit button
+        const editForm = document.createElement('form');
+        editForm.action = `/editPrize/${prize.id}`;
+        editForm.method = 'get';
+        const editButton = document.createElement('button');
+        editButton.type = 'submit';
+        editButton.className = 'golden-button';
+        editButton.textContent = 'Editar Recompensa';
+        editForm.appendChild(editButton);
+        buttonsContainer.appendChild(editForm);
 
-<!--        // Delete button-->
-<!--        const deleteForm = document.createElement('form');-->
-<!--        deleteForm.action = `/deletePrize/${prize.id}`;-->
-<!--        deleteForm.method = 'post';-->
-<!--        const deleteButton = document.createElement('button');-->
-<!--        deleteButton.type = 'submit';-->
-<!--        deleteButton.className = 'golden-button';-->
-<!--        deleteButton.textContent = 'Eliminar Recompensa';-->
-<!--        deleteForm.appendChild(deleteButton);-->
-<!--        buttonsContainer.appendChild(deleteForm);-->
+        // Delete button
+        const deleteForm = document.createElement('form');
+        deleteForm.action = `/deletePrize/${prize.id}`;
+        deleteForm.method = 'post';
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'submit';
+        deleteButton.className = 'golden-button';
+        deleteButton.textContent = 'Eliminar Recompensa';
+        deleteForm.appendChild(deleteButton);
+        buttonsContainer.appendChild(deleteForm);
 
-<!--        section.appendChild(buttonsContainer);-->
+        section.appendChild(buttonsContainer);
 
 
-<!--        return section;-->
-<!--    }-->
-<!--</script>-->
-<!--&lt;!&ndash; Estilos para la paginación &ndash;&gt;-->
-<!--<style>-->
-<!--    .spinner-border {-->
-<!--        width: 3rem;-->
-<!--        height: 3rem;-->
-<!--        margin: 1rem auto;-->
-<!--    }-->
+        return section;
+    }
+</script>
+<style>
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin: 1rem auto;
+    }
 
-<!--    .d-none {-->
-<!--        display: none !important;-->
-<!--    }-->
+    .d-none {
+        display: none !important;
+    }
 
-<!--    .prizes-container {-->
-<!--        display: flex;-->
-<!--        flex-wrap: wrap;-->
-<!--        gap: 16px;-->
-<!--        justify-content: center;-->
-<!--    }-->
+    .prizes-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+    }
 
-<!--    .text-center {-->
-<!--        text-align: center;-->
-<!--    }-->
+    .text-center {
+        text-align: center;
+    }
 
-<!--    .mt-4 {-->
-<!--        margin-top: 1.5rem;-->
-<!--    }-->
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
 
-<!--    .mb-4 {-->
-<!--        margin-bottom: 1.5rem;-->
-<!--    }-->
-<!--</style>-->
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+</style>
 
 </body>
 </html>
