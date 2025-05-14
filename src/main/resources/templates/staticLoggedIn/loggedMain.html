@@ -23,7 +23,8 @@
                     User
                 </p>
 
-                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg"
+                     alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
                 <img th:if="${user.isadmin() == true}" src="/images/CasinoLaMielLogo.png" alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
@@ -58,21 +59,15 @@
 <div id="container">
     <nav class="navbar">
         <ul class="menu">
-            <li>
-                <button role="button" class="golden-button" onclick="location.href='/'">
-                    <span class="golden-text">INICIO</span>
-                </button>
-            </li>
-            <li>
-                <button role="button" class="golden-button" onclick="location.href='/NGames'">
-                    <span class="golden-text">NUESTROS JUEGOS</span>
-                </button>
-            </li>
-            <li>
-                <button role="button" class="golden-button" onclick="location.href='/prizes'">
-                    <span class="golden-text">RECOMPENSAS</span>
-                </button>
-            </li>
+            <button role="button" class="golden-button" onclick="location.href='/'">
+                <span class="golden-text">INICIO</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/NGames'">
+                <span class="golden-text">NUESTROS JUEGOS</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/prizes'">
+                <span class="golden-text">RECOMPENSAS</span>
+            </button>
         </ul>
     </nav>
     <div style="text-align: center;">

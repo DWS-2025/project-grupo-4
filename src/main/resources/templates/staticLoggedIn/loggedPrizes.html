@@ -7,7 +7,7 @@
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
-<body>
+<body th:attr="data-is-admin=${user.isadmin()}">
 <div class="transparent-container">
     <div class="template">
         <div
@@ -118,14 +118,16 @@
             </div>
         </div>
 
-        <div class="text-center mt-4 mb-4">
+        <div class="text-center mt-4 mb-4" style="align-self: center">
             <button id="loadMoreBtn" class="golden-button">
                 <span class="golden-text">Cargar Más</span>
             </button>
+
             <div id="spinner" class="spinner-border text-primary d-none" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
         </div>
+
     </main>
 
     <footer class="footer">
@@ -238,10 +240,11 @@
         price.className = 'prize-price';
         price.textContent = `${prize.price} $`;
         section.appendChild(price);
+
         const buttonsContainer = document.createElement('div');
         buttonsContainer.className = 'prize-buttons';
 
-        // Buy button
+        // Buy button (visible para todos)
         const buyForm = document.createElement('form');
         buyForm.action = `/buy/${prize.id}`;
         buyForm.method = 'post';
@@ -252,35 +255,57 @@
         buyForm.appendChild(buyButton);
         buttonsContainer.appendChild(buyForm);
 
-        // Edit button
-        const editForm = document.createElement('form');
-        editForm.action = `/editPrize/${prize.id}`;
-        editForm.method = 'get';
-        const editButton = document.createElement('button');
-        editButton.type = 'submit';
-        editButton.className = 'golden-button';
-        editButton.textContent = 'Editar Recompensa';
-        editForm.appendChild(editButton);
-        buttonsContainer.appendChild(editForm);
+        // Verificar si el usuario es admin (usando Thymeleaf)
+        const isAdmin = document.body.getAttribute('data-is-admin') === 'true';
 
-        // Delete button
-        const deleteForm = document.createElement('form');
-        deleteForm.action = `/deletePrize/${prize.id}`;
-        deleteForm.method = 'post';
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'submit';
-        deleteButton.className = 'golden-button';
-        deleteButton.textContent = 'Eliminar Recompensa';
-        deleteForm.appendChild(deleteButton);
-        buttonsContainer.appendChild(deleteForm);
+        // Edit button (solo para admin)
+        if (isAdmin) {
+            const editForm = document.createElement('form');
+            editForm.action = `/editPrize/${prize.id}`;
+            editForm.method = 'get';
+            const editButton = document.createElement('button');
+            editButton.type = 'submit';
+            editButton.className = 'golden-button';
+            editButton.textContent = 'Editar Recompensa';
+            editForm.appendChild(editButton);
+            buttonsContainer.appendChild(editForm);
+        }
+
+        // Delete button (solo para admin)
+        if (isAdmin) {
+            const deleteForm = document.createElement('form');
+            deleteForm.action = `/deletePrize/${prize.id}`;
+            deleteForm.method = 'post';
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'submit';
+            deleteButton.className = 'golden-button';
+            deleteButton.textContent = 'Eliminar Recompensa';
+            deleteForm.appendChild(deleteButton);
+            buttonsContainer.appendChild(deleteForm);
+        }
 
         section.appendChild(buttonsContainer);
-
 
         return section;
     }
 </script>
 <style>
+    .text-center.mt-4.mb-4 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin: 1.5rem auto;
+    }
+
+    #loadMoreBtn {
+        margin: 0 auto;
+    }
+
+    #spinner {
+        margin-top: 1rem;
+    }
+
     .spinner-border {
         width: 3rem;
         height: 3rem;
