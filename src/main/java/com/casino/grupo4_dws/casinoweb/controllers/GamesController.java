@@ -137,11 +137,21 @@ public class GamesController {
     @PostMapping("/delete/{id}")
     @Transactional
     public String deleteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            gameManager.deleteGame(id);
-            return "redirect:/NGames";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al borrar el juego: " + e.getMessage());
+        Optional<UserDTO> userop = userManager.findById((Integer) session.getAttribute("user"));
+        if (userop.isEmpty()) {
+            return "redirect:/login";
+        }
+        UserDTO user = userop.get();
+        if (userManager.isAdmin(user)) {
+            try {
+                gameManager.deleteGame(id);
+                return "redirect:/NGames";
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error al borrar el juego: " + e.getMessage());
+                return "redirect:/NGames";
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "No se puede borrar el juego");
             return "redirect:/NGames";
         }
     }

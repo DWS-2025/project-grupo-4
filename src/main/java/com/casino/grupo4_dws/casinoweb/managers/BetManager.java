@@ -124,9 +124,14 @@ public class BetManager {
             betRepo.save(bet);
         }
     }
-
+    //
+    //Mét1odo no funcional, ya que las bets no pueden ser borradas, es necesario para la web cambiarlo por un botón para ocultarlas, no se borrarán de la base, pero no aparecerán en historial
     public void deleteBet(BetDTO betDTO, UserDTO userDTO) {
-        Bet bet = betRepo.getONEBetById(betMapper.toEntity(betDTO).getId()).get();
+        Optional<Bet> betOp = betRepo.getONEBetById(betMapper.toEntity(betDTO).getId());
+        if(betOp.isEmpty()){
+            throw new IllegalArgumentException("No se puede eliminar la bet");
+        }
+        Bet bet = betOp.get();
         Optional <User> userOp = userRepo.getONEUserById(userMapper.toEntity(userDTO).getId());
         if (userOp.isEmpty()) {
             throw new IllegalArgumentException("No se puede eliminar la bet");
@@ -153,4 +158,27 @@ public class BetManager {
             throw new IllegalArgumentException("EL id de apuesta no existe");
         }
     }
+
+    public void hideBet(BetDTO betDTO, UserDTO userDTO) {
+        Optional<Bet> betOp = betRepo.getONEBetById(betMapper.toEntity(betDTO).getId());
+        if(betOp.isEmpty()){
+            throw new IllegalArgumentException("No se puede eliminar la bet");
+        }
+        Bet bet = betOp.get();
+        Optional <User> userOp = userRepo.getONEUserById(userMapper.toEntity(userDTO).getId());
+        if (userOp.isEmpty()) {
+            throw new IllegalArgumentException("No se puede eliminar la bet");
+        }
+        User user = userOp.get();
+        if(user.getBetHistory().contains(bet)) {
+            bet.setShow(false);
+            betRepo.save(bet);
+        } else if(user.getIsadmin()) {
+            bet.setShow(false);
+            betRepo.save(bet);
+        } else {
+            throw new IllegalArgumentException("No se puede eliminar la bet");
+        }
+    }
+
 }

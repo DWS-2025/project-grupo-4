@@ -85,6 +85,9 @@
         que tienes.</p>
     <img src="/images/vanilla.jpeg" alt="vanilla" width=512 height=512 id="vanilla"/>
     <h1 class="golden-subtitle"> Tienes un total de <span th:text="${user.money()}"></span>$</h1>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+        <span th:text="${errorMessage}"></span>
+    </div>
 </div>
 
 <div class="backpack" id="Backpack">

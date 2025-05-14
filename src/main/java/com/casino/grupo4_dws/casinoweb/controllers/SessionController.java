@@ -163,7 +163,7 @@ public class SessionController {
                 return "redirect:/user";
             }
             UserDTO user2dto = user2op.get();
-            userManager.deleteUser(user2dto);
+            userManager.deleteUser(user2dto,userdto);
             return "redirect:/user";
         } else {
             return "redirect:/user";

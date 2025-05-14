@@ -81,6 +81,9 @@
             <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots, entre
                 otros muchos!</p>
             <img src="/images/luigiapuestas.jpg" alt="Luigi" width=681 height=511 id="Luigi"/>
+            <h2 th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                <span th:text="${errorMessage}"></span>
+            </h2>
         </div>
     </header>
 

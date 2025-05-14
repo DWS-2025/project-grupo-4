@@ -71,23 +71,54 @@ public class BetController {
     }
 
 
-    @PutMapping("/deleteBet/{id}")
+    @PostMapping("/deleteBet/{id}")
     public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para realizar esta acción");
             return "redirect:/login";
         }
         Optional<UserDTO> userOp = userManager.findById(userId);
         if (userOp.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
             return "redirect:/login";
         }
         Optional<BetDTO> bet = betManager.findById(id);
         if (bet.isPresent()) {
-           try{
-               betManager.deleteBet(bet.get(),userOp.get());
-           } catch (IllegalArgumentException e) {
-               redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error: " + e.getMessage());
-           }
+            try {
+                betManager.deleteBet(bet.get(), userOp.get());
+                redirectAttributes.addFlashAttribute("successMessage", "Apuesta eliminada correctamente");
+            } catch (IllegalArgumentException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "La apuesta no existe");
+        }
+        return "redirect:/user";
+    }
+
+    @PostMapping("/hideBet/{id}")
+    public String hideBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para realizar esta acción");
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
+            return "redirect:/login";
+        }
+        Optional<BetDTO> bet = betManager.findById(id);
+        if (bet.isPresent()) {
+            try {
+                betManager.hideBet(bet.get(), userOp.get());
+                redirectAttributes.addFlashAttribute("successMessage", "Apuesta eliminada correctamente");
+            } catch (IllegalArgumentException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "La apuesta no existe");
         }
         return "redirect:/user";
     }

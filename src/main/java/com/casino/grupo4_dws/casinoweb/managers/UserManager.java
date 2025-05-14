@@ -257,7 +257,7 @@ public class UserManager {
         }
     }
 
-    public void deleteUser(UserDTO userdto) {
+    public void deleteUser(UserDTO userdto, UserDTO activeUserdto) {
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
         if (userOp.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
