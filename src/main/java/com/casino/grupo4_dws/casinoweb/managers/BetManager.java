@@ -140,4 +140,17 @@ public class BetManager {
             throw new IllegalArgumentException("No se puede eliminar la bet");
         }
     }
+
+    public void updateBet(BetDTO betDTO, int id){
+        var possibleBet = findById(id);
+
+        if(possibleBet.isPresent()){
+            Bet bet = betMapper.toEntity(possibleBet.get());
+            bet.setId(id);
+            betRepo.save(bet);
+        }
+        else{
+            throw new IllegalArgumentException("EL id de apuesta no existe");
+        }
+    }
 }

@@ -19,11 +19,12 @@ CREATE TABLE IF NOT EXISTS users (
 -- Tabla de juegos
 CREATE TABLE IF NOT EXISTS games (
                                      id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                                     name VARCHAR(255) NOT NULL,
+                                     title VARCHAR(255) NOT NULL,
     description TEXT,
-    min_bet DECIMAL(10,2) NOT NULL,
-    max_bet DECIMAL(10,2) NOT NULL,
-    status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
+    image LONGBLOB,
+    chance INT NOT NULL,
+    min_input INT NOT NULL,
+    multiplier INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -31,9 +32,12 @@ CREATE TABLE IF NOT EXISTS games (
 CREATE TABLE IF NOT EXISTS bets (
                                     id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                     user_id BIGINT NOT NULL,
-                                    game_id BIGINT NOT NULL,
-                                    amount DECIMAL(10,2) NOT NULL,
-    status ENUM('PENDING', 'WON', 'LOST') DEFAULT 'PENDING',
+                                    game_id BIGINT,
+                                    amount INT NOT NULL,
+    revenue INT DEFAULT 0,
+    game_title VARCHAR(255),
+    status BOOLEAN DEFAULT false,
+    ver BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (game_id) REFERENCES games(id)

@@ -132,11 +132,11 @@ public class UserManager {
     @Transactional
     public PrizeDTO buyPrize(PrizeDTO prizedto, UserDTO userdto) {
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
-        if (!userOp.isPresent()) {
+        if (userOp.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
         }
         Optional<Prize> prizeOp = prizeRepo.findPrizeById(prizeMapper.toEntity(prizedto).getId());
-        if (!prizeOp.isPresent()) {
+        if (prizeOp.isEmpty()) {
             throw new IllegalArgumentException("El prize introducido no existe");
         }
         Prize prize = prizeOp.get();
@@ -169,13 +169,15 @@ public class UserManager {
     }
 
     public void setFav(UserDTO userdto, GameDTO gamedto) {
+        // Check user existence
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
-        if (!userOp.isPresent()) {
+        if (userOp.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
         }
         User user = userOp.get();
+        // Check game existence
         Optional<Game> gameOp = gameRepo.findGameById(gameMapper.toEntity(gamedto).getId());
-        if (!gameOp.isPresent()) {
+        if (gameOp.isEmpty()) {
             throw new IllegalArgumentException("El game introducido no existe");
         }
         Game game = gameOp.get();
@@ -197,25 +199,26 @@ public class UserManager {
 
     @Transactional
     public void deleteFav(UserDTO userdto, GameDTO gamedto) {
+        // Check for game existance
         Optional<Game> gameOp = gameRepo.findGameById(gameMapper.toEntity(gamedto).getId());
-        if (!gameOp.isPresent()) {
+        if (gameOp.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
         }
         Game game = gameOp.get();
+        // Check for game existance
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
-        if (!userOp.isPresent()) {
+        if (userOp.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
         }
         User user = userOp.get();
-
+        // Check game-user favorite relation
         if (!user.getGamesLiked().contains(game)) {
             throw new IllegalArgumentException("El juego no está en tus favoritos");
         }
-
+        // Remove relation
         user.getGamesLiked().remove(game);
         game.getUsersLiked().remove(user);
-
-        // Save both entities
+        // Save both entities back
         userRepo.save(user);
         gameRepo.save(game);
     }
@@ -230,6 +233,28 @@ public class UserManager {
             user.setGamesLiked(new ArrayList<>());
         }
         return gameMapper.toDTOList(user.getGamesLiked());
+    }
+
+    public boolean likesGame(int idUser, int idGame){
+        Optional<User> user = userRepo.getONEUserById(idUser);
+        if(user.isEmpty()){
+            throw new IllegalArgumentException("El usuario introducido no existe");
+        }
+        else{
+            List<Game> gameList = user.get().getGamesLiked();
+            Optional<Game> favGame = gameRepo.findGameById(idGame);
+            if(favGame.isEmpty()){
+                throw new IllegalArgumentException("El game introducido no existe");
+            }
+            else{
+                if(gameList.contains(favGame.get())){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
     }
 
     public void deleteUser(UserDTO userdto) {
@@ -247,5 +272,18 @@ public class UserManager {
         }
         User user = userOp.get();
         return user.getIsadmin();
+    }
+
+    public void updateUser(UserDTO userDTO, int id){
+        var possibleUser = findById(id);
+
+        if(possibleUser.isPresent()){
+            var user = userMapper.toEntity(possibleUser.get());
+            user.setId(id);
+            userRepo.save(user);
+        }
+        else{
+            throw new IllegalArgumentException("El usuario introducido no existe");
+        }
     }
 }
