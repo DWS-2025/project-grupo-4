@@ -94,7 +94,9 @@ public class PrizeController {
     }
 
     @PostMapping("/addPrize")
-    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile, HttpSession session) throws IOException, SQLException {
+    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile,
+                           HttpSession session) throws IOException, SQLException {
+
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             return "redirect:/login";

@@ -159,4 +159,14 @@ public class PrizeManager {
     public Page<Prize> findAllPrizes(Pageable pageable) {
         return prizeRepo.findAllByOwnerIsNull(pageable);
     }
+
+    public Page<Prize> findPrizesPageByFilter(Pageable pageable, String title, int minPrice, int maxPrice) {
+        if (title != null && title.trim().isEmpty()) {
+            title = null;
+        }
+        if (minPrice > maxPrice) {
+            minPrice = maxPrice;
+        }
+        return prizeRepo.findPageByFilters(title,minPrice,maxPrice,pageable);
+    }
 }

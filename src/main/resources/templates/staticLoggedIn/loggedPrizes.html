@@ -88,13 +88,13 @@
     </header>
 
     <main>
-        <form th:action="@{/filterPrizes}" method="post" class="prize-filter-form">
+        <form id="filterForm" class="prize-filter-form">
             <div class="filter-container">
-                <input type="text" name="title" th:value="${title}" placeholder="Título" class="filter-input">
-                <input type="number" name="minPrice" th:value="${minPrice}" placeholder="Precio mínimo" class="filter-input">
-                <input type="number" name="maxPrice" th:value="${maxPrice}" placeholder="Precio máximo" class="filter-input">
+                <input type="text" name="title" id="titleFilter" th:value="${title}" placeholder="Título" class="filter-input">
+                <input type="number" name="minPrice" id="minPriceFilter" th:value="${minPrice}" placeholder="Precio mínimo" class="filter-input">
+                <input type="number" name="maxPrice" id="maxPriceFilter" th:value="${maxPrice}" placeholder="Precio máximo" class="filter-input">
                 <div class="filter-buttons">
-                    <button type="submit" class="filter-btn">Filtrar</button>
+                    <button type="button" id="filterBtn" class="filter-btn">Filtrar</button>
                     <a th:href="@{/prizes}" class="filter-btn clear-btn">Limpiar filtros</a>
                 </div>
             </div>
@@ -137,14 +137,31 @@
     let currentPage = 0;
     const pageSize = 3;
     let loading = false;
+    let currentFilters = {};
 
     window.onload = function() {
         const container = document.getElementById('grid-container');
         container.innerHTML = '';
         loadPrizes();
+
+        // Agregar evento al botón de filtrar
+        document.getElementById('filterBtn').addEventListener('click', applyFilters);
     };
 
     document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);
+
+    function applyFilters() {
+        currentPage = 0; // Resetear a la primera página
+        currentFilters = {
+            title: document.getElementById('titleFilter').value,
+            minPrice: document.getElementById('minPriceFilter').value || 0,
+            maxPrice: document.getElementById('maxPriceFilter').value || 999999
+        };
+
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        loadPrizes();
+    }
 
     function loadPrizes() {
         if (loading) return;
@@ -156,7 +173,21 @@
         spinner.classList.remove('d-none');
         loadMoreBtn.classList.add('d-none');
 
-        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)
+        // Construir la URL con los parámetros de filtro
+        let url = `/api/prizes/search?page=${currentPage}&size=${pageSize}`;
+
+        // Agregar filtros si existen
+        if (currentFilters.title) {
+            url += `&title=${encodeURIComponent(currentFilters.title)}`;
+        }
+        if (currentFilters.minPrice !== undefined) {
+            url += `&minPrice=${currentFilters.minPrice}`;
+        }
+        if (currentFilters.maxPrice !== undefined) {
+            url += `&maxPrice=${currentFilters.maxPrice}`;
+        }
+
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 const prizesContainer = document.getElementById('grid-container');

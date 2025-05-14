@@ -28,6 +28,15 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
             @Param("minPrice") Integer minPrice,
             @Param("maxPrice") Integer maxPrice
     );
+    @Query("SELECT p FROM Prize p WHERE " +
+            "(:title IS NULL OR p.title LIKE %:title%) AND " +
+            "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR p.price <= :maxPrice)")
+    Page<Prize> findPageByFilters(
+            @Param("title") String title,
+            @Param("minPrice") Integer minPrice,
+            @Param("maxPrice") Integer maxPrice,
+            Pageable pageable);
 
     Optional<Prize> getPrizeById(int id);
 }

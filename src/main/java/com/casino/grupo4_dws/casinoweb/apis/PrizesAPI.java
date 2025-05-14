@@ -43,9 +43,37 @@ public class PrizesAPI {
     private UserMapper userMapper;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllPrizes(Pageable pageable) {
+    public ResponseEntity<?> getAllPrizes(Pageable pageable,String title, int minPrice, int maxPrice) {
+
         try {
             Page<Prize> prizePage = prizeManager.findAllPrizes(pageable);
+            if (prizePage.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            Page<PrizeDTO> dtoPage = prizePage.map(prize -> {
+                PrizeDTO dto = prizeMapper.toDTO(prize);
+                // Prevent serialization issues with Blob/InputStream
+                if (prizeMapper.toEntity(dto).getImage() != null) {
+                    prizeMapper.toEntity(dto).setImage(null);
+                }
+                return dto;
+            });
+
+            return ResponseEntity.ok(dtoPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error retrieving prizes: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getAllPrizesFiltered(Pageable pageable,@RequestParam(required = false) String title,
+                                          @RequestParam(required = false, defaultValue = "0") Integer minPrice,
+                                          @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
+
+        try {
+            Page<Prize> prizePage = prizeManager.findPrizesPageByFilter(pageable, title, minPrice, maxPrice);
             if (prizePage.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
