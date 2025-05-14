@@ -150,7 +150,7 @@ public class BetManager {
             betRepo.save(bet);
         }
         else{
-            throw new IllegalArgumentException("El usuario introducido no existe");
+            throw new IllegalArgumentException("EL id de apuesta no existe");
         }
     }
 }

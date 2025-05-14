@@ -67,4 +67,10 @@ public class BetAPI {
             return ResponseEntity.badRequest().build();
         }
     }
+    /*
+    @GetMapping("")
+    public ResponseEntity<BetDTO> PlayBet() {
+        // Aqui iría el codigo de PlayBet, ya lo haré
+    }
+    */
 }
