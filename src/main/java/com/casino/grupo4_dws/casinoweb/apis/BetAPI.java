@@ -1,6 +1,10 @@
 package com.casino.grupo4_dws.casinoweb.apis;
 
+import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
+import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.BetManager;
+import com.casino.grupo4_dws.casinoweb.managers.GameManager;
+import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.BetMapper;
@@ -21,6 +25,10 @@ public class BetAPI {
 
     @Autowired
     private BetMapper betMapper;
+    @Autowired
+    private GameManager gameManager;
+    @Autowired
+    private UserManager userManager;
 
     @GetMapping("")
     public ResponseEntity<List<BetDTO>> getAllBets() {
@@ -67,10 +75,18 @@ public class BetAPI {
             return ResponseEntity.badRequest().build();
         }
     }
-    /*
-    @GetMapping("")
-    public ResponseEntity<BetDTO> PlayBet() {
-        // Aqui iría el codigo de PlayBet, ya lo haré
+
+    @PutMapping("/play/{gameId}/user/{userId}")
+    public ResponseEntity<BetDTO> PlayBet(@PathVariable int gameId, @PathVariable int userId, @RequestBody int amount) {
+        Optional<GameDTO> gameDTO = gameManager.getGameById(gameId);
+        Optional<UserDTO> userDTO = userManager.findById(userId);
+
+        if(gameDTO.isPresent() && userDTO.isPresent()) {
+            BetDTO betDTO = betManager.playBet(gameDTO.get(), userDTO.get(), amount);
+            return ResponseEntity.ok(betDTO);
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
-    */
 }
