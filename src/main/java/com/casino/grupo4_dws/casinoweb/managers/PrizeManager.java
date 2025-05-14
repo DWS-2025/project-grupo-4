@@ -8,6 +8,7 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,11 @@ public class PrizeManager {
         return prizeRepo.findAllByOwnerIsNull().stream()
                 .map(prize -> prizeMapper.toDTO(prize))
                 .collect(Collectors.toList());
+    }
+
+    public Optional<PrizeDTO> findById(@PathVariable int id) {
+        return prizeRepo.findPrizeById(id)
+                .map(user -> prizeMapper.toDTO(user));
     }
 
     public List<PrizeDTO> findPrizesByFilters(String title, int minPrice, int maxPrice) {

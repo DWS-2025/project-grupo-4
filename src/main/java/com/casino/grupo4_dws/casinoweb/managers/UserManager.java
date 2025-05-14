@@ -130,7 +130,7 @@ public class UserManager {
     }
 
     @Transactional
-    public PrizeDTO buyPrize(PrizeDTO prizedto, UserDTO userdto) {
+    public UserDTO buyPrize(PrizeDTO prizedto, UserDTO userdto) {
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
         if (userOp.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
@@ -162,7 +162,7 @@ public class UserManager {
         try {
             userRepo.save(user);
             prizeRepo.save(prize);
-            return prizeMapper.toDTO(prize);
+            return userMapper.toDTO(user);
         } catch (Exception e) {
             throw new RuntimeException("Error al guardar el usuario despues de comprar");
         }

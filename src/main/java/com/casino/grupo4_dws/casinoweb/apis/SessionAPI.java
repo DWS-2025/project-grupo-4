@@ -2,7 +2,9 @@
 package com.casino.grupo4_dws.casinoweb.apis;
 
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
+import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
+import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
@@ -27,6 +29,8 @@ public class SessionAPI {
     private UserMapper userMapper;
     @Autowired
     private GameManager gameManager;
+    @Autowired
+    private PrizeManager prizeManager;
 
     @GetMapping("")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -44,9 +48,8 @@ public class SessionAPI {
     @PostMapping("")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         try {
-            UserDTO user = userDTO;
-            userManager.save(userMapper.toEntity(user));
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            userManager.save(userMapper.toEntity(userDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -75,6 +78,13 @@ public class SessionAPI {
         }
     }
 
+    @GetMapping("/{idUser}/favorite")
+    public ResponseEntity<List<GameDTO>> getFavoriteGames(@PathVariable int idUser) {
+        UserDTO userDTO = userManager.findById(idUser).get();
+        List<GameDTO> favList = userManager.getFavGames(userDTO);
+        return ResponseEntity.ok(favList);
+    }
+
     @PutMapping("/{idUser}/favorite/{idGame}")
     public ResponseEntity<UserDTO> addFavorite(@PathVariable int idUser, @PathVariable int idGame) {
         userManager.setFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
@@ -85,5 +95,19 @@ public class SessionAPI {
     public ResponseEntity<UserDTO> removeFavorite(@PathVariable int idUser, @PathVariable int idGame) {
         userManager.deleteFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
         return ResponseEntity.ok(userManager.findById(idUser).get());
+        // DUDA: DEBERIAMOS VERIFICAR TODOS ESTOS GETS DE LOS OPTIONALS? LOS MANAGERS YA LO HACEN
+    }
+
+    @PutMapping("/{idUser}/buy/{idPrize}")
+    public ResponseEntity<UserDTO> buy(@PathVariable int idUser, @PathVariable int idPrize) {
+        Optional<UserDTO> userDTO = userManager.findById(idUser);
+        Optional<PrizeDTO> prizeDTO = prizeManager.findById(idPrize);
+
+        if(userDTO.isPresent() && prizeDTO.isPresent()){
+            userManager.buyPrize(prizeDTO.get(), userDTO.get());
+            UserDTO updatedUser = userManager.findById(idUser).get();
+            return ResponseEntity.ok(updatedUser);
+        } else
+            return ResponseEntity.notFound().build();
     }
 }
