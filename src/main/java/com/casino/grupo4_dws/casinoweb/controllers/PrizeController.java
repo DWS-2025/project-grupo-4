@@ -77,21 +77,50 @@ public class PrizeController {
     }
 
     @GetMapping("/addPrize")
-    public String addGameForm(Model model) {
+    public String addGameForm(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         model.addAttribute("newPrize", new Prize());
         return "staticLoggedIn/addPrizeForm";
     }
 
     @PostMapping("/addPrize")
-    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, SQLException {
+    public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile, HttpSession session) throws IOException, SQLException {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         prizeManager.savePrize(newPrize, imageFile);
         return "redirect:/prizes";
     }
 
     @PostMapping("/deletePrize/{id}")
     public String deletePrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        Optional<UserDTO> userOp = userManager.findById((Integer) session.getAttribute("user"));
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
         if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())){
             return "redirect:/login";
         }
         Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
@@ -116,7 +145,18 @@ public class PrizeController {
     }
 
     @GetMapping("/editPrize/{id}")
-    public String editPrize(Model model, @PathVariable int id) {
+    public String editPrize(Model model, @PathVariable int id, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         Optional<PrizeDTO> editado = prizeManager.getPrizeById(id);
         if (editado.isPresent()) {
             model.addAttribute("prize", editado.get());
@@ -129,8 +169,18 @@ public class PrizeController {
     @PostMapping("/updatePrize/{id}")
     public String updatePrize(@ModelAttribute("prize") PrizeDTO updatedPrize, @PathVariable int id,
                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-                              Model model) throws IOException {
-
+                              Model model, HttpSession session) throws IOException {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         prizeManager.updatePrizeDetails(updatedPrize, id, imageFile);
         model.addAttribute("prizes", prizeManager.findAllPrizes());
         return "redirect:/prizes";
