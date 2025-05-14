@@ -146,7 +146,7 @@ public class PrizesAPI {
             return ResponseEntity.notFound().build();
         }
         try {
-            PrizeDTO boughtPrize = userManager.buyPrize(prizeOpt.get() , userMapper.toDTO(user));
+            UserDTO boughtPrize = userManager.buyPrize(prizeOpt.get() , userMapper.toDTO(user));
             return ResponseEntity.ok(boughtPrize);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
