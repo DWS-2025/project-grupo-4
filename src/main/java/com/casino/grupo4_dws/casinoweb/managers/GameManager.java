@@ -139,6 +139,26 @@ public class GameManager {
         Game savedGame = gameRepo.save(game);
         return gameMapper.toDTO(savedGame);
     }
+    public GameDTO updateGameDetails(GameDTO updatedGameDTO, int id, MultipartFile imageFile) throws IOException {
+        Game game = gameRepo.findGameById(id)
+                .orElseThrow(() -> new RuntimeException("Game not found with id: " + id));
+
+        Game updatedGame = gameMapper.toEntity(updatedGameDTO);
+
+        game.setTitle(updatedGame.getTitle());
+        game.setDescription(updatedGame.getDescription());
+        game.setMinInput(updatedGame.getMinInput());
+        game.setMultiplier(updatedGame.getMultiplier());
+        game.setChance(updatedGame.getChance());
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            game.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
+        }
+
+        gameRepo.save(game);
+        return gameMapper.toDTO(game);
+    }
+
 
     public boolean isLiked(GameDTO gamedto, UserDTO userdto) {
         Optional<Game> gameOp = gameRepo.findGameById(gameMapper.toEntity(gamedto).getId());
