@@ -76,6 +76,12 @@
                     <span class="golden-text">RECOMPENSAS</span>
                 </button>
             </li>
+            <li th:if="${user.isadmin()}">
+                <button role="button" class="golden-button" onclick="location.href='/admin'">
+                    <span class="golden-text">ADMIN PANEL</span>
+                </button>
+            </li>
+
         </ul>
     </nav>
 </div>

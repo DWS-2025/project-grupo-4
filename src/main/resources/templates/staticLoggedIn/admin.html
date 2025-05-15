@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+  <title>Panel de Administrador</title>
+</head>
+<body>
+<div class="transparent-container">
+  <div class="template">
+    <div
+            tabindex="0"
+            class="popup button"
+            style="padding:0 0.225rem  0; border-top-right-radius: 1.2rem;
+    border-bottom-right-radius: 1.2rem;"
+    >
+      <div class="popup-header">
+        <p
+                style="letter-spacing: 1px; font-weight: 600; padding: 0.625rem 0rem 0.625rem 0.825rem;"
+                th:text="${user.userName()}"
+        >
+          Admin
+        </p>
+        <img src="/images/CasinoLaMielLogo.png" alt="Foto admin"
+             style="height: 32px; width: 32px; border-radius: 50%;">
+      </div>
+
+      <div class="popup-main">
+        <ul class="list-box">
+          <li class="button item" onclick="location.href='/user'">Mi zona</li>
+          <li class="button item">
+            Saldo: <span th:text="${user.money()}"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <button class="Btn" onclick="location.href='/logout'">
+    <div class="sign">
+      <svg viewBox="0 0 512 512">
+        <path d="..."></path>
+      </svg>
+    </div>
+    <div class="text">Logout</div>
+  </button>
+</div>
+
+<div class="gold-text-container">
+  <div class="gold-text">
+    <h1>Casino La Miel</h1>
+  </div>
+</div>
+
+<div id="container">
+  <nav class="navbar">
+    <ul class="menu">
+      <li>
+        <button role="button" class="golden-button" onclick="location.href='/'">
+          <span class="golden-text">INICIO</span>
+        </button>
+      </li>
+      <li>
+        <button role="button" class="golden-button" onclick="location.href='/NGames'">
+          <span class="golden-text">NUESTROS JUEGOS</span>
+        </button>
+      </li>
+      <li>
+        <button role="button" class="golden-button" onclick="location.href='/prizes'">
+          <span class="golden-text">RECOMPENSAS</span>
+        </button>
+      </li>
+      <li>
+        <button role="button" class="golden-button" onclick="location.href='/admin'">
+          <span class="golden-text">ADMIN PANEL</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div id="Welcome">
+  <h1 class="golden-subtitle">Hola, admin <span th:text="${user.userName()}"></span></h1>
+  <p>Desde aquí puedes gestionar a los usuarios del sistema.</p>
+</div>
+
+<div class="backpack">
+  <div id="grid-container">
+    <section class="game-section" th:each="user : ${userList}">
+      <h2 th:text="${user.userName()}"></h2>
+      <p>Saldo: <span th:text="${user.money()}"></span> $</p>
+      <form th:action="@{'/deleteUser/' + ${user.id()}}" method="post">
+        <button type="submit" class="golden-button">Eliminar Usuario</button>
+      </form>
+    </section>
+  </div>
+</div>
+</body>
+</html>
