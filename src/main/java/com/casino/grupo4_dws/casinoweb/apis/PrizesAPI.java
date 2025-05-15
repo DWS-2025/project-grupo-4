@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.http.MediaType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -165,7 +164,7 @@ public class PrizesAPI {
         }
         return ResponseEntity.notFound().build();
     }
-
+/*
     // Buy prize
     @PostMapping("/{id}/buy")
     public ResponseEntity<?> buyPrize(@PathVariable int id, @RequestBody User user) {
@@ -179,5 +178,5 @@ public class PrizesAPI {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
+    }*/
 }
