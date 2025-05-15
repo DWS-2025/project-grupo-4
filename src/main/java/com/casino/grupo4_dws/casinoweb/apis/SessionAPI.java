@@ -4,8 +4,10 @@ package com.casino.grupo4_dws.casinoweb.apis;
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
+import com.casino.grupo4_dws.casinoweb.managers.JWTManager;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
+import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -24,13 +27,14 @@ public class SessionAPI {
 
     @Autowired
     private UserManager userManager;
-
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private GameManager gameManager;
     @Autowired
     private PrizeManager prizeManager;
+    @Autowired
+    private JWTManager jwtManager;
 
     @GetMapping("")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -111,11 +115,36 @@ public class SessionAPI {
             return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
-        user.setIsadmin(false);
+    /*
+    Methods Register and Login accept two user & pass strings because
+    UserDTO does not contain a password field, so using a DTO would make
+    data transfer harder, and also allow user to modify their params (money, isAdmin...)
+     */
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> registerUser(@RequestBody Map<String, String> data) {
+        String username = data.get("username");
+        String password = data.get("password");
+        User user = new User();
+        if(username.isEmpty() || password.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        user.setUserName(username);
+        user.setPassword(password);
         userManager.save(user);
         return ResponseEntity.ok(userMapper.toDTO(user));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody Map<String, String> data) {
+        String username = data.get("username");
+        String password = data.get("password");
+
+        if(userManager.isUserCorrect(username, password)){
+            UserDTO userDTO = userMapper.toDTO(userManager.findByUsername(username).get());
+            return ResponseEntity.ok(jwtManager.generateToken(userDTO));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
