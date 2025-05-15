@@ -257,7 +257,7 @@ public class UserManager {
         }
     }
 
-    public void deleteUser(UserDTO userdto) {
+    public void deleteUser(UserDTO userdto, UserDTO activeUserdto) {
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
         if (userOp.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
@@ -285,5 +285,22 @@ public class UserManager {
         else{
             throw new IllegalArgumentException("El usuario introducido no existe");
         }
+    }
+
+    public boolean isOwner(UserDTO userdto, PrizeDTO prizedto) {
+        Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
+        if (userOp.isEmpty()) {
+            throw new IllegalArgumentException("El usuario introducido no existe");
+        }
+        User user = userOp.get();
+        Optional<Prize> prizeOp = prizeRepo.getPrizeById(prizeMapper.toEntity(prizedto).getId());
+        if (prizeOp.isEmpty()) {
+            throw new IllegalArgumentException("El prize introducido no existe");
+        }
+        if(user.getInventory() == null){
+            user.setInventory(new ArrayList<>());
+        }
+        Prize prize = prizeOp.get();
+        return user.getInventory().contains(prize);
     }
 }

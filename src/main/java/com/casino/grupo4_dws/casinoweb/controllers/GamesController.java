@@ -116,14 +116,37 @@ public class GamesController {
     }
 
     @GetMapping("/add")
-    public String addGameForm(Model model) {
+    public String addGameForm(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         model.addAttribute("newGame", new Game());
         return "staticLoggedIn/addGameForm";
     }
 
 
     @PostMapping("/add")
-    public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes) throws IOException {
+    public String addGame(@ModelAttribute Game newGame, @RequestParam("imageFile") MultipartFile imageFile,
+                          RedirectAttributes redirectAttributes, HttpSession session) throws IOException {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        if(!userManager.isAdmin(userOp.get())) {
+            return "redirect:/login";
+        }
         try {
             gameManager.saveGame(newGame, imageFile);
         } catch (IllegalArgumentException e) {
@@ -137,11 +160,21 @@ public class GamesController {
     @PostMapping("/delete/{id}")
     @Transactional
     public String deleteGame(@PathVariable int id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            gameManager.deleteGame(id);
-            return "redirect:/NGames";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al borrar el juego: " + e.getMessage());
+        Optional<UserDTO> userop = userManager.findById((Integer) session.getAttribute("user"));
+        if (userop.isEmpty()) {
+            return "redirect:/login";
+        }
+        UserDTO user = userop.get();
+        if (userManager.isAdmin(user)) {
+            try {
+                gameManager.deleteGame(id);
+                return "redirect:/NGames";
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error al borrar el juego: " + e.getMessage());
+                return "redirect:/NGames";
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "No se puede borrar el juego");
             return "redirect:/NGames";
         }
     }

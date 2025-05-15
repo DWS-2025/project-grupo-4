@@ -81,6 +81,9 @@
             <p>Elige entre la emoción del crash, la elegancia de la ruleta o la experiencia clásica de los slots, entre
                 otros muchos!</p>
             <img src="/images/luigiapuestas.jpg" alt="Luigi" width=681 height=511 id="Luigi"/>
+            <h2 th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                <span th:text="${errorMessage}"></span>
+            </h2>
         </div>
     </header>
 
@@ -108,7 +111,7 @@
                 <form th:action="@{/game/{id}(id=${game.id()})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
                 </form>
-                <form th:action="@{/delete/{id}(id=${game.id()})}" method="post">
+                <form th:if="${user.isadmin()}" th:action="@{/delete/{id}(id=${game.id()})}" method="post">
                     <button class="golden-button" type="submit">Eliminar Juego</button>
                 </form>
             </section>

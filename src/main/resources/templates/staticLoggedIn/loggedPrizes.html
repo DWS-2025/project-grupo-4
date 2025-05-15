@@ -7,7 +7,7 @@
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
-<body>
+<body th:attr="data-is-admin=${user.isadmin()}">
 <div class="transparent-container">
     <div class="template">
         <div
@@ -81,20 +81,20 @@
             <img src="/images/rick_dinero.jpg" alt="rick" width=681 height=511 id="rick"/>
         </div>
         <center>
-            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+            <h2 th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
                 <span th:text="${errorMessage}"></span>
-            </div>
+            </h2>
         </center>
     </header>
 
     <main>
-        <form th:action="@{/filterPrizes}" method="post" class="prize-filter-form">
+        <form id="filterForm" class="prize-filter-form">
             <div class="filter-container">
-                <input type="text" name="title" th:value="${title}" placeholder="Título" class="filter-input">
-                <input type="number" name="minPrice" th:value="${minPrice}" placeholder="Precio mínimo" class="filter-input">
-                <input type="number" name="maxPrice" th:value="${maxPrice}" placeholder="Precio máximo" class="filter-input">
+                <input type="text" name="title" id="titleFilter" th:value="${title}" placeholder="Título" class="filter-input">
+                <input type="number" name="minPrice" id="minPriceFilter" th:value="${minPrice}" placeholder="Precio mínimo" class="filter-input">
+                <input type="number" name="maxPrice" id="maxPriceFilter" th:value="${maxPrice}" placeholder="Precio máximo" class="filter-input">
                 <div class="filter-buttons">
-                    <button type="submit" class="filter-btn">Filtrar</button>
+                    <button type="button" id="filterBtn" class="filter-btn">Filtrar</button>
                     <a th:href="@{/prizes}" class="filter-btn clear-btn">Limpiar filtros</a>
                 </div>
             </div>
@@ -109,23 +109,25 @@
                 <form th:action="@{'/buy/' + ${prize.id()}}" method="post">
                     <button type="submit" class="golden-button">Comprar</button>
                 </form>
-                <form th:action="@{'/editPrize/' + ${prize.id()}}" method="get">
+                <form th:if="${user.isadmin()}" th:action="@{'/editPrize/' + ${prize.id()}}" method="get">
                     <button type="submit" class="golden-button">Editar Recompensa</button>
                 </form>
-                <form th:action="@{'/deletePrize/' + ${prize.id()}}" method="post">
+                <form th:if="${user.isadmin()}" th:action="@{'/deletePrize/' + ${prize.id()}}" method="post">
                     <button type="submit" class="golden-button">Eliminar Recompensa</button>
                 </form>
             </div>
         </div>
 
-        <div class="text-center mt-4 mb-4">
+        <div class="text-center mt-4 mb-4" style="align-self: center">
             <button id="loadMoreBtn" class="golden-button">
                 <span class="golden-text">Cargar Más</span>
             </button>
+
             <div id="spinner" class="spinner-border text-primary d-none" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
         </div>
+
     </main>
 
     <footer class="footer">
@@ -133,153 +135,206 @@
     </footer>
 </div>
 
-<!--<script>-->
-<!--    let currentPage = 0;-->
-<!--    const pageSize = 3;-->
-<!--    let loading = false;-->
+<script>
+    let currentPage = 0;
+    const pageSize = 3;
+    let loading = false;
+    let currentFilters = {};
 
-<!--    window.onload = function() {-->
-<!--        const container = document.getElementById('grid-container');-->
-<!--        container.innerHTML = '';-->
-<!--        loadPrizes();-->
-<!--    };-->
+    window.onload = function() {
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        loadPrizes();
 
-<!--    document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);-->
+        // Agregar evento al botón de filtrar
+        document.getElementById('filterBtn').addEventListener('click', applyFilters);
+    };
 
-<!--    function loadPrizes() {-->
-<!--        if (loading) return;-->
-<!--        loading = true;-->
+    document.getElementById('loadMoreBtn').addEventListener('click', loadPrizes);
 
-<!--        const spinner = document.getElementById('spinner');-->
-<!--        const loadMoreBtn = document.getElementById('loadMoreBtn');-->
+    function applyFilters() {
+        currentPage = 0; // Resetear a la primera página
+        currentFilters = {
+            title: document.getElementById('titleFilter').value,
+            minPrice: document.getElementById('minPriceFilter').value || 0,
+            maxPrice: document.getElementById('maxPriceFilter').value || 999999
+        };
 
-<!--        spinner.classList.remove('d-none');-->
-<!--        loadMoreBtn.classList.add('d-none');-->
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        loadPrizes();
+    }
 
-<!--        fetch(`/api/prizes?page=${currentPage}&size=${pageSize}`)-->
-<!--            .then(response => response.json())-->
-<!--            .then(data => {-->
-<!--                const prizesContainer = document.getElementById('grid-container');-->
+    function loadPrizes() {
+        if (loading) return;
+        loading = true;
 
-<!--                data.content.forEach(prize => {-->
-<!--                    const prizeElement = createPrizeElement(prize);-->
-<!--                    prizesContainer.appendChild(prizeElement);-->
-<!--                });-->
+        const spinner = document.getElementById('spinner');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
 
-<!--                currentPage++;-->
+        spinner.classList.remove('d-none');
+        loadMoreBtn.classList.add('d-none');
 
-<!--                if (currentPage >= data.totalPages) {-->
-<!--                    loadMoreBtn.style.display = 'none';-->
-<!--                } else {-->
-<!--                    loadMoreBtn.style.display = 'block';-->
-<!--                }-->
-<!--            })-->
-<!--            .catch(error => console.error('Error:', error))-->
-<!--            .finally(() => {-->
-<!--                loading = false;-->
-<!--                spinner.classList.add('d-none');-->
-<!--                loadMoreBtn.classList.remove('d-none');-->
-<!--            });-->
-<!--    }-->
+        // Construir la URL con los parámetros de filtro
+        let url = `/api/prizes/search?page=${currentPage}&size=${pageSize}`;
 
-<!--    function createPrizeElement(prize) {-->
-<!--        const section = document.createElement('div');-->
-<!--        section.className = 'game-section prize-item';-->
+        // Agregar filtros si existen
+        if (currentFilters.title) {
+            url += `&title=${encodeURIComponent(currentFilters.title)}`;
+        }
+        if (currentFilters.minPrice !== undefined) {
+            url += `&minPrice=${currentFilters.minPrice}`;
+        }
+        if (currentFilters.maxPrice !== undefined) {
+            url += `&maxPrice=${currentFilters.maxPrice}`;
+        }
 
-<!--        const title = document.createElement('h2');-->
-<!--        title.className = 'prize-title';-->
-<!--        title.textContent = prize.title;-->
-<!--        section.appendChild(title);-->
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const prizesContainer = document.getElementById('grid-container');
 
-<!--        const img = document.createElement('img');-->
-<!--        img.src = `/prize/${prize.id}/image`;-->
-<!--        img.alt = 'Prize Img';-->
-<!--        img.className = 'prize-image';-->
-<!--        img.width = 230;-->
-<!--        img.height = 230;-->
-<!--        section.appendChild(img);-->
+                data.content.forEach(prize => {
+                    const prizeElement = createPrizeElement(prize);
+                    prizesContainer.appendChild(prizeElement);
+                });
 
-<!--        const description = document.createElement('p');-->
-<!--        description.textContent = prize.description;-->
-<!--        section.appendChild(description);-->
+                currentPage++;
 
-<!--        const price = document.createElement('p');-->
-<!--        price.className = 'prize-price';-->
-<!--        price.textContent = `${prize.price} $`;-->
-<!--        section.appendChild(price);-->
-<!--        const buttonsContainer = document.createElement('div');-->
-<!--        buttonsContainer.className = 'prize-buttons';-->
+                if (currentPage >= data.totalPages) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                loading = false;
+                spinner.classList.add('d-none');
+                loadMoreBtn.classList.remove('d-none');
+            });
+    }
 
-<!--        // Buy button-->
-<!--        const buyForm = document.createElement('form');-->
-<!--        buyForm.action = `/buy/${prize.id}`;-->
-<!--        buyForm.method = 'post';-->
-<!--        const buyButton = document.createElement('button');-->
-<!--        buyButton.type = 'submit';-->
-<!--        buyButton.className = 'golden-button';-->
-<!--        buyButton.textContent = 'Comprar';-->
-<!--        buyForm.appendChild(buyButton);-->
-<!--        buttonsContainer.appendChild(buyForm);-->
+    function createPrizeElement(prize) {
+        const section = document.createElement('div');
+        section.className = 'game-section prize-item';
 
-<!--        // Edit button-->
-<!--        const editForm = document.createElement('form');-->
-<!--        editForm.action = `/editPrize/${prize.id}`;-->
-<!--        editForm.method = 'get';-->
-<!--        const editButton = document.createElement('button');-->
-<!--        editButton.type = 'submit';-->
-<!--        editButton.className = 'golden-button';-->
-<!--        editButton.textContent = 'Editar Recompensa';-->
-<!--        editForm.appendChild(editButton);-->
-<!--        buttonsContainer.appendChild(editForm);-->
+        const title = document.createElement('h2');
+        title.className = 'prize-title';
+        title.textContent = prize.title;
+        section.appendChild(title);
 
-<!--        // Delete button-->
-<!--        const deleteForm = document.createElement('form');-->
-<!--        deleteForm.action = `/deletePrize/${prize.id}`;-->
-<!--        deleteForm.method = 'post';-->
-<!--        const deleteButton = document.createElement('button');-->
-<!--        deleteButton.type = 'submit';-->
-<!--        deleteButton.className = 'golden-button';-->
-<!--        deleteButton.textContent = 'Eliminar Recompensa';-->
-<!--        deleteForm.appendChild(deleteButton);-->
-<!--        buttonsContainer.appendChild(deleteForm);-->
+        const img = document.createElement('img');
+        img.src = `/prize/${prize.id}/image`;
+        img.alt = 'Prize Img';
+        img.className = 'prize-image';
+        img.width = 230;
+        img.height = 230;
+        section.appendChild(img);
 
-<!--        section.appendChild(buttonsContainer);-->
+        const description = document.createElement('p');
+        description.textContent = prize.description;
+        section.appendChild(description);
 
+        const price = document.createElement('p');
+        price.className = 'prize-price';
+        price.textContent = `${prize.price} $`;
+        section.appendChild(price);
 
-<!--        return section;-->
-<!--    }-->
-<!--</script>-->
-<!--&lt;!&ndash; Estilos para la paginación &ndash;&gt;-->
-<!--<style>-->
-<!--    .spinner-border {-->
-<!--        width: 3rem;-->
-<!--        height: 3rem;-->
-<!--        margin: 1rem auto;-->
-<!--    }-->
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'prize-buttons';
 
-<!--    .d-none {-->
-<!--        display: none !important;-->
-<!--    }-->
+        // Buy button (visible para todos)
+        const buyForm = document.createElement('form');
+        buyForm.action = `/buy/${prize.id}`;
+        buyForm.method = 'post';
+        const buyButton = document.createElement('button');
+        buyButton.type = 'submit';
+        buyButton.className = 'golden-button';
+        buyButton.textContent = 'Comprar';
+        buyForm.appendChild(buyButton);
+        buttonsContainer.appendChild(buyForm);
 
-<!--    .prizes-container {-->
-<!--        display: flex;-->
-<!--        flex-wrap: wrap;-->
-<!--        gap: 16px;-->
-<!--        justify-content: center;-->
-<!--    }-->
+        // Verificar si el usuario es admin (usando Thymeleaf)
+        const isAdmin = document.body.getAttribute('data-is-admin') === 'true';
 
-<!--    .text-center {-->
-<!--        text-align: center;-->
-<!--    }-->
+        // Edit button (solo para admin)
+        if (isAdmin) {
+            const editForm = document.createElement('form');
+            editForm.action = `/editPrize/${prize.id}`;
+            editForm.method = 'get';
+            const editButton = document.createElement('button');
+            editButton.type = 'submit';
+            editButton.className = 'golden-button';
+            editButton.textContent = 'Editar Recompensa';
+            editForm.appendChild(editButton);
+            buttonsContainer.appendChild(editForm);
+        }
 
-<!--    .mt-4 {-->
-<!--        margin-top: 1.5rem;-->
-<!--    }-->
+        // Delete button (solo para admin)
+        if (isAdmin) {
+            const deleteForm = document.createElement('form');
+            deleteForm.action = `/deletePrize/${prize.id}`;
+            deleteForm.method = 'post';
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'submit';
+            deleteButton.className = 'golden-button';
+            deleteButton.textContent = 'Eliminar Recompensa';
+            deleteForm.appendChild(deleteButton);
+            buttonsContainer.appendChild(deleteForm);
+        }
 
-<!--    .mb-4 {-->
-<!--        margin-bottom: 1.5rem;-->
-<!--    }-->
-<!--</style>-->
+        section.appendChild(buttonsContainer);
+
+        return section;
+    }
+</script>
+<style>
+    .text-center.mt-4.mb-4 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin: 1.5rem auto;
+    }
+
+    #loadMoreBtn {
+        margin: 0 auto;
+    }
+
+    #spinner {
+        margin-top: 1rem;
+    }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin: 1rem auto;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+
+    .prizes-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+</style>
 
 </body>
 </html>

@@ -85,6 +85,9 @@
         que tienes.</p>
     <img src="/images/vanilla.jpeg" alt="vanilla" width=512 height=512 id="vanilla"/>
     <h1 class="golden-subtitle"> Tienes un total de <span th:text="${user.money()}"></span>$</h1>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+        <span th:text="${errorMessage}"></span>
+    </div>
 </div>
 
 <div class="backpack" id="Backpack">
@@ -95,6 +98,9 @@
             <h2 th:text="${item.title()}"></h2>
             <p th:text="${item.description()}"></p>
             <img th:if="${item.image()}" th:src="@{/prize/{id}/image(id=${item.id()})}" alt="Prize Img" class="prize-image" width="230" height="230">
+            <form th:action="@{'/deletePrize/' + ${item.id()}}" method="post">
+                <button type="submit" class="golden-button">Eliminar Recompensa</button>
+            </form>
         </section>
     </div>
 </div>
