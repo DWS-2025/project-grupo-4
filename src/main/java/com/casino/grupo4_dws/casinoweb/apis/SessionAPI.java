@@ -110,4 +110,12 @@ public class SessionAPI {
         } else
             return ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/register")
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
+        user.setIsadmin(false);
+        userManager.save(user);
+        return ResponseEntity.ok(userMapper.toDTO(user));
+    }
 }

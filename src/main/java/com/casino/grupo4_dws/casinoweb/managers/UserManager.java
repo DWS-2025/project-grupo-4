@@ -47,6 +47,9 @@ public class UserManager {
     }
 
     public UserDTO save(User user) {
+        if(user.getUserName().isEmpty() || user.getPassword().isEmpty()) {
+            return null;
+        }
         User savedUser = userRepo.save(user);
         return userMapper.toDTO(savedUser);
     }
