@@ -49,7 +49,7 @@ public class JWTManager {
     }
 
     // Returns -1 if invalid token, 0 if standard user, 1 if admin
-    public int UserPrivileges(String token) {
+    public int userPrivileges(String token) {
         try {
             Claims claims = verifyToken(token);  // Uses Verifytoken
             if(claims.get("isAdmin", Boolean.class)) {
