@@ -126,15 +126,9 @@ public class SessionAPI {
     public ResponseEntity<UserDTO> registerUser(@RequestBody Map<String, String> data) {
         String username = data.get("username");
         String password = data.get("password");
-        User user = new User();
-        if(username.isEmpty() || password.isEmpty()){
-            return ResponseEntity.badRequest().build();
-        }
 
-        user.setUserName(username);
-        user.setPassword(password);
-        userManager.save(user);
-        return ResponseEntity.ok(userMapper.toDTO(user));
+        userManager.saveUser(username, password);
+        return ResponseEntity.ok(userMapper.toDTO(userManager.findByUsername(username).get()));
     }
 
     @PostMapping("/login")
