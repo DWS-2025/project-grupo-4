@@ -12,6 +12,7 @@ import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -147,4 +148,11 @@ public class SessionAPI {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @GetMapping("/testtoken")
+    public ResponseEntity<Claims> testToken(@RequestHeader("Authorization") String jwtToken) {
+        String token = jwtToken.replace("Bearer ", "");
+        return ResponseEntity.ok(jwtManager.verifyToken(token));
+    }
+
 }
