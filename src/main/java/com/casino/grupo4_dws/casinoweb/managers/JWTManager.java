@@ -32,6 +32,7 @@ public class JWTManager {
         return Jwts.builder()
                 .claim("username", user.getUserName())
                 .claim("isAdmin", user.getIsadmin())
+                .claim("id", user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 3600_000))
                 .signWith(key)
@@ -60,5 +61,18 @@ public class JWTManager {
         } catch (JwtException | IllegalArgumentException e) {
             return -1;
         }
+    }
+    // Check if a resource can be modified, either if the user has access or is an admin
+    public boolean tokenHasPermission(String token, int id){
+        Claims claims = verifyToken(token);
+        Integer userId = claims.get("id", Integer.class);
+        Boolean isAdmin = claims.get("isAdmin", Boolean.class);
+        return (userId != null && userId.equals(id)) || (isAdmin != null && isAdmin);
+    }
+
+    // Check is token has admin permissions
+    public boolean tokenBelongsToAdmin(String token){
+        Claims claims = verifyToken(token);
+        return claims.get("isAdmin", Boolean.class);
     }
 }
