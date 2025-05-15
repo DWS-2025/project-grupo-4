@@ -9,8 +9,8 @@ public record UserDTO(int id,
                       String userName,
                       @JsonIgnore
                       String password,
-                      boolean isadmin,
-                      int money,
+                      Boolean isadmin,
+                      Integer money,
                       List<Integer> gamesLiked,
                       List<Integer> inventory,
                       List<Long> betHistory) {

@@ -275,16 +275,12 @@ public class UserManager {
     }
 
     public void updateUser(UserDTO userDTO, int id){
-        var possibleUser = findById(id);
+        User existingUser = userRepo.getONEUserById(id).get();
+        User editedUser = userMapper.toEntity(userDTO);
 
-        if(possibleUser.isPresent()){
-            var user = userMapper.toEntity(possibleUser.get());
-            user.setId(id);
-            userRepo.save(user);
-        }
-        else{
-            throw new IllegalArgumentException("El usuario introducido no existe");
-        }
+        existingUser.setUserName(editedUser.getUserName());
+        existingUser.setPassword(editedUser.getPassword());
+        userRepo.save(existingUser);
     }
 
     public boolean isOwner(UserDTO userdto, PrizeDTO prizedto) {

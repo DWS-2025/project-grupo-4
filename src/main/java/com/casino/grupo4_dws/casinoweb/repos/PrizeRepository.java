@@ -31,7 +31,8 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
     @Query("SELECT p FROM Prize p WHERE " +
             "(:title IS NULL OR p.title LIKE %:title%) AND " +
             "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
-            "(:maxPrice IS NULL OR p.price <= :maxPrice)")
+            "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
+            "p.owner IS NULL")
     Page<Prize> findPageByFilters(
             @Param("title") String title,
             @Param("minPrice") Integer minPrice,

@@ -34,7 +34,9 @@
 
             <div class="popup-main">
                 <ul class="list-box">
-                    <li class="button item" onclick="location.href='/user'">Mi zona</li>
+                    <form th:action="@{'/updateUser/' + ${user.id()}}" method="get">
+                        <button type="submit" class="button item">Actualizar Info</button>
+                    </form>
                     <li class="button item">
                         Saldo: <span th:text="${user.money()}"></span>
                     </li>
@@ -65,13 +67,11 @@
                 <button role="button" class="golden-button" onclick="location.href='/'">
                     <span class="golden-text">INICIO</span>
                 </button>
-            </li>
-            <li>
+
                 <button role="button" class="golden-button" onclick="location.href='/NGames'">
                     <span class="golden-text">NUESTROS JUEGOS</span>
                 </button>
-            </li>
-            <li>
+
                 <button role="button" class="golden-button" onclick="location.href='/prizes'">
                     <span class="golden-text">RECOMPENSAS</span>
                 </button>
