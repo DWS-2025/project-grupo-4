@@ -97,6 +97,10 @@ public class UserManager {
                 .map(user -> userMapper.toDTO(user));
     }
 
+    public Optional<User> findUserById(int id) {
+        return userRepo.getONEUserById(id);
+    }
+
     public Optional<UserDTO> findDTOByUsername(String username) {
         return userRepo.getUserByUserName(username)
                 .map(user -> userMapper.toDTO(user));

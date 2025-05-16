@@ -8,6 +8,7 @@ import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
+import com.casino.grupo4_dws.casinoweb.managers.JWTManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +27,8 @@ public class GamesAPI {
     private GameManager gameManager;
     @Autowired
     private GameMapper gameMapper;
+    @Autowired
+    private JWTManager jwtManager;
 
 
     @GetMapping("")
@@ -43,43 +46,55 @@ public class GamesAPI {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<GameDTO> createPrize(
+            @RequestHeader("Authorization") String jwtToken,
             @RequestPart("game") GameDTO gameDTO,
             @RequestPart(value = "image", required = false) MultipartFile imageFile){
-        try {
-            Game game = gameMapper.toEntity(gameDTO);
-            GameDTO savedGameDTO = gameManager.saveGame(game,imageFile);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedGameDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
+            try {
+                Game game = gameMapper.toEntity(gameDTO);
+                GameDTO savedGameDTO = gameManager.saveGame(game,imageFile);
+                return ResponseEntity.status(HttpStatus.CREATED).body(savedGameDTO);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<GameDTO> updateGame(
+            @RequestHeader("Authorization") String jwtToken,
             @PathVariable int id,
             @RequestPart("game") GameDTO gameDTO,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-
-        try {
-            GameDTO updatedGame = gameManager.updateGameDetails(gameDTO, id, imageFile);
-            return ResponseEntity.ok(updatedGame);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.notFound().build();
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
+            try {
+                GameDTO updatedGame = gameManager.updateGameDetails(gameDTO, id, imageFile);
+                return ResponseEntity.ok(updatedGame);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.notFound().build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGame(@PathVariable int id) {
-        try {
-            if (gameManager.getGameById(id).isPresent()) {
-                gameManager.deleteGame(id);
-                return ResponseEntity.ok().build();
+    public ResponseEntity<Void> deleteGame(
+            @RequestHeader("Authorization") String jwtToken,
+            @PathVariable int id) {
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
+            try {
+                if (gameManager.getGameById(id).isPresent()) {
+                    gameManager.deleteGame(id);
+                    return ResponseEntity.ok().build();
+                }
+                return ResponseEntity.notFound().build();
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().build();
             }
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

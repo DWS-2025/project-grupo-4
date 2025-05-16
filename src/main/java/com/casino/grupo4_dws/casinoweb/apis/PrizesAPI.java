@@ -9,6 +9,7 @@ import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
+import com.casino.grupo4_dws.casinoweb.managers.JWTManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,9 @@ public class PrizesAPI {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private JWTManager jwtManager;
 
     @GetMapping("")
     public ResponseEntity<?> getAllPrizes(Pageable pageable,String title, int minPrice, int maxPrice) {
@@ -129,40 +133,56 @@ public class PrizesAPI {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PrizeDTO> createPrize(
+            @RequestHeader("Authorization") String jwtToken,
             @RequestPart("prize") PrizeDTO prizeDTO,
             @RequestPart(value = "image", required = false) MultipartFile imageFile) {
-        try {
-            Prize prize = prizeMapper.toEntity(prizeDTO);
-            PrizeDTO savedPrizeDTO = prizeManager.savePrize(prize, imageFile);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedPrizeDTO);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
+            try {
+                Prize prize = prizeMapper.toEntity(prizeDTO);
+                PrizeDTO savedPrizeDTO = prizeManager.savePrize(prize, imageFile);
+                return ResponseEntity.status(HttpStatus.CREATED).body(savedPrizeDTO);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.badRequest().build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
     // Update prize
     @PutMapping("/{id}")
-    public ResponseEntity<PrizeDTO> updatePrize(@PathVariable int id, @RequestBody PrizeDTO prize, MultipartFile file) {
-        try {
-            prizeManager.updatePrizeDetails(prize, id, file);
-            return ResponseEntity.ok(prize);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<PrizeDTO> updatePrize(
+            @RequestHeader("Authorization") String jwtToken,
+            @PathVariable int id,
+            @RequestBody PrizeDTO prize,
+            MultipartFile file) {
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
+            try {
+                prizeManager.updatePrizeDetails(prize, id, file);
+                return ResponseEntity.ok(prize);
+            } catch (Exception e) {
+                return ResponseEntity.notFound().build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     // Delete prize
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePrize(@PathVariable int id) {
-        Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
-        if (prize.isPresent()) {
-            prizeManager.deletePrize(prizeMapper.toEntity(prize.get()).getId());
-            return ResponseEntity.ok().build();
+    public ResponseEntity<Void> deletePrize(
+            @RequestHeader("Authorization") String jwtToken,
+            @PathVariable int id) {
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
+            Optional<PrizeDTO> prize = prizeManager.getPrizeById(id);
+            if (prize.isPresent()) {
+                prizeManager.deletePrize(prizeMapper.toEntity(prize.get()).getId());
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 /*
     // Buy prize
