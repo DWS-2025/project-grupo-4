@@ -37,6 +37,9 @@
                     <form th:action="@{'/updateUser/' + ${user.id()}}" method="get">
                         <button type="submit" class="button item">Actualizar Info</button>
                     </form>
+                    <form th:action="@{'/autodeleteUser'}" method="post">
+                        <button type="submit" class="button item">Borrar Cuenta</button>
+                    </form>
                     <li class="button item">
                         Saldo: <span th:text="${user.money()}"></span>
                     </li>
