@@ -13,6 +13,7 @@ import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,35 +55,35 @@ public class UserManager {
     public void postConstruct() {
         User user1 = new User();
         user1.setUserName("gigandres");
-        user1.setPassword("1234");
+        user1.setPassword(hashPassword("1234"));
         user1.setMoney(5000);
         user1.setIsadmin(true);
         userRepo.save(user1);
 
         User user2 = new User();
         user2.setUserName("ralpi");
-        user2.setPassword("qwerty");
+        user2.setPassword(hashPassword("qwerty"));
         user2.setMoney(10000);
         user2.setIsadmin(true);
         userRepo.save(user2);
 
         User user3 = new User();
         user3.setUserName("user");
-        user3.setPassword("aaaaa");
+        user3.setPassword(hashPassword("aaaaa"));
         user3.setMoney(500);
         user3.setIsadmin(false);
         userRepo.save(user3);
 
         User user4 = new User();
         user4.setUserName("userprize");
-        user4.setPassword("1234");
+        user4.setPassword(hashPassword("1234"));
         user4.setMoney(1500);
         user4.setIsadmin(false);
         userRepo.save(user4);
 
         User user5 = new User();
         user5.setUserName("saultj");
-        user5.setPassword("abc");
+        user5.setPassword(hashPassword("abc"));
         user5.setMoney(2147483647);
         user5.setIsadmin(true);
         userRepo.save(user5);
@@ -110,23 +111,23 @@ public class UserManager {
     }
 
     public boolean isUserCorrect(String username, String password) {
-        return userRepo.getUserByUserName(username)
-                .map(user -> user.getPassword().equals(password))
-                .orElse(false);
+        User user = findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        return checkHashedPassword(password, user.getPassword());
     }
 
-    public User saveUser(String username, String password) {
+    public UserDTO saveUser(String username, String password) {
         if (userRepo.getUserByUserName(username).isPresent()) {
             throw new IllegalArgumentException("Ya existe un usuario con ese nombre");
         }
 
         User newUser = new User();
         newUser.setUserName(username);
-        newUser.setPassword(password);
+        newUser.setPassword(hashPassword(password));
         newUser.setMoney(500);
         newUser.setIsadmin(false);
 
-        return userRepo.save(newUser);
+        return userMapper.toDTO(userRepo.save(newUser));
     }
 
     @Transactional
@@ -317,5 +318,13 @@ public class UserManager {
         }
         Prize prize = prizeOp.get();
         return user.getInventory().contains(prize);
+    }
+
+    public String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public static boolean checkHashedPassword(String plainPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainPassword, hashedPassword);
     }
 }
