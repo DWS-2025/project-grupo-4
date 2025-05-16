@@ -122,7 +122,7 @@
                 </div>
                 <div class="game-info">
                     <h1 class="game-title" th:if="${game != null}" th:text="${game.title()}">Game Title</h1>
-                    <p class="game-description" th:if="${game != null}" th:text="${game.description()}">Game description</p>
+                    <p class="game-description" th:if="${game != null}" th:utext="${game.description()}">Game description</p>
                     <div class="betting-info">
                         <div class="bet-limit">
                             <span class="bet-label">Apuesta Mínima:</span>

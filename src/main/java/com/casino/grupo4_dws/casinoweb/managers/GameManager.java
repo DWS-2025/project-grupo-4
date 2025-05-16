@@ -13,10 +13,13 @@ import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.engine.jdbc.BlobProxy;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.mock.web.MockMultipartFile;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -183,5 +186,10 @@ public class GameManager {
         } else {
             return false;
         }
+    }
+
+    public Game sanitize(Game game) {
+        game.setDescription(Jsoup.clean(game.getDescription(),Whitelist.relaxed()));
+        return game;
     }
 }

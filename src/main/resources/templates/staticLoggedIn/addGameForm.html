@@ -1,11 +1,245 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Crear Nuevo Juego</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
-    <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/casino');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
+        body {
+            padding: 0;
+            margin: 0;
+            background: #661208;
+            color: #FFF;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        #editor-container .ql-editor {
+            font-family: inherit;
+            color: inherit;
+            text-align: left;
+            background-color: #FFF;
+            border: 1px solid #d4af37;
+            border-radius: 5px;
+            padding: 10px;
+            min-height: 150px;
+        }
+
+        #editor-container .ql-toolbar {
+            background-color: #f8f9fa;
+            border: 1px solid #d4af37;
+            border-radius: 5px 5px 0 0;
+        }
+
+        #editor-container .ql-editor p {
+            margin-bottom: 1rem;
+        }
+
+        #add-game-form {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: linear-gradient(145deg, #2a1f1d, #1a0f0d);
+            border: 2px solid #d4af37;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            color: #ffffff;
+        }
+
+        #add-game-form button[type="submit"] {
+            margin-top: 1.5rem;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            background-image: linear-gradient(160deg, #a54e07, #b47e11, #fef1a2, #bc881b, #a54e07);
+            border: 1px solid #a55d07;
+            color: rgb(120, 50, 5);
+            text-transform: uppercase;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 2px rgba(250, 227, 133, 1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(110, 80, 20, 0.4);
+            font-family: 'Casino', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        #add-game-form button[type="submit"]:hover {
+            background-size: 150% 150%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            transform: translateY(-2px);
+        }
+        /* Estilos para los elementos no cubiertos */
+        .gold-text-container {
+            text-align: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: linear-gradient(145deg, #1a0f0d, #2a1f1d);
+            border-bottom: 3px solid #d4af37;
+        }
+
+        .gold-text h1 {
+            font-family: 'Casino', sans-serif;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        #container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .menu {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .golden-button {
+            background: linear-gradient(145deg, #1a0f0d, #2a1f1d);
+            border: 2px solid #d4af37;
+            border-radius: 5px;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .golden-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .golden-text {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #d4af37;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        #GameTitles h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #d4af37;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #GameTitles p {
+            color: #f8f9fa;
+            font-size: 1.1rem;
+        }
+
+        #add-game-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #d4af37;
+            font-family: 'Cinzel Decorative', cursive;
+        }
+
+        #add-game-form input[type="text"],
+        #add-game-form input[type="number"],
+        #add-game-form input[type="file"] {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #d4af37;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        #add-game-form input[type="text"]:focus,
+        #add-game-form input[type="number"]:focus {
+            outline: none;
+            border-color: #f8f9fa;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .alert-danger {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #d4af37;
+            color: #d4af37;
+            font-family: 'Cinzel Decorative', cursive;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .gold-text h1 {
+                font-size: 2rem;
+            }
+
+            #GameTitles h1 {
+                font-size: 1.8rem;
+            }
+
+            #add-game-form {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="gold-text-container">
@@ -44,8 +278,13 @@
                 </div>
                 <div>
                     <label for="description">Descripción:</label>
-                    <input type="text" id="description" th:field="*{description}" required>
+                    <div id="editor">
+                        <p>Escribe la descripción del juego aquí...</p>
+                        <p><br /></p>
+                    </div>
+                    <input type="hidden" id="description" th:field="*{description}" required>
                 </div>
+                <br>
                 <div class="mb-3">
                     <label for="imageFile" class="form-label">Imagen del juego</label>
                     <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
@@ -65,9 +304,11 @@
                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
                     <span th:text="${errorMessage}"></span>
                 </div>
+                <center>
                 <div>
                     <button type="submit">Crear Juego</button>
                 </div>
+                </center>
             </form>
         </div>
     </main>
@@ -76,5 +317,22 @@
         <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
     </footer>
 </div>
+
+<!-- Include the Quill library -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+<!-- Initialize Quill editor and synchronize with hidden input -->
+<script>
+    const quill = new Quill('#editor', {
+        theme: 'snow'
+    });
+
+    const hiddenInput = document.getElementById('description');
+
+    quill.on('text-change', function() {
+        hiddenInput.value = quill.root.innerHTML;
+    });
+</script>
+
 </body>
 </html>
