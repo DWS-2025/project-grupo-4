@@ -237,4 +237,53 @@ public class SessionController {
             return "redirect:/";
         }
     }
+    @GetMapping("/updateUserAdmin/{id}")
+    public String editUserAdmin(Model model, @PathVariable Integer id, HttpSession session,
+                           RedirectAttributes redirectAttributes) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> user2op = userManager.findById(id);
+        if (user2op.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage","Usuario a eliminar no encontrado");
+            return "redirect:/";
+        }
+        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            model.addAttribute("editUser",user2op.get());
+            return "staticLoggedIn/updateUserFormAdmin";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            return "redirect:/";
+        }
+    }
+    @PostMapping("/updateUserAdmin/{id}")
+    public String updateUserAdmin(Model model, @PathVariable Integer id, HttpSession session,
+                             RedirectAttributes redirectAttributes,@ModelAttribute("editUser") UserDTO updatedUser) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> user2op = userManager.findById(id);
+        if (user2op.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage","Usuario a eliminar no encontrado");
+            return "redirect:/";
+        }
+        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            userManager.updateUserAdmin(updatedUser,id);
+            redirectAttributes.addFlashAttribute("message","Usuario actualizado con exito");
+            return "redirect:/user";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            return "redirect:/";
+        }
+    }
 }

@@ -93,6 +93,11 @@
       <form th:action="@{'/deleteUser/' + ${user.id()}}" method="post">
         <button type="submit" class="golden-button">Eliminar Usuario</button>
       </form>
+      <form th:action="@{'/updateUserAdmin/' + ${user.id()}}" method="get">
+      <button role="button" class="golden-button">
+          <span class="golden-text">Gestionar usuario</span>
+      </button>
+      </form>
     </section>
   </div>
 </div>

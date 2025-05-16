@@ -286,6 +286,21 @@ public class UserManager {
         }
         userRepo.save(modifiedUser);
     }
+    public void updateUserAdmin(UserDTO userDTO, int id){
+        User modifiedUser = userRepo.getONEUserById(id).get();
+        User modification = userMapper.toEntity(userDTO);
+
+        if(modification.getUserName() != null){
+            modifiedUser.setUserName(modification.getUserName());
+        }
+        if(modification.getPassword() != null){
+            modifiedUser.setPassword(modification.getPassword());
+        }
+            modifiedUser.setMoney(modification.getMoney());
+            modifiedUser.setIsadmin(modification.getIsadmin());
+
+        userRepo.save(modifiedUser);
+    }
 
     public boolean isOwner(UserDTO userdto, PrizeDTO prizedto) {
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
