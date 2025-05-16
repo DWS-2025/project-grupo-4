@@ -3,6 +3,7 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
+import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.BetMapper;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
@@ -11,6 +12,7 @@ import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager; // Inyectar GameManager
+import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
@@ -37,6 +39,8 @@ public class SessionController {
     BetMapper betMapper;
     @Autowired
     PrizeMapper prizeMapper;
+    @Autowired
+    PrizeManager prizeManager;
 
     @PostConstruct
     public void init() {
@@ -67,7 +71,7 @@ public class SessionController {
         }
         if (userManager.isUserCorrect(loginUsername, loginPassword)) {
             User active = userManager.findByUsername(loginUsername).get();
-            session.setAttribute("user", (Integer)active.getId());
+            session.setAttribute("user", (Integer) active.getId());
             return "redirect:/NGames";
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Usuario o Contraseña incorrectos");
@@ -146,7 +150,46 @@ public class SessionController {
     }
 
     @PostMapping("/deleteUser/{id}")
-    public String deleteUser(Model model, @PathVariable Integer id, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String deleteUser(
+            @PathVariable Integer id,          // ID del usuario a borrar (no del admin)
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        // 1️⃣ Verificar si hay un usuario logueado
+        Integer adminId = (Integer) session.getAttribute("user");
+        if (adminId == null) {
+            return "redirect:/login";
+        }
+
+        // 2️⃣ Verificar si el usuario logueado es admin
+        Optional<UserDTO> adminOp = userManager.findById(adminId);
+        if (adminOp.isEmpty() || !userManager.isAdmin(adminOp.get())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "No tienes permisos de administrador.");
+            return "redirect:/user";
+        }
+
+        // 3️⃣ Evitar que el admin se borre a sí mismo
+        if (id.equals(adminId)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "No puedes eliminarte a ti mismo.");
+            return "redirect:/admin";
+        }
+
+        // 4️⃣ Buscar el usuario a borrar
+        Optional<UserDTO> userToDeleteOp = userManager.findById(id);
+        if (userToDeleteOp.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "El usuario no existe.");
+            return "redirect:/admin";
+        }
+
+        // 5️⃣ Borrar el usuario (si todo está correcto)
+        userManager.deleteUser(userToDeleteOp.get(), adminOp.get());
+        redirectAttributes.addFlashAttribute("successMessage", "Usuario eliminado correctamente.");
+        return "redirect:/admin";  // Recargar el panel de admin
+    }
+
+    @GetMapping("/updateUser/{id}")
+    public String editUser(Model model, @PathVariable Integer id, HttpSession session,
+                             RedirectAttributes redirectAttributes) {
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             return "redirect:/login";
@@ -155,18 +198,43 @@ public class SessionController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        UserDTO userdto = userOp.get();
-        if(userManager.isAdmin(userdto)) {
-            Optional<UserDTO> user2op = userManager.findById(userId);
-            if (user2op.isEmpty()) {
-                redirectAttributes.addFlashAttribute("errorMessage","El usuario a borrar no ha sido encontrado");
-                return "redirect:/user";
-            }
-            UserDTO user2dto = user2op.get();
-            userManager.deleteUser(user2dto,userdto);
+        Optional<UserDTO> user2op = userManager.findById(id);
+        if (user2op.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage","Usuario a eliminar no encontrado");
+            return "redirect:/";
+        }
+        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            model.addAttribute("editUser",user2op.get());
+            return "staticLoggedIn/updateUserForm";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/updateUser/{id}")
+    public String updateUser(Model model, @PathVariable Integer id, HttpSession session,
+                             RedirectAttributes redirectAttributes,@ModelAttribute("editUser") UserDTO updatedUser) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/login";
+        }
+        Optional<UserDTO> user2op = userManager.findById(id);
+        if (user2op.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage","Usuario a eliminar no encontrado");
+            return "redirect:/";
+        }
+        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            userManager.updateUser(updatedUser,id);
+            redirectAttributes.addFlashAttribute("message","Usuario actualizado con exito");
             return "redirect:/user";
         } else {
-            return "redirect:/user";
+            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            return "redirect:/";
         }
     }
 }

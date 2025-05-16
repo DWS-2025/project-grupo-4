@@ -47,9 +47,6 @@ public class UserManager {
     }
 
     public UserDTO save(User user) {
-        if(user.getUserName().isEmpty() || user.getPassword().isEmpty()) {
-            return null;
-        }
         User savedUser = userRepo.save(user);
         return userMapper.toDTO(savedUser);
     }
@@ -278,16 +275,16 @@ public class UserManager {
     }
 
     public void updateUser(UserDTO userDTO, int id){
-        var possibleUser = findById(id);
+        User modifiedUser = userRepo.getONEUserById(id).get();
+        User modification = userMapper.toEntity(userDTO);
 
-        if(possibleUser.isPresent()){
-            User user = userMapper.toEntity(userDTO);
-            user.setId(id);
-            userRepo.save(user);
+        if(modification.getUserName() != null){
+            modifiedUser.setUserName(modification.getUserName());
         }
-        else{
-            throw new IllegalArgumentException("El usuario introducido no existe");
+        if(modification.getPassword() != null){
+            modifiedUser.setPassword(modification.getPassword());
         }
+        userRepo.save(modifiedUser);
     }
 
     public boolean isOwner(UserDTO userdto, PrizeDTO prizedto) {

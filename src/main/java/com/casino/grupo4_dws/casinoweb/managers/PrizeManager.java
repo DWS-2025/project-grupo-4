@@ -33,9 +33,7 @@ public class PrizeManager {
     private UserRepository userRepo;
 
     public List<PrizeDTO> findAllPrizes() {
-        return prizeRepo.findAllByOwnerIsNull().stream()
-                .map(prize -> prizeMapper.toDTO(prize))
-                .collect(Collectors.toList());
+        return prizeMapper.toDTOList(prizeRepo.findAll());
     }
 
     public Optional<PrizeDTO> findById(@PathVariable int id) {
