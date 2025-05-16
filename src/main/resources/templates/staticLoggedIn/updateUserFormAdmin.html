@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Editar usuario</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+</head>
+<body>
+<div class="gold-text-container">
+  <div class="gold-text">
+    <h1>Casino La Miel</h1>
+  </div>
+</div>
+<div id="container">
+  <nav class="navbar">
+    <ul class="menu">
+      <button role="button" class="golden-button" onclick="location.href='/'">
+        <span class="golden-text">INICIO</span>
+      </button>
+      <button role="button" class="golden-button" onclick="location.href='/NGames'">
+        <span class="golden-text">NUESTROS JUEGOS</span>
+      </button>
+      <button role="button" class="golden-button" onclick="location.href='/prizes'">
+        <span class="golden-text">RECOMPENSAS</span>
+      </button>
+    </ul>
+  </nav>
+
+  <header>
+    <div id="GameTitles">
+      <h1>Edita tu información</h1>
+      <p>Modifica el formulario para editar tus datos. Si no deseas modificar un campo
+        déjalo igual.</p>
+    </div>
+  </header>
+
+  <main>
+    <div id="add-game-form">
+      <form th:action="@{/updateUserAdmin/{id}(id=${id})}" th:object="${editUser}" method="post"
+            enctype="multipart/form-data">
+        <div>
+          <label for="userName">Nombre de usuario:</label>
+          <input type="text" id="userName" th:field="*{userName}">
+        </div>
+        <div>
+          <label for="password">Contraseña:</label>
+          <input type="text" id="password" th:field="*{password}">
+        </div>
+        <div>
+          <label for="money">Saldo:</label>
+          <input type="number" id="money" th:field="*{money}">
+        </div>
+        <div>
+          <button type="submit" class="golden-button">Guardar Cambios</button>
+        </div>
+        <!-- Campo para el estado de administrador -->
+        <div class="form-group">
+          <label>Privilegios de Administrador</label>
+          <div class="toggle-container">
+            <!-- Input oculto para el estado real -->
+            <input type="hidden" name="isadmin" th:value="${editUser.isadmin()}">
+
+            <!-- Toggle switch visual -->
+            <input type="checkbox" id="adminToggle" th:checked="${editUser.isadmin()}" class="hidden-checkbox">
+            <label for="adminToggle" class="lock-label">
+      <span class="lock-wrapper">
+        <span class="shackle"></span>
+        <svg class="lock-body" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M0 5C0 2.23858 2.23858 0 5 0H23C25.7614 0 28 2.23858 28 5V23C28 25.7614 25.7614 28 23 28H5C2.23858 28 0 25.7614 0 23V5ZM16 13.2361C16.6137 12.6868 17 11.8885 17 11C17 9.34315 15.6569 8 14 8C12.3431 8 11 9.34315 11 11C11 11.8885 11.3863 12.6868 12 13.2361V18C12 19.1046 12.8954 20 14 20C15.1046 20 16 19.1046 16 18V13.2361Z"
+                fill="white"></path>
+        </svg>
+      </span>
+              <span class="admin-status-text" th:text="${editUser.isadmin()} ? 'ON' : 'OFF'"></span>
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
+  </footer>
+</div>
+<script>
+  document.getElementById('adminToggle').addEventListener('change', function() {
+    // Actualiza el texto del estado
+    const statusText = this.checked ? 'ON' : 'OFF';
+    document.querySelector('.admin-status-text').textContent = statusText;
+
+    // Actualiza el valor del campo oculto que se enviará al servidor
+    document.querySelector('input[name="isadmin"]').value = this.checked;
+
+    // Cambia el color del texto según el estado
+    const textElement = document.querySelector('.admin-status-text');
+    textElement.style.color = this.checked ? '#28a745' : '#d4af37';
+  });
+</script>
+</body>
+</html>
