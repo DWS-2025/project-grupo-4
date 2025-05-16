@@ -11,8 +11,8 @@ import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
-import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import io.jsonwebtoken.Claims;
+import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,32 +52,67 @@ public class SessionAPI {
     }
 
     @PostMapping("")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        try {
-            userManager.save(userMapper.toEntity(userDTO));
-            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserDTO> createUser(@RequestHeader("Authorization") String jwtToken,  @RequestBody Map<String, Object> data) {
+        if(jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))){
+            try {
+                String username = (String) data.get("username");
+                String password = (String) data.get("password");
+                Integer money = (Integer) data.get("money");
+                Boolean isAdmin = (Boolean) data.get("isAdmin");
+
+                User user = new User();
+                user.setUserName(username);
+                user.setPassword(userManager.hashPassword(password));
+                user.setMoney(money);
+                user.setIsadmin(isAdmin);
+
+                userManager.save(user);
+                return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDTO(user));
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
-        try {
-            userManager.updateUser(userDTO, id);
-            return ResponseEntity.ok(userDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestHeader("Authorization") String jwtToken,  @RequestBody Map<String, Object> data) {
+        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
+            try {
+                User user = userManager.findUserById(id).get();
+                String username = (String) data.get("username");
+                String password = (String) data.get("password");
+                Integer money = (Integer) data.get("money");
+                Boolean isAdmin = (Boolean) data.get("isAdmin");
+
+
+                if(username != null) user.setUserName(username);
+                if(password != null) user.setPassword(userManager.hashPassword(password));
+
+                if(jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))){
+                    if(money != null) user.setMoney(money);
+                    if(isAdmin != null) user.setIsadmin(isAdmin);
+                }
+                UserDTO userDTO = userMapper.toDTO(user);
+                userManager.updateUser(userDTO, id);
+                return ResponseEntity.ok(userDTO);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().build();
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        if (userManager.findById(id).isPresent()) {
-            userManager.deleteUser(id);
-            return ResponseEntity.ok().build();
+    public ResponseEntity<User> deleteUser(@RequestHeader("Authorization") String jwtToken, @PathVariable int id) {
+        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
+            if (userManager.findById(id).isPresent()) {
+                userManager.deleteUser(id);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/{idUser}/favorite")
@@ -91,35 +126,43 @@ public class SessionAPI {
     }
 
     @PutMapping("/{idUser}/favorite/{idGame}")
-    public ResponseEntity<UserDTO> addFavorite(@PathVariable int idUser, @PathVariable int idGame) {
-        if(userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
-            userManager.setFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
-            return ResponseEntity.ok(userManager.findById(idUser).get());
+    public ResponseEntity<UserDTO> addFavorite(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser, @PathVariable int idGame) {
+        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+            if (userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
+                userManager.setFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
+                return ResponseEntity.ok(userManager.findById(idUser).get());
+            }
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
-
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @DeleteMapping("/{idUser}/favorite/{idGame}")
-    public ResponseEntity<UserDTO> removeFavorite(@PathVariable int idUser, @PathVariable int idGame) {
-        if (userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
-            userManager.deleteFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
-            return ResponseEntity.ok(userManager.findById(idUser).get());
+    public ResponseEntity<UserDTO> removeFavorite(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser, @PathVariable int idGame) {
+        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+            if (userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
+                userManager.deleteFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
+                return ResponseEntity.ok(userManager.findById(idUser).get());
+            }
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/{idUser}/buy/{idPrize}")
-    public ResponseEntity<UserDTO> buy(@PathVariable int idUser, @PathVariable int idPrize) {
-        Optional<UserDTO> userDTO = userManager.findById(idUser);
-        Optional<PrizeDTO> prizeDTO = prizeManager.findById(idPrize);
+    public ResponseEntity<UserDTO> buy(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser, @PathVariable int idPrize) {
+        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+            Optional<UserDTO> userDTO = userManager.findById(idUser);
+            Optional<PrizeDTO> prizeDTO = prizeManager.findById(idPrize);
 
-        if(userDTO.isPresent() && prizeDTO.isPresent()){
-            userManager.buyPrize(prizeDTO.get(), userDTO.get());
-            UserDTO updatedUser = userManager.findById(idUser).get();
-            return ResponseEntity.ok(updatedUser);
-        } else
-            return ResponseEntity.notFound().build();
+            if(userDTO.isPresent() && prizeDTO.isPresent()){
+                userManager.buyPrize(prizeDTO.get(), userDTO.get());
+                UserDTO updatedUser = userManager.findById(idUser).get();
+                return ResponseEntity.ok(updatedUser);
+            } else
+                return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     /*
@@ -147,7 +190,7 @@ public class SessionAPI {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
+    // Only for testing purposes, delete before final release
     @GetMapping("/testtoken")
     public ResponseEntity<Claims> testToken(@RequestHeader("Authorization") String jwtToken) {
         String token = jwtToken.replace("Bearer ", "");

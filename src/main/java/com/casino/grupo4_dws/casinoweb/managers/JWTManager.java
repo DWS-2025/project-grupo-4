@@ -38,12 +38,16 @@ public class JWTManager {
 
     public Claims verifyToken(String token) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException | IllegalArgumentException e) {
+            // Invalid or expired token
+            return null;
+        }
     }
 
     // Returns -1 if invalid token, 0 if standard user, 1 if admin
@@ -62,14 +66,25 @@ public class JWTManager {
     // Check if a resource can be modified, either if the user has access or is an admin
     public boolean tokenHasPermission(String token, int id){
         Claims claims = verifyToken(token);
+        if (claims == null) {
+            return false;
+        }
         Integer userId = claims.get("id", Integer.class);
         Boolean isAdmin = claims.get("isAdmin", Boolean.class);
         return (userId != null && userId.equals(id)) || (isAdmin != null && isAdmin);
     }
 
     // Check is token has admin permissions
-    public boolean tokenBelongsToAdmin(String token){
+    public boolean tokenBelongsToAdmin(String token) {
         Claims claims = verifyToken(token);
-        return claims.get("isAdmin", Boolean.class);
+        if (claims == null) {
+            return false;
+        }
+        Boolean isAdmin = claims.get("isAdmin", Boolean.class);
+        return isAdmin != null && isAdmin;
+    }
+
+    public String extractTokenFromHeader(String header) {
+        return header.replace("Bearer ", "");
     }
 }
