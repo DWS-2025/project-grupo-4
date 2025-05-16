@@ -45,9 +45,10 @@ public class SessionAPI {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) {
-        Optional<UserDTO> user = userManager.findById(id);
-        return user.map(u -> ResponseEntity.ok(u))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        if(userManager.findById(id).isPresent()){
+            return ResponseEntity.ok(userManager.findById(id).get());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("")
@@ -72,35 +73,40 @@ public class SessionAPI {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        try {
-            if (userManager.findById(id).isPresent()) {
-                userManager.deleteUser(id);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+        if (userManager.findById(id).isPresent()) {
+            userManager.deleteUser(id);
+            return ResponseEntity.ok().build();
         }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/{idUser}/favorite")
     public ResponseEntity<List<GameDTO>> getFavoriteGames(@PathVariable int idUser) {
-        UserDTO userDTO = userManager.findById(idUser).get();
-        List<GameDTO> favList = userManager.getFavGames(userDTO);
-        return ResponseEntity.ok(favList);
+        if(userManager.findById(idUser).isPresent()){
+            UserDTO userDTO = userManager.findById(idUser).get();
+            List<GameDTO> favList = userManager.getFavGames(userDTO);
+            return ResponseEntity.ok(favList);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{idUser}/favorite/{idGame}")
     public ResponseEntity<UserDTO> addFavorite(@PathVariable int idUser, @PathVariable int idGame) {
-        userManager.setFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
-        return ResponseEntity.ok(userManager.findById(idUser).get());
+        if(userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
+            userManager.setFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
+            return ResponseEntity.ok(userManager.findById(idUser).get());
+        }
+        return ResponseEntity.notFound().build();
+
     }
 
     @DeleteMapping("/{idUser}/favorite/{idGame}")
     public ResponseEntity<UserDTO> removeFavorite(@PathVariable int idUser, @PathVariable int idGame) {
-        userManager.deleteFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
-        return ResponseEntity.ok(userManager.findById(idUser).get());
-        // DUDA: DEBERIAMOS VERIFICAR TODOS ESTOS GETS DE LOS OPTIONALS? LOS MANAGERS YA LO HACEN
+        if (userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
+            userManager.deleteFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
+            return ResponseEntity.ok(userManager.findById(idUser).get());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{idUser}/buy/{idPrize}")
@@ -126,9 +132,8 @@ public class SessionAPI {
     public ResponseEntity<UserDTO> registerUser(@RequestBody Map<String, String> data) {
         String username = data.get("username");
         String password = data.get("password");
+        return ResponseEntity.status(HttpStatus.CREATED).body(userManager.saveUser(username, password));
 
-        userManager.saveUser(username, password);
-        return ResponseEntity.ok(userMapper.toDTO(userManager.findByUsername(username).get()));
     }
 
     @PostMapping("/login")

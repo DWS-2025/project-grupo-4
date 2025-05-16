@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.ExpiredJwtException;
 import java.nio.charset.StandardCharsets;
-import java.security.PrivateKey;
 import java.util.Date;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -20,7 +17,7 @@ public class JWTManager {
 
     @Autowired
     private UserMapper userMapper;
-    // Private KEY used to encript token
+    // Private KEY used to encrypt token
     private final String SECRET_KEY = "SeCrEtJWT123456789SeCrEtJWT123456789";
 
     // Receives userDTO and creates a token encapsulating its data
@@ -50,7 +47,7 @@ public class JWTManager {
     }
 
     // Returns -1 if invalid token, 0 if standard user, 1 if admin
-    public int userPrivileges(String token) {
+    public int getTokenPrivileges(String token) {
         try {
             Claims claims = verifyToken(token);  // Uses Verifytoken
             if(claims.get("isAdmin", Boolean.class)) {

@@ -118,7 +118,7 @@ public class UserManager {
                 .orElse(false);
     }
 
-    public User saveUser(String username, String password) {
+    public UserDTO saveUser(String username, String password) {
         if (userRepo.getUserByUserName(username).isPresent()) {
             throw new IllegalArgumentException("Ya existe un usuario con ese nombre");
         }
@@ -129,7 +129,7 @@ public class UserManager {
         newUser.setMoney(500);
         newUser.setIsadmin(false);
 
-        return userRepo.save(newUser);
+        return userMapper.toDTO(userRepo.save(newUser));
     }
 
     @Transactional
