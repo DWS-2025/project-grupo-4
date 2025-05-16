@@ -69,11 +69,16 @@ public class SessionController {
         if (loginPassword == null || loginPassword.trim().isEmpty()) {
             return "redirect:/login";
         }
-        if (userManager.isUserCorrect(loginUsername, loginPassword)) {
-            User active = userManager.findByUsername(loginUsername).get();
-            session.setAttribute("user", (Integer) active.getId());
-            return "redirect:/NGames";
-        } else {
+        try {
+            if (userManager.isUserCorrect(loginUsername, loginPassword)) {
+                User active = userManager.findByUsername(loginUsername).get();
+                session.setAttribute("user", (Integer) active.getId());
+                return "redirect:/NGames";
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Usuario o Contraseña incorrectos");
+                return "redirect:/login";
+            }
+        }catch (IllegalArgumentException e){
             redirectAttributes.addFlashAttribute("errorMessage", "Usuario o Contraseña incorrectos");
             return "redirect:/login";
         }
@@ -285,5 +290,20 @@ public class SessionController {
             redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
             return "redirect:/";
         }
+    }
+
+    @PostMapping("/autodeleteUser")
+    public String deleteMySelf(HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("user");
+        if (userId == null) {
+            return "redirect:/";
+        }
+        Optional<UserDTO> userOp = userManager.findById(userId);
+        if (userOp.isEmpty()) {
+            return "redirect:/";
+        }
+        session.removeAttribute("user");
+        userManager.deleteUser(userId);
+        return "redirect:/";
     }
 }

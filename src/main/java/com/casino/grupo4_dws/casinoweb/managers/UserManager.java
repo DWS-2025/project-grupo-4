@@ -283,11 +283,15 @@ public class UserManager {
         User modifiedUser = userRepo.getONEUserById(id).get();
         User modification = userMapper.toEntity(userDTO);
 
+        if (userRepo.getUserByUserName(modification.getUserName()).isPresent() && !modification.getUserName().equals(modifiedUser.getUserName())) {
+            throw new IllegalArgumentException("Ya existe un usuario con ese nombre");
+        }
+
         if(modification.getUserName() != null){
             modifiedUser.setUserName(modification.getUserName());
         }
         if(modification.getPassword() != null){
-            modifiedUser.setPassword(modification.getPassword());
+            modifiedUser.setPassword(hashPassword(modification.getPassword()));
         }
         userRepo.save(modifiedUser);
     }
@@ -299,7 +303,7 @@ public class UserManager {
             modifiedUser.setUserName(modification.getUserName());
         }
         if(modification.getPassword() != null){
-            modifiedUser.setPassword(modification.getPassword());
+            modifiedUser.setPassword(hashPassword(modification.getPassword()));
         }
             modifiedUser.setMoney(modification.getMoney());
             modifiedUser.setIsadmin(modification.getIsadmin());

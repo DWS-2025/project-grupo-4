@@ -148,7 +148,8 @@ public class GamesController {
             return "redirect:/login";
         }
         try {
-            gameManager.saveGame(newGame, imageFile);
+            Game sanitizado = gameManager.sanitize(newGame);
+            gameManager.saveGame(sanitizado, imageFile);
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/add";
