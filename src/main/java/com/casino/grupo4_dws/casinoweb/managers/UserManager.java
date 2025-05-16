@@ -14,7 +14,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -330,5 +333,29 @@ public class UserManager {
 
     public static boolean checkHashedPassword(String plainPassword, String hashedPassword) {
         return BCrypt.checkpw(plainPassword, hashedPassword);
+    }
+    public void saveUserDocument(long userId, MultipartFile document) throws IOException {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String fileName = document.getOriginalFilename();
+
+        // Ruta absoluta basada en el directorio del proyecto
+        String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs();  // Crea directorio si no existe
+        }
+
+        File dest = new File(directory, fileName);
+        document.transferTo(dest);
+
+        user.setDocumentPath(dest.getAbsolutePath()); // Guarda ruta absoluta si quieres acceder luego
+        userRepo.save(user);
+    }
+    public String getUserDocumentPath(long userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return user.getDocumentPath(); // Ya es un String
     }
 }

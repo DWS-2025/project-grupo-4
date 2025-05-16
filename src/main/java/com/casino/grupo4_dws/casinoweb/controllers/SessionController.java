@@ -17,11 +17,19 @@ import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -306,4 +314,44 @@ public class SessionController {
         userManager.deleteUser(userId);
         return "redirect:/";
     }
+    @PostMapping("/users/{id}/upload-document")
+    public String uploadDocument(@PathVariable("id") int userId,
+                                 @RequestParam("document") MultipartFile document,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            userManager.saveUserDocument(userId, document);
+            redirectAttributes.addFlashAttribute("successMessage", "Documento subido con éxito.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al subir el documento.");
+        }
+        return "redirect:/";
+    }
+    @GetMapping("/users/{id}/view-document")
+    public ResponseEntity<byte[]> viewDocument(@PathVariable("id") int userId) {
+        try {
+            String documentPath = userManager.getUserDocumentPath(userId);
+            File file = new File(documentPath);
+
+            if (!file.exists() || !file.canRead()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+
+            String contentType = Files.probeContentType(file.toPath());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"")
+                    .body(fileContent);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

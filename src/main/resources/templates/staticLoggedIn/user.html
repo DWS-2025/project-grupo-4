@@ -84,7 +84,13 @@
                     <span class="golden-text">ADMIN PANEL</span>
                 </button>
             </li>
-
+            <div th:if="${user.documentPath() != null and !#strings.isEmpty(user.documentPath())}">
+                <button role="button"
+                        class="golden-button"
+                        th:onclick="|window.open('/users/${user.id}/view-document', '_blank')|">
+                    <span class="golden-text">Descargar Documento</span>
+                </button>
+            </div>
         </ul>
     </nav>
 </div>

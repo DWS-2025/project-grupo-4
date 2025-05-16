@@ -52,6 +52,11 @@
           <button type="submit" class="golden-button">Guardar Cambios</button>
         </div>
       </form>
+      <form th:action="@{/users/{id}/upload-document(id=${id})}" method="post" enctype="multipart/form-data">
+        <input type="file" name="document" accept="application/pdf"/>
+        <button type="submit">Subir DNI</button>
+      </form>
+
     </div>
   </main>
 

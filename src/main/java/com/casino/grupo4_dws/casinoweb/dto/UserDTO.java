@@ -11,6 +11,7 @@ public record UserDTO(int id,
                       String password,
                       Boolean isadmin,
                       Integer money,
+                      String documentPath,
                       List<Integer> gamesLiked,
                       List<Integer> inventory,
                       List<Long> betHistory) {

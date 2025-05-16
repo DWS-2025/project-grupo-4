@@ -16,6 +16,9 @@ public class User {
     @Column(nullable = false)
     private int money;
     private boolean isadmin;
+    @Column(nullable = true)
+    private String documentPath;
+
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "owner", orphanRemoval = true)
     private List<Prize> Inventory;
@@ -99,4 +102,8 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getDocumentPath() {return documentPath;}
+
+    public void setDocumentPath(String documentPath) {this.documentPath = documentPath;}
 }
