@@ -366,7 +366,7 @@ public class SessionController {
         }
         Optional<UserDTO> user2op = userManager.findById(id);
         if (user2op.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage","Usuario a eliminar no encontrado");
+            redirectAttributes.addFlashAttribute("errorMessage","Usuario no encontrado");
             return "redirect:/";
         }
         if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
@@ -423,29 +423,42 @@ public class SessionController {
         return "redirect:/user";
     }
     @GetMapping("/users/{id}/view-document")
-    public ResponseEntity<byte[]> viewDocument(@PathVariable("id") int userId) {
-        try {
-            String documentPath = userManager.getUserDocumentPath(userId);
-            File file = new File(documentPath);
+    public ResponseEntity<byte[]> viewDocument(@PathVariable("id") int userId, HttpSession session) {
+        Integer id = (Integer) session.getAttribute("user");
+        if (id == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        Optional<UserDTO> userOp = userManager.findById(id);
+        if (userOp.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        UserDTO user = userOp.get();
+        if(userManager.isAdmin(user) || id == userId) {
+            try {
+                String documentPath = userManager.getUserDocumentPath(userId);
+                File file = new File(documentPath);
 
-            if (!file.exists() || !file.canRead()) {
-                return ResponseEntity.notFound().build();
+                if (!file.exists() || !file.canRead()) {
+                    return ResponseEntity.notFound().build();
+                }
+
+                byte[] fileContent = Files.readAllBytes(file.toPath());
+
+                String contentType = Files.probeContentType(file.toPath());
+                if (contentType == null) {
+                    contentType = "application/octet-stream";
+                }
+
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(contentType))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"")
+                        .body(fileContent);
+
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-
-            byte[] fileContent = Files.readAllBytes(file.toPath());
-
-            String contentType = Files.probeContentType(file.toPath());
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"")
-                    .body(fileContent);
-
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 

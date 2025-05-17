@@ -1,63 +1,63 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>-->
-<!--    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>-->
-<!--    <title>Page Not Found</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<center>-->
-<!--    <h1>Error 500: Internal Server Error</h1>-->
-<!--    <h2>Something went wrong, we are fixing on it</h2>-->
-<!--    <a href="/">-->
-<!--        <button role="button" class="golden-button">-->
-<!--            <span>Go Back</span>-->
-<!--        </button>-->
-<!--    </a>-->
-<!--</center>-->
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error - Algo ha fallado</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-        }
-        h1 {
-            color: #d9534f;
-        }
-        .details {
-            text-align: left;
-            margin-top: 20px;
-        }
-    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    <title>Page Not Found</title>
 </head>
 <body>
-<div class="container">
-    <h1>Oops... Algo salió mal</h1>
-    <p>Parece que el servidor ha encontrado un problema.</p>
-    <div class="details">
-        <strong>Estado:</strong> <span th:text="${status}"></span><br>
-        <strong>Error:</strong> <span th:text="${error}"></span><br>
-        <strong>Mensaje:</strong> <span th:text="${message}"></span><br>
-        <strong>Ruta:</strong> <span th:text="${path}"></span>
-    </div>
-    <p><a href="/">Volver a inicio</a></p>
-</div>
+<center>
+    <h1>Error 500: Internal Server Error</h1>
+    <h2>Something went wrong, we are fixing on it</h2>
+    <a href="/">
+        <button role="button" class="golden-button">
+            <span>Go Back</span>
+        </button>
+    </a>
+</center>
 </body>
 </html>
+<!--<!DOCTYPE html>-->
+<!--<html lang="es">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Error - Algo ha fallado</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            text-align: center;-->
+<!--            padding: 50px;-->
+<!--            background-color: #f8d7da;-->
+<!--            color: #721c24;-->
+<!--        }-->
+<!--        .container {-->
+<!--            background: white;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 8px;-->
+<!--            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
+<!--            display: inline-block;-->
+<!--        }-->
+<!--        h1 {-->
+<!--            color: #d9534f;-->
+<!--        }-->
+<!--        .details {-->
+<!--            text-align: left;-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <h1>Oops... Algo salió mal</h1>-->
+<!--    <p>Parece que el servidor ha encontrado un problema.</p>-->
+<!--    <div class="details">-->
+<!--        <strong>Estado:</strong> <span th:text="${status}"></span><br>-->
+<!--        <strong>Error:</strong> <span th:text="${error}"></span><br>-->
+<!--        <strong>Mensaje:</strong> <span th:text="${message}"></span><br>-->
+<!--        <strong>Ruta:</strong> <span th:text="${path}"></span>-->
+<!--    </div>-->
+<!--    <p><a href="/">Volver a inicio</a></p>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
