@@ -153,6 +153,9 @@ public class SessionController {
             redirectAttributes.addFlashAttribute("errorMessage", "Rellena todos los campos");
             return "redirect:/register";
         }
+        if (loginPassword.length() < 4 || loginPassword.length() > 16) {
+            redirectAttributes.addFlashAttribute("errorMessage", "La contraseña debe tener entre 4 y 16 caracteres");
+        }
         try {
             userManager.saveUser(loginUsername, loginPassword);
         } catch (IllegalArgumentException e) {

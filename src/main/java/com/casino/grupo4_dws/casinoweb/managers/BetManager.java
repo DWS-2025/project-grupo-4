@@ -67,7 +67,9 @@ public class BetManager {
         if (win) {
             int revenue = amount * game.getMultiplier();
             bet.setRevenue(revenue);
-            player.setMoney(player.getMoney() + revenue);
+            if(player.getMoney() + revenue < 2147483647){
+                player.setMoney(player.getMoney() + revenue);
+            }
             bet.setStatus(true);
         } else {
             bet.setRevenue(0);

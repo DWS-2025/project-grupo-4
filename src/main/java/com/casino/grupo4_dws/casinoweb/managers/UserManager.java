@@ -131,7 +131,7 @@ public class UserManager {
         User newUser = new User();
         newUser.setUserName(username);
         newUser.setPassword(hashPassword(password));
-        newUser.setMoney(500);
+        newUser.setMoney(1000);
         newUser.setIsadmin(false);
 
         return userMapper.toDTO(userRepo.save(newUser));
