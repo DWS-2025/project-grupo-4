@@ -5,7 +5,7 @@
     <title>Crear Nuevo Juego</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
     <style>
         @import url('https://fonts.cdnfonts.com/css/casino');
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
@@ -74,6 +74,7 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
             transform: translateY(-2px);
         }
+
         /* Estilos para los elementos no cubiertos */
         .gold-text-container {
             text-align: center;
@@ -280,7 +281,7 @@
                     <label for="description">Descripción:</label>
                     <div id="editor">
                         <p>Escribe la descripción del juego aquí...</p>
-                        <p><br /></p>
+                        <p><br/></p>
                     </div>
                     <input type="hidden" id="description" th:field="*{description}" required>
                 </div>
@@ -306,9 +307,9 @@
                 </div>
                 <center>
                     <input type="hidden" name="csrfToken" th:value="${csrfToken}">
-                <div>
-                    <button type="submit">Crear Juego</button>
-                </div>
+                    <div>
+                        <button type="submit">Crear Juego</button>
+                    </div>
                 </center>
             </form>
         </div>
@@ -330,7 +331,7 @@
 
     const hiddenInput = document.getElementById('description');
 
-    quill.on('text-change', function() {
+    quill.on('text-change', function () {
         hiddenInput.value = quill.root.innerHTML;
     });
 </script>

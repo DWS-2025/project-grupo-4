@@ -2,8 +2,7 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
-import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
-import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.managers.CSRFManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,13 @@ public class AdminController {
 
     @Autowired
     private UserManager userManager;
-    @Autowired
-    private UserMapper userMapper;
 
     @GetMapping("/admin")
     public String showAdminPanel(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);

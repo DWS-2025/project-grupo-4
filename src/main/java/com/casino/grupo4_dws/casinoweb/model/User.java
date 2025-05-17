@@ -103,7 +103,11 @@ public class User {
         this.id = id;
     }
 
-    public String getDocumentPath() {return documentPath;}
+    public String getDocumentPath() {
+        return documentPath;
+    }
 
-    public void setDocumentPath(String documentPath) {this.documentPath = documentPath;}
+    public void setDocumentPath(String documentPath) {
+        this.documentPath = documentPath;
+    }
 }

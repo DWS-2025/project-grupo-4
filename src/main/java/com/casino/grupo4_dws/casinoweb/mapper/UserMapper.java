@@ -1,4 +1,5 @@
 package com.casino.grupo4_dws.casinoweb.mapper;// ... existing imports ...
+
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;

@@ -15,7 +15,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +66,7 @@ public class BetManager {
         if (win) {
             int revenue = amount * game.getMultiplier();
             bet.setRevenue(revenue);
-            if(player.getMoney() + revenue < 2147483647){
+            if (player.getMoney() + revenue < 2147483647) {
                 player.setMoney(player.getMoney() + revenue);
             }
             bet.setStatus(true);
@@ -126,56 +125,57 @@ public class BetManager {
             betRepo.save(bet);
         }
     }
-    //
-    //Mét1odo no funcional, ya que las bets no pueden ser borradas, es necesario para la web cambiarlo por un botón para ocultarlas, no se borrarán de la base, pero no aparecerán en historial
+
+    //This method isn't functional, we made it because Michel said all entities must have delete and create methods.
+    //However, our database model don't allow to delete a Bet without deleting a User.
     public void deleteBet(BetDTO betDTO, UserDTO userDTO) {
         Optional<Bet> betOp = betRepo.getONEBetById(betMapper.toEntity(betDTO).getId());
-        if(betOp.isEmpty()){
+        if (betOp.isEmpty()) {
             throw new IllegalArgumentException("No se puede eliminar la bet");
         }
         Bet bet = betOp.get();
-        Optional <User> userOp = userRepo.getONEUserById(userMapper.toEntity(userDTO).getId());
+        Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userDTO).getId());
         if (userOp.isEmpty()) {
             throw new IllegalArgumentException("No se puede eliminar la bet");
         }
         User user = userOp.get();
-        if(user.getBetHistory().contains(bet)) {
+        if (user.getBetHistory().contains(bet)) {
             betRepo.delete(bet);
-        } else if(user.getIsadmin()) {
+        } else if (user.getIsadmin()) {
             betRepo.delete(bet);
         } else {
             throw new IllegalArgumentException("No se puede eliminar la bet");
         }
     }
 
-    public void updateBet(BetDTO betDTO, int id){
+    public void updateBet(BetDTO betDTO, int id) {
         var possibleBet = findById(id);
 
-        if(possibleBet.isPresent()){
+        if (possibleBet.isPresent()) {
             Bet bet = betMapper.toEntity(possibleBet.get());
             bet.setId(id);
             betRepo.save(bet);
-        }
-        else{
+        } else {
             throw new IllegalArgumentException("EL id de apuesta no existe");
         }
     }
 
+    //Alternative to deleting a bet, just making it not show under a User profile
     public void hideBet(BetDTO betDTO, UserDTO userDTO) {
         Optional<Bet> betOp = betRepo.getONEBetById(betMapper.toEntity(betDTO).getId());
-        if(betOp.isEmpty()){
+        if (betOp.isEmpty()) {
             throw new IllegalArgumentException("No se puede eliminar la bet");
         }
         Bet bet = betOp.get();
-        Optional <User> userOp = userRepo.getONEUserById(userMapper.toEntity(userDTO).getId());
+        Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userDTO).getId());
         if (userOp.isEmpty()) {
             throw new IllegalArgumentException("No se puede eliminar la bet");
         }
         User user = userOp.get();
-        if(user.getBetHistory().contains(bet)) {
+        if (user.getBetHistory().contains(bet)) {
             bet.setShow(false);
             betRepo.save(bet);
-        } else if(user.getIsadmin()) {
+        } else if (user.getIsadmin()) {
             bet.setShow(false);
             betRepo.save(bet);
         } else {

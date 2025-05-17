@@ -4,16 +4,12 @@ import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
-import com.casino.grupo4_dws.casinoweb.model.Bet;
-import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.managers.BetManager;
-import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.managers.CSRFManager;
 import com.casino.grupo4_dws.casinoweb.security.CSRFValidator;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
-import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -70,7 +65,7 @@ public class BetController {
                 }
                 // Update user in session
                 redirectAttributes.addFlashAttribute("status", betManager.getStatusDTO(bet));
-                CSRFService.regenerateCSRFToken(request);
+                CSRFManager.regenerateCSRFToken(request);
 
             } catch (IllegalArgumentException e) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error: " + e.getMessage());
@@ -85,6 +80,7 @@ public class BetController {
     }
 }
 
+//  OBSOLETE METHODS THAT WE MAY REUSE
 //    @PostMapping("/deleteBet/{id}")
 //    public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
 //        Integer userId = (Integer) session.getAttribute("user");

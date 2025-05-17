@@ -1,9 +1,10 @@
-package com.casino.grupo4_dws.casinoweb.security;
+package com.casino.grupo4_dws.casinoweb.managers;
 
+import com.casino.grupo4_dws.casinoweb.security.CSRFTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-public class CSRFService {
+public class CSRFManager {
 
     private static final String CSRF_TOKEN_ATTR = "csrfToken";
     private static final long TOKEN_EXPIRATION_TIME = 3600000;

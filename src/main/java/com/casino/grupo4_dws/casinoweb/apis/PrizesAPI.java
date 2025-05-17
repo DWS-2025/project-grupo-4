@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.web.bind.annotation.RequestPart;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.http.MediaType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
+
 @RestController
 @RequestMapping("/api/prizes")
 public class PrizesAPI {
@@ -34,19 +38,13 @@ public class PrizesAPI {
     private PrizeManager prizeManager;
 
     @Autowired
-    private UserManager userManager;
-
-    @Autowired
     private PrizeMapper prizeMapper;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private JWTManager jwtManager;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllPrizes(Pageable pageable,String title, int minPrice, int maxPrice) {
+    public ResponseEntity<?> getAllPrizes(Pageable pageable, String title, int minPrice, int maxPrice) {
 
         try {
             Page<Prize> prizePage = prizeManager.findAllPrizes(pageable);
@@ -71,9 +69,9 @@ public class PrizesAPI {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> getAllPrizesFiltered(Pageable pageable,@RequestParam(required = false) String title,
-                                          @RequestParam(required = false, defaultValue = "0") Integer minPrice,
-                                          @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
+    public ResponseEntity<?> getAllPrizesFiltered(Pageable pageable, @RequestParam(required = false) String title,
+                                                  @RequestParam(required = false, defaultValue = "0") Integer minPrice,
+                                                  @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
 
         try {
             Page<Prize> prizePage = prizeManager.findPrizesPageByFilter(pageable, title, minPrice, maxPrice);
@@ -115,6 +113,7 @@ public class PrizesAPI {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/{id}/image")
     public ResponseEntity<?> getPrizeImage(@PathVariable int id) {
         try {
@@ -151,6 +150,7 @@ public class PrizesAPI {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
     // Update prize
     @PutMapping("/{id}")
     public ResponseEntity<PrizeDTO> updatePrize(

@@ -14,11 +14,16 @@ import java.util.Optional;
 public interface PrizeRepository extends JpaRepository<Prize, Long> {
     @Override
     <S extends Prize> S save(S entity);
+
     @Override
     <S extends Prize> List<S> findAll(Example<S> example);
+
     Optional<Prize> findPrizeById(int id);
+
     List<Prize> findAllByOwnerIsNull();
+
     Page<Prize> findAllByOwnerIsNull(Pageable pageable);
+
     @Query("SELECT p FROM Prize p WHERE " +
             "(:title is null OR LOWER(p.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
             "(:minPrice is null OR p.price >= :minPrice) AND " +
@@ -28,6 +33,7 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
             @Param("minPrice") Integer minPrice,
             @Param("maxPrice") Integer maxPrice
     );
+
     @Query("SELECT p FROM Prize p WHERE " +
             "(:title IS NULL OR p.title LIKE %:title%) AND " +
             "(:minPrice IS NULL OR p.price >= :minPrice) AND " +

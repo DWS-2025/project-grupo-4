@@ -26,7 +26,8 @@
                     User
                 </p>
 
-                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg"
+                     alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
                 <img th:if="${user.isadmin() == true}" src="/images/CasinoLaMielLogo.png" alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
@@ -113,7 +114,8 @@
         <section class="game-section" th:each="item : ${inventory}">
             <h2 th:text="${item.title()}"></h2>
             <p th:text="${item.description()}"></p>
-            <img th:if="${item.image()}" th:src="@{/prize/{id}/image(id=${item.id()})}" alt="Prize Img" class="prize-image" width="230" height="230">
+            <img th:if="${item.image()}" th:src="@{/prize/{id}/image(id=${item.id()})}" alt="Prize Img"
+                 class="prize-image" width="230" height="230">
             <form th:action="@{'/deletePrize/' + ${item.id()}}" method="post">
                 <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                 <button type="submit" class="golden-button">Eliminar Recompensa</button>

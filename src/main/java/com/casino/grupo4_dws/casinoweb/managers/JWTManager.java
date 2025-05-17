@@ -1,4 +1,5 @@
 package com.casino.grupo4_dws.casinoweb.managers;
+
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
@@ -7,9 +8,12 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+
 import io.jsonwebtoken.security.Keys;
+
 import java.security.Key;
 
 @Service
@@ -54,7 +58,7 @@ public class JWTManager {
     public int getTokenPrivileges(String token) {
         try {
             Claims claims = verifyToken(token);  // Uses Verifytoken
-            if(claims.get("isAdmin", Boolean.class)) {
+            if (claims.get("isAdmin", Boolean.class)) {
                 return 1;
             }
             return 0;
@@ -63,8 +67,9 @@ public class JWTManager {
             return -1;
         }
     }
+
     // Check if a resource can be modified, either if the user has access or is an admin
-    public boolean tokenHasPermission(String token, int id){
+    public boolean tokenHasPermission(String token, int id) {
         Claims claims = verifyToken(token);
         if (claims == null) {
             return false;

@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -68,11 +67,11 @@ public class PrizeManager {
 
     public void deletePrize(int id) {
         Prize prize = prizeRepo.getPrizeById(id).get();
-        if(prize.getOwner() == null){
-            prizeRepo.deleteById((long)id);
+        if (prize.getOwner() == null) {
+            prizeRepo.deleteById((long) id);
         } else {
             prize.getOwner().getInventory().remove(prize);
-            prizeRepo.deleteById((long)id);
+            prizeRepo.deleteById((long) id);
             userRepo.save(prize.getOwner());
         }
     }
@@ -82,10 +81,10 @@ public class PrizeManager {
                 .orElseThrow(() -> new RuntimeException("Prize not found with id: " + id));
         Prize updatedPrize = prizeMapper.toEntity(updatedPrizeDTO);
 
-        if(updatedPrize.getTitle() != null){
+        if (updatedPrize.getTitle() != null) {
             prize.setTitle(updatedPrize.getTitle());
         }
-        if(updatedPrize.getDescription() != null){
+        if (updatedPrize.getDescription() != null) {
             prize.setDescription(updatedPrize.getDescription());
         }
         prize.setPrice(updatedPrize.getPrice());
@@ -169,6 +168,6 @@ public class PrizeManager {
         if (minPrice > maxPrice) {
             minPrice = maxPrice;
         }
-        return prizeRepo.findPageByFilters(title,minPrice,maxPrice,pageable);
+        return prizeRepo.findPageByFilters(title, minPrice, maxPrice, pageable);
     }
 }

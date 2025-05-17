@@ -48,8 +48,10 @@
         <form th:action="@{/filterPrizes}" method="post" class="prize-filter-form">
             <div class="filter-container">
                 <input type="text" name="title" th:value="${title}" placeholder="Título" class="filter-input">
-                <input type="number" name="minPrice" th:value="${minPrice}" placeholder="Precio mínimo" class="filter-input">
-                <input type="number" name="maxPrice" th:value="${maxPrice}" placeholder="Precio máximo" class="filter-input">
+                <input type="number" name="minPrice" th:value="${minPrice}" placeholder="Precio mínimo"
+                       class="filter-input">
+                <input type="number" name="maxPrice" th:value="${maxPrice}" placeholder="Precio máximo"
+                       class="filter-input">
                 <div class="filter-buttons">
                     <button type="submit" class="filter-btn">Filtrar</button>
                     <a th:href="@{/prizes}" class="filter-btn clear-btn">Limpiar filtros</a>
@@ -60,7 +62,8 @@
         <div id="grid-container" class="prizes-container">
             <div th:each="prize : ${prizes}" class="game-section prize-item">
                 <h2 class="prize-title" th:text="${prize.title()}">Título del Premio</h2>
-                <img th:if="${prize.image()}" th:src="@{'/prize/' + ${prize.id()} + '/image'}" alt="Prize Img" class="prize-image" width="230" height="230">
+                <img th:if="${prize.image()}" th:src="@{'/prize/' + ${prize.id()} + '/image'}" alt="Prize Img"
+                     class="prize-image" width="230" height="230">
                 <p th:text="${prize.description()}">Descripción del Premio</p>
                 <p class="prize-price" th:text="${prize.price() + ' $'}">Precio</p>
             </div>
@@ -87,7 +90,7 @@
     let loading = false;
     let currentFilters = {};
 
-    window.onload = function() {
+    window.onload = function () {
         const container = document.getElementById('grid-container');
         container.innerHTML = '';
         loadPrizes();

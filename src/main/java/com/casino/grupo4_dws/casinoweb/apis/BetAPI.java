@@ -94,11 +94,10 @@ public class BetAPI {
             Optional<GameDTO> gameDTO = gameManager.getGameById(gameId);
             Optional<UserDTO> userDTO = userManager.findById(userId);
 
-            if(gameDTO.isPresent() && userDTO.isPresent()) {
+            if (gameDTO.isPresent() && userDTO.isPresent()) {
                 BetDTO betDTO = betManager.playBet(gameDTO.get(), userDTO.get(), amount);
                 return ResponseEntity.ok(betDTO);
-            }
-            else{
+            } else {
                 return ResponseEntity.notFound().build();
             }
         }

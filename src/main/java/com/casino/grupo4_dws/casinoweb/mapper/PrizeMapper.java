@@ -36,7 +36,7 @@ public abstract class PrizeMapper {
     @Named("idToUser")
     public User idToUser(int id) {
         if (id == 0) return null;
-        Optional<User> user = userRepository.findById((long)id);
+        Optional<User> user = userRepository.findById((long) id);
         if (!user.isPresent()) return null;
         return user.get();
     }

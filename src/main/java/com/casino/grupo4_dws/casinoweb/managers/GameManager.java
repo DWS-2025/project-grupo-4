@@ -1,12 +1,10 @@
 package com.casino.grupo4_dws.casinoweb.managers;
 
-import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
+
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
-import com.casino.grupo4_dws.casinoweb.mapper.BetMapper;
 import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
-import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
@@ -24,13 +22,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.sql.rowset.serial.SerialBlob;
 
 @Service
 public class GameManager {
@@ -49,12 +45,6 @@ public class GameManager {
 
     @Autowired
     private UserRepository userRepo;
-
-    @Autowired
-    private BetManager betManager;
-
-    @Autowired
-    private BetMapper betMapper;
 
     public void deleteGame(long id) {
         if (!gameRepo.existsById(id)) {
@@ -142,6 +132,7 @@ public class GameManager {
         Game savedGame = gameRepo.save(game);
         return gameMapper.toDTO(savedGame);
     }
+
     public GameDTO updateGameDetails(GameDTO updatedGameDTO, int id, MultipartFile imageFile) throws IOException {
         Game game = gameRepo.findGameById(id)
                 .orElseThrow(() -> new RuntimeException("Game not found with id: " + id));
@@ -169,7 +160,7 @@ public class GameManager {
             throw new IllegalArgumentException("El juego introducido no existe");
         }
         Game game = gameOp.get();
-        Optional <User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
+        Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
         if (userOp.isEmpty()) {
             throw new IllegalArgumentException("El user introducido no existe");
         }
@@ -189,7 +180,7 @@ public class GameManager {
     }
 
     public Game sanitize(Game game) {
-        game.setDescription(Jsoup.clean(game.getDescription(),Whitelist.relaxed()));
+        game.setDescription(Jsoup.clean(game.getDescription(), Whitelist.relaxed()));
         return game;
     }
 }

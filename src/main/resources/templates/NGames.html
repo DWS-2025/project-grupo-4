@@ -44,7 +44,8 @@
         <div id="grid-container">
             <section class="game-section" th:each="game : ${games}">
                 <h2 th:text="${game.title()}">Nombre del juego</h2>
-                <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img" class="game-image">
+                <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img"
+                     class="game-image">
                 <p th:utext="${game.description()}">Descripción</p>
             </section>
         </div>

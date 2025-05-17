@@ -62,7 +62,8 @@
                     User
                 </p>
 
-                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg"
+                     alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
                 <img th:if="${user.isadmin() == true}" src="/images/CasinoLaMielLogo.png" alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
@@ -118,11 +119,13 @@
         <div class="game-details-container" th:if="${game != null}">
             <div class="game-card">
                 <div class="game-image-container">
-                    <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img" class="game-image">
+                    <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img"
+                         class="game-image">
                 </div>
                 <div class="game-info">
                     <h1 class="game-title" th:if="${game != null}" th:text="${game.title()}">Game Title</h1>
-                    <p class="game-description" th:if="${game != null}" th:utext="${game.description()}">Game description</p>
+                    <p class="game-description" th:if="${game != null}" th:utext="${game.description()}">Game
+                        description</p>
                     <div class="betting-info">
                         <div class="bet-limit">
                             <span class="bet-label">Apuesta Mínima:</span>
@@ -155,7 +158,8 @@
                             <label class="container">
                                 <input type="checkbox" th:value="${game.id()}" onchange="this.form.submit()" checked>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z" fill="#E3474F"/>
+                                    <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z"
+                                          fill="#E3474F"/>
                                 </svg>
                             </label>
                         </form>
@@ -174,8 +178,9 @@
             <form th:if="${game != null and user != null and user.userName() != null}"
                   th:action="@{/playGame/{id}(id=${game.id()})}" method="post">
                 <input type="hidden" name="csrfToken" th:value="${csrfToken}">
-            <label for="playedAmount"></label>
-                <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647" oninput="validity.valid||(value='');" required>
+                <label for="playedAmount"></label>
+                <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647"
+                       oninput="validity.valid||(value='');" required>
                 <button class="golden-button" type="submit">Jugar</button>
             </form>
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">

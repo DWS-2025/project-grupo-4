@@ -6,7 +6,7 @@ import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
-import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.managers.CSRFManager;
 import com.casino.grupo4_dws.casinoweb.security.CSRFValidator;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,10 +49,10 @@ public class PrizeController {
     //Done
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -90,10 +90,10 @@ public class PrizeController {
 
     @GetMapping("/addPrize")
     public String addGameForm(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -106,7 +106,7 @@ public class PrizeController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if(!userManager.isAdmin(userOp.get())) {
+        if (!userManager.isAdmin(userOp.get())) {
             return "redirect:/login";
         }
         model.addAttribute("newPrize", new Prize());
@@ -132,11 +132,11 @@ public class PrizeController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if(!userManager.isAdmin(userOp.get())) {
+        if (!userManager.isAdmin(userOp.get())) {
             return "redirect:/login";
         }
         prizeManager.savePrize(newPrize, imageFile);
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         return "redirect:/prizes";
     }
 
@@ -157,7 +157,7 @@ public class PrizeController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if(!userManager.isAdmin(userOp.get())){
+        if (!userManager.isAdmin(userOp.get())) {
             return "redirect:/login";
         }
         Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
@@ -166,13 +166,13 @@ public class PrizeController {
             return "redirect:/prizes";
         }
         PrizeDTO prize = op.get();
-        if(userManager.isAdmin(userOp.get()) || userManager.isOwner(userOp.get(),prize)) {
-            try{
+        if (userManager.isAdmin(userOp.get()) || userManager.isOwner(userOp.get(), prize)) {
+            try {
                 prizeManager.deletePrize(id);
                 redirectAttributes.addFlashAttribute("errorMessage", "Prize eliminado correctamente");
-                CSRFService.regenerateCSRFToken(request);
+                CSRFManager.regenerateCSRFToken(request);
                 return "redirect:/prizes";
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
                 return "redirect:/prizes";
             }
@@ -184,10 +184,10 @@ public class PrizeController {
 
     @GetMapping("/editPrize/{id}")
     public String editPrize(Model model, @PathVariable int id, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -200,7 +200,7 @@ public class PrizeController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if(!userManager.isAdmin(userOp.get())) {
+        if (!userManager.isAdmin(userOp.get())) {
             return "redirect:/login";
         }
         Optional<PrizeDTO> editado = prizeManager.getPrizeById(id);
@@ -232,12 +232,12 @@ public class PrizeController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if(!userManager.isAdmin(userOp.get())) {
+        if (!userManager.isAdmin(userOp.get())) {
             return "redirect:/login";
         }
         prizeManager.updatePrizeDetails(updatedPrize, id, imageFile);
         model.addAttribute("prizes", prizeManager.findAllPrizes());
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         return "redirect:/prizes";
     }
 
@@ -271,7 +271,7 @@ public class PrizeController {
         try {
             userManager.buyPrize(prize, userdto);
             redirectAttributes.addFlashAttribute("successMessage", "¡Compra realizada con éxito!");
-            CSRFService.regenerateCSRFToken(request);
+            CSRFManager.regenerateCSRFToken(request);
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }

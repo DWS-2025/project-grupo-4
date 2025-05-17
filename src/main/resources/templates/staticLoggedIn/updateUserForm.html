@@ -1,74 +1,74 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Editar usuario</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
-  <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+    <title>Editar usuario</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
 </head>
 <body>
 <div class="gold-text-container">
-  <div class="gold-text">
-    <h1>Casino La Miel</h1>
-  </div>
+    <div class="gold-text">
+        <h1>Casino La Miel</h1>
+    </div>
 </div>
 <div id="container">
-  <nav class="navbar">
-    <ul class="menu">
-      <button role="button" class="golden-button" onclick="location.href='/'">
-        <span class="golden-text">INICIO</span>
-      </button>
-      <button role="button" class="golden-button" onclick="location.href='/NGames'">
-        <span class="golden-text">NUESTROS JUEGOS</span>
-      </button>
-      <button role="button" class="golden-button" onclick="location.href='/prizes'">
-        <span class="golden-text">RECOMPENSAS</span>
-      </button>
-    </ul>
-  </nav>
+    <nav class="navbar">
+        <ul class="menu">
+            <button role="button" class="golden-button" onclick="location.href='/'">
+                <span class="golden-text">INICIO</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/NGames'">
+                <span class="golden-text">NUESTROS JUEGOS</span>
+            </button>
+            <button role="button" class="golden-button" onclick="location.href='/prizes'">
+                <span class="golden-text">RECOMPENSAS</span>
+            </button>
+        </ul>
+    </nav>
 
-  <header>
-    <div id="GameTitles">
-      <h1>Edita tu información</h1>
-      <p>Modifica el formulario para editar tus datos. Si no deseas modificar un campo no lo modifiques.</p>
-    </div>
-  </header>
+    <header>
+        <div id="GameTitles">
+            <h1>Edita tu información</h1>
+            <p>Modifica el formulario para editar tus datos. Si no deseas modificar un campo no lo modifiques.</p>
+        </div>
+    </header>
 
-  <main>
-    <div id="add-game-form">
-      <form th:action="@{/updateUser/{id}(id=${id})}" th:object="${editUser}" method="post"
-            enctype="multipart/form-data">
-        <div>
-          <label for="userName">Nombre de usuario:</label>
-          <input type="text" id="userName" th:field="*{userName}">
-        </div>
-        <div>
-          <label for="password">Contraseña:</label>
-          <input type="password" id="password" th:field="*{password}">
-        </div>
-        <div>
-          <input type="hidden" name="csrfToken" th:value="${csrfToken}">
-          <button type="submit" class="golden-button">Guardar Cambios</button>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
-          <span th:text="${errorMessage}"></span>
-        </div>
-      </form>
-      <br>
-      <form th:action="@{/users/{id}/upload-document(id=${id})}" method="post" enctype="multipart/form-data">
-        <label for="dni">Carga tu DNI (PDF):</label>
-        <input type="file" id="dni" name="document" accept="application/pdf"/>
-        <input type="hidden" name="csrfToken" th:value="${csrfToken}">
-        <button type="submit">Subir DNI</button>
-      </form>
+    <main>
+        <div id="add-game-form">
+            <form th:action="@{/updateUser/{id}(id=${id})}" th:object="${editUser}" method="post"
+                  enctype="multipart/form-data">
+                <div>
+                    <label for="userName">Nombre de usuario:</label>
+                    <input type="text" id="userName" th:field="*{userName}">
+                </div>
+                <div>
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" th:field="*{password}">
+                </div>
+                <div>
+                    <input type="hidden" name="csrfToken" th:value="${csrfToken}">
+                    <button type="submit" class="golden-button">Guardar Cambios</button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+            </form>
+            <br>
+            <form th:action="@{/users/{id}/upload-document(id=${id})}" method="post" enctype="multipart/form-data">
+                <label for="dni">Carga tu DNI (PDF):</label>
+                <input type="file" id="dni" name="document" accept="application/pdf"/>
+                <input type="hidden" name="csrfToken" th:value="${csrfToken}">
+                <button type="submit">Subir DNI</button>
+            </form>
 
-    </div>
-  </main>
+        </div>
+    </main>
 
-  <footer class="footer">
-    <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
-  </footer>
+    <footer class="footer">
+        <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
+    </footer>
 </div>
 </body>
 </html>

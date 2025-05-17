@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
-    <meta name="csrfToken" th:content="${csrfToken}" />
+    <meta name="csrfToken" th:content="${csrfToken}"/>
 </head>
 <body th:attr="data-is-admin=${user.isadmin()}">
 <div class="transparent-container">
@@ -25,7 +25,8 @@
                     User
                 </p>
 
-                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg"
+                     alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
                 <img th:if="${user.isadmin() == true}" src="/images/CasinoLaMielLogo.png" alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
@@ -91,9 +92,12 @@
     <main>
         <form id="filterForm" class="prize-filter-form">
             <div class="filter-container">
-                <input type="text" name="title" id="titleFilter" th:value="${title}" placeholder="Título" class="filter-input">
-                <input type="number" name="minPrice" id="minPriceFilter" th:value="${minPrice}" placeholder="Precio mínimo" class="filter-input">
-                <input type="number" name="maxPrice" id="maxPriceFilter" th:value="${maxPrice}" placeholder="Precio máximo" class="filter-input">
+                <input type="text" name="title" id="titleFilter" th:value="${title}" placeholder="Título"
+                       class="filter-input">
+                <input type="number" name="minPrice" id="minPriceFilter" th:value="${minPrice}"
+                       placeholder="Precio mínimo" class="filter-input">
+                <input type="number" name="maxPrice" id="maxPriceFilter" th:value="${maxPrice}"
+                       placeholder="Precio máximo" class="filter-input">
                 <div class="filter-buttons">
                     <button type="button" id="filterBtn" class="filter-btn">Filtrar</button>
                     <a th:href="@{/prizes}" class="filter-btn clear-btn">Limpiar filtros</a>
@@ -104,7 +108,8 @@
         <div id="grid-container" class="prizes-container">
             <div th:each="prize : ${prizes}" class="game-section prize-item">
                 <h2 class="prize-title" th:text="${prize.title()}">Título del Premio</h2>
-                <img th:if="${prize.image()}" th:src="@{'/prize/' + ${prize.id()} + '/image'}" alt="Prize Img" class="prize-image" width="230" height="230">
+                <img th:if="${prize.image()}" th:src="@{'/prize/' + ${prize.id()} + '/image'}" alt="Prize Img"
+                     class="prize-image" width="230" height="230">
                 <p th:text="${prize.description()}">Descripción del Premio</p>
                 <p class="prize-price" th:text="${prize.price() + ' $'}">Precio</p>
                 <form th:action="@{'/buy/' + ${prize.id()}}" method="post">
@@ -145,7 +150,7 @@
     let loading = false;
     let currentFilters = {};
 
-    window.onload = function() {
+    window.onload = function () {
         const container = document.getElementById('grid-container');
         container.innerHTML = '';
         loadPrizes();

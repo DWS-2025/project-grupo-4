@@ -24,7 +24,8 @@
                     User
                 </p>
 
-                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg" alt="Foto de perfil"
+                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg"
+                     alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
                 <img th:if="${user.isadmin() == true}" src="/images/CasinoLaMielLogo.png" alt="Foto de perfil"
                      style="height: 32px; width: 32px; border-radius: 50%;">
@@ -103,7 +104,8 @@
             <section class="game-section" th:each="game : ${mostLikedGames}">
                 <h2 th:text="${game.title()}"></h2>
                 <p th:utext="${game.description()}"></p>
-                <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img" class="game-image">
+                <img th:if="${game.image()}" th:src="@{/game/{id}/image(id=${game.id()})}" alt="Game Img"
+                     class="game-image">
                 <form th:action="@{/game/{id}(id=${game.id()})}" method="get">
                     <button class="golden-button" type="submit">Ver Juego</button>
                 </form>

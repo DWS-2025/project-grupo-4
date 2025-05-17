@@ -3,18 +3,12 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
-import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.BetMapper;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
-import com.casino.grupo4_dws.casinoweb.model.Bet;
-import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.model.User;
-import com.casino.grupo4_dws.casinoweb.managers.GameManager; // Inyectar GameManager
-import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
-import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
-import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.managers.CSRFManager;
 import com.casino.grupo4_dws.casinoweb.security.CSRFValidator;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletException;
@@ -39,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 public class SessionController {
@@ -52,8 +45,6 @@ public class SessionController {
     BetMapper betMapper;
     @Autowired
     PrizeMapper prizeMapper;
-    @Autowired
-    PrizeManager prizeManager;
 
     @PostConstruct
     public void init() {
@@ -61,12 +52,12 @@ public class SessionController {
     }
 
     @GetMapping("/login")
-    public String loadLoginPage(HttpSession session, HttpServletRequest request, Model model){
+    public String loadLoginPage(HttpSession session, HttpServletRequest request, Model model) {
 
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -86,7 +77,7 @@ public class SessionController {
     @PostMapping("/login")
     public String loginUser(Model model, @RequestParam String loginUsername, @RequestParam String loginPassword, HttpSession session, RedirectAttributes redirectAttributes,
                             HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Validar el token CSRF
+        // Validate CSRF TOKEN
         if (!CSRFValidator.validateCSRFToken(request)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             redirectAttributes.addFlashAttribute("errorMessage", "CSRF token invalid");
@@ -103,13 +94,13 @@ public class SessionController {
             if (userManager.isUserCorrect(loginUsername, loginPassword)) {
                 User active = userManager.findByUsername(loginUsername).get();
                 session.setAttribute("user", (Integer) active.getId());
-                CSRFService.regenerateCSRFToken(request);
+                CSRFManager.regenerateCSRFToken(request);
                 return "redirect:/NGames";
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Usuario o Contraseña incorrectos");
                 return "redirect:/login";
             }
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Usuario o Contraseña incorrectos");
             return "redirect:/login";
         }
@@ -131,7 +122,7 @@ public class SessionController {
 
     @GetMapping("/register")
     public String registerUser(Model model, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         model.addAttribute("csrfToken", csrfToken);
         return "register";
     }
@@ -164,17 +155,17 @@ public class SessionController {
         } catch (NullPointerException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         redirectAttributes.addFlashAttribute("message", "Usuario registrado con exito");
         return "redirect:/login";
     }
 
     @GetMapping("/user")
     public String showUser(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -220,41 +211,37 @@ public class SessionController {
             return "redirect:/login";
         }
 
-        // 2️⃣ Verificar si el usuario logueado es admin
         Optional<UserDTO> adminOp = userManager.findById(adminId);
         if (adminOp.isEmpty() || !userManager.isAdmin(adminOp.get())) {
             redirectAttributes.addFlashAttribute("errorMessage", "No tienes permisos de administrador.");
             return "redirect:/user";
         }
 
-        // 3️⃣ Evitar que el admin se borre a sí mismo
         if (id.equals(adminId)) {
             redirectAttributes.addFlashAttribute("errorMessage", "No puedes eliminarte a ti mismo.");
             return "redirect:/admin";
         }
 
-        // 4️⃣ Buscar el usuario a borrar
         Optional<UserDTO> userToDeleteOp = userManager.findById(id);
         if (userToDeleteOp.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "El usuario no existe.");
             return "redirect:/admin";
         }
 
-        // 5️⃣ Borrar el usuario (si todo está correcto)
         userManager.deleteUser(userToDeleteOp.get(), adminOp.get());
         redirectAttributes.addFlashAttribute("successMessage", "Usuario eliminado correctamente.");
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         return "redirect:/admin";  // Recargar el panel de admin
     }
 
     @GetMapping("/updateUser/{id}")
     public String editUser(Model model, @PathVariable Integer id, HttpSession session,
-                             RedirectAttributes redirectAttributes, HttpServletRequest request) {
+                           RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -269,21 +256,21 @@ public class SessionController {
         }
         Optional<UserDTO> user2op = userManager.findById(id);
         if (user2op.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage","Usuario a eliminar no encontrado");
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario a eliminar no encontrado");
             return "redirect:/";
         }
-        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
-            model.addAttribute("editUser",user2op.get());
+        if (userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            model.addAttribute("editUser", user2op.get());
             return "staticLoggedIn/updateUserForm";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            redirectAttributes.addFlashAttribute("errorMessage", "No puedes realizar esta accion");
             return "redirect:/";
         }
     }
 
     @PostMapping("/updateUser/{id}")
     public String updateUser(Model model, @PathVariable Integer id, HttpSession session,
-                             RedirectAttributes redirectAttributes,@ModelAttribute("editUser") UserDTO updatedUser,
+                             RedirectAttributes redirectAttributes, @ModelAttribute("editUser") UserDTO updatedUser,
                              HttpServletRequest request, HttpServletResponse response) {
         if (!CSRFValidator.validateCSRFToken(request)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -301,27 +288,28 @@ public class SessionController {
         }
         Optional<UserDTO> user2op = userManager.findById(id);
         if (user2op.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage","Usuario a actualizar no encontrado");
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario a actualizar no encontrado");
             return "redirect:/";
         }
-        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
-            userManager.updateUser(updatedUser,id);
-            redirectAttributes.addFlashAttribute("message","Usuario actualizado con exito");
-            CSRFService.regenerateCSRFToken(request);
+        if (userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            userManager.updateUser(updatedUser, id);
+            redirectAttributes.addFlashAttribute("message", "Usuario actualizado con exito");
+            CSRFManager.regenerateCSRFToken(request);
             return "redirect:/user";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            redirectAttributes.addFlashAttribute("errorMessage", "No puedes realizar esta accion");
             return "redirect:/";
         }
     }
+
     @GetMapping("/updateUserAdmin/{id}")
     public String editUserAdmin(Model model, @PathVariable Integer id, HttpSession session,
-                           RedirectAttributes redirectAttributes, HttpServletRequest request) {
+                                RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -336,20 +324,21 @@ public class SessionController {
         }
         Optional<UserDTO> user2op = userManager.findById(id);
         if (user2op.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage","Usuario a eliminar no encontrado");
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario a eliminar no encontrado");
             return "redirect:/";
         }
-        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
-            model.addAttribute("editUser",user2op.get());
+        if (userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            model.addAttribute("editUser", user2op.get());
             return "staticLoggedIn/updateUserFormAdmin";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            redirectAttributes.addFlashAttribute("errorMessage", "No puedes realizar esta accion");
             return "redirect:/";
         }
     }
+
     @PostMapping("/updateUserAdmin/{id}")
     public String updateUserAdmin(Model model, @PathVariable Integer id, HttpSession session,
-                             RedirectAttributes redirectAttributes,@ModelAttribute("editUser") UserDTO updatedUser,
+                                  RedirectAttributes redirectAttributes, @ModelAttribute("editUser") UserDTO updatedUser,
                                   HttpServletRequest request, HttpServletResponse response) {
         if (!CSRFValidator.validateCSRFToken(request)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -366,16 +355,16 @@ public class SessionController {
         }
         Optional<UserDTO> user2op = userManager.findById(id);
         if (user2op.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage","Usuario no encontrado");
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
             return "redirect:/";
         }
-        if(userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
-            userManager.updateUserAdmin(updatedUser,id);
-            redirectAttributes.addFlashAttribute("message","Usuario actualizado con exito");
-            CSRFService.regenerateCSRFToken(request);
+        if (userManager.isAdmin(userOp.get()) || user2op.get().equals(userOp.get())) {
+            userManager.updateUserAdmin(updatedUser, id);
+            redirectAttributes.addFlashAttribute("message", "Usuario actualizado con exito");
+            CSRFManager.regenerateCSRFToken(request);
             return "redirect:/user";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage","No puedes realizar esta accion");
+            redirectAttributes.addFlashAttribute("errorMessage", "No puedes realizar esta accion");
             return "redirect:/";
         }
     }
@@ -397,9 +386,10 @@ public class SessionController {
         }
         session.removeAttribute("user");
         userManager.deleteUser(userId);
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         return "redirect:/";
     }
+
     @PostMapping("/users/{id}/upload-document")
     public String uploadDocument(@PathVariable("id") int userId,
                                  @RequestParam("document") MultipartFile document,
@@ -415,13 +405,14 @@ public class SessionController {
         try {
             userManager.saveUserDocument(userId, document);
             redirectAttributes.addFlashAttribute("successMessage", "Documento subido con éxito.");
-            CSRFService.regenerateCSRFToken(request);
+            CSRFManager.regenerateCSRFToken(request);
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "Error al subir el documento.");
         }
         return "redirect:/user";
     }
+
     @GetMapping("/users/{id}/view-document")
     public ResponseEntity<byte[]> viewDocument(@PathVariable("id") int userId, HttpSession session) {
         Integer id = (Integer) session.getAttribute("user");
@@ -433,7 +424,7 @@ public class SessionController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         UserDTO user = userOp.get();
-        if(userManager.isAdmin(user) || id == userId) {
+        if (userManager.isAdmin(user) || id == userId) {
             try {
                 String documentPath = userManager.getUserDocumentPath(userId);
                 File file = new File(documentPath);

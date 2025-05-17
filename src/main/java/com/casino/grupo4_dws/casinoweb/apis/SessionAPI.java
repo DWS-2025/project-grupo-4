@@ -45,15 +45,15 @@ public class SessionAPI {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable int id) {
-        if(userManager.findById(id).isPresent()){
+        if (userManager.findById(id).isPresent()) {
             return ResponseEntity.ok(userManager.findById(id).get());
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping("")
-    public ResponseEntity<UserDTO> createUser(@RequestHeader("Authorization") String jwtToken,  @RequestBody Map<String, Object> data) {
-        if(jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))){
+    public ResponseEntity<UserDTO> createUser(@RequestHeader("Authorization") String jwtToken, @RequestBody Map<String, Object> data) {
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
             try {
                 String username = (String) data.get("username");
                 String password = (String) data.get("password");
@@ -76,8 +76,8 @@ public class SessionAPI {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestHeader("Authorization") String jwtToken,  @RequestBody Map<String, Object> data) {
-        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestHeader("Authorization") String jwtToken, @RequestBody Map<String, Object> data) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
             try {
                 User user = userManager.findUserById(id).get();
                 String username = (String) data.get("username");
@@ -86,12 +86,12 @@ public class SessionAPI {
                 Boolean isAdmin = (Boolean) data.get("isAdmin");
 
 
-                if(username != null) user.setUserName(username);
-                if(password != null) user.setPassword(userManager.hashPassword(password));
+                if (username != null) user.setUserName(username);
+                if (password != null) user.setPassword(userManager.hashPassword(password));
 
-                if(jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))){
-                    if(money != null) user.setMoney(money);
-                    if(isAdmin != null) user.setIsadmin(isAdmin);
+                if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
+                    if (money != null) user.setMoney(money);
+                    if (isAdmin != null) user.setIsadmin(isAdmin);
                 }
                 UserDTO userDTO = userMapper.toDTO(user);
                 userManager.updateUser(userDTO, id);
@@ -105,7 +105,7 @@ public class SessionAPI {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@RequestHeader("Authorization") String jwtToken, @PathVariable int id) {
-        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
             if (userManager.findById(id).isPresent()) {
                 userManager.deleteUser(id);
                 return ResponseEntity.ok().build();
@@ -117,7 +117,7 @@ public class SessionAPI {
 
     @GetMapping("/{idUser}/favorite")
     public ResponseEntity<List<GameDTO>> getFavoriteGames(@PathVariable int idUser) {
-        if(userManager.findById(idUser).isPresent()){
+        if (userManager.findById(idUser).isPresent()) {
             UserDTO userDTO = userManager.findById(idUser).get();
             List<GameDTO> favList = userManager.getFavGames(userDTO);
             return ResponseEntity.ok(favList);
@@ -127,7 +127,7 @@ public class SessionAPI {
 
     @PutMapping("/{idUser}/favorite/{idGame}")
     public ResponseEntity<UserDTO> addFavorite(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser, @PathVariable int idGame) {
-        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
             if (userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
                 userManager.setFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
                 return ResponseEntity.ok(userManager.findById(idUser).get());
@@ -139,7 +139,7 @@ public class SessionAPI {
 
     @DeleteMapping("/{idUser}/favorite/{idGame}")
     public ResponseEntity<UserDTO> removeFavorite(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser, @PathVariable int idGame) {
-        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
             if (userManager.findById(idUser).isPresent() && gameManager.getGameById(idGame).isPresent()) {
                 userManager.deleteFav(userManager.findById(idUser).get(), gameManager.getGameById(idGame).get());
                 return ResponseEntity.ok(userManager.findById(idUser).get());
@@ -151,11 +151,11 @@ public class SessionAPI {
 
     @PutMapping("/{idUser}/buy/{idPrize}")
     public ResponseEntity<UserDTO> buy(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser, @PathVariable int idPrize) {
-        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
             Optional<UserDTO> userDTO = userManager.findById(idUser);
             Optional<PrizeDTO> prizeDTO = prizeManager.findById(idPrize);
 
-            if(userDTO.isPresent() && prizeDTO.isPresent()){
+            if (userDTO.isPresent() && prizeDTO.isPresent()) {
                 userManager.buyPrize(prizeDTO.get(), userDTO.get());
                 UserDTO updatedUser = userManager.findById(idUser).get();
                 return ResponseEntity.ok(updatedUser);
@@ -184,12 +184,13 @@ public class SessionAPI {
         String username = data.get("username");
         String password = data.get("password");
 
-        if(userManager.isUserCorrect(username, password)){
+        if (userManager.isUserCorrect(username, password)) {
             UserDTO userDTO = userMapper.toDTO(userManager.findByUsername(username).get());
             return ResponseEntity.ok(jwtManager.generateToken(userDTO));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
     // Only for testing purposes, delete before final release
     @GetMapping("/testtoken")
     public ResponseEntity<Claims> testToken(@RequestHeader("Authorization") String jwtToken) {

@@ -243,22 +243,19 @@ public class UserManager {
         return gameMapper.toDTOList(user.getGamesLiked());
     }
 
-    public boolean likesGame(int idUser, int idGame){
+    public boolean likesGame(int idUser, int idGame) {
         Optional<User> user = userRepo.getONEUserById(idUser);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             throw new IllegalArgumentException("El usuario introducido no existe");
-        }
-        else{
+        } else {
             List<Game> gameList = user.get().getGamesLiked();
             Optional<Game> favGame = gameRepo.findGameById(idGame);
-            if(favGame.isEmpty()){
+            if (favGame.isEmpty()) {
                 throw new IllegalArgumentException("El game introducido no existe");
-            }
-            else{
-                if(gameList.contains(favGame.get())){
+            } else {
+                if (gameList.contains(favGame.get())) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             }
@@ -282,7 +279,7 @@ public class UserManager {
         return user.getIsadmin();
     }
 
-    public void updateUser(UserDTO userDTO, int id){
+    public void updateUser(UserDTO userDTO, int id) {
         User modifiedUser = userRepo.getONEUserById(id).get();
         User modification = userMapper.toEntity(userDTO);
 
@@ -290,26 +287,27 @@ public class UserManager {
             throw new IllegalArgumentException("Ya existe un usuario con ese nombre");
         }
 
-        if(modification.getUserName() != null){
+        if (modification.getUserName() != null) {
             modifiedUser.setUserName(modification.getUserName());
         }
-        if(modification.getPassword() != null){
+        if (modification.getPassword() != null) {
             modifiedUser.setPassword(hashPassword(modification.getPassword()));
         }
         userRepo.save(modifiedUser);
     }
-    public void updateUserAdmin(UserDTO userDTO, int id){
+
+    public void updateUserAdmin(UserDTO userDTO, int id) {
         User modifiedUser = userRepo.getONEUserById(id).get();
         User modification = userMapper.toEntity(userDTO);
 
-        if(modification.getUserName() != null){
+        if (modification.getUserName() != null) {
             modifiedUser.setUserName(modification.getUserName());
         }
-        if(modification.getPassword() != null){
+        if (modification.getPassword() != null) {
             modifiedUser.setPassword(hashPassword(modification.getPassword()));
         }
-            modifiedUser.setMoney(modification.getMoney());
-            modifiedUser.setIsadmin(modification.getIsadmin());
+        modifiedUser.setMoney(modification.getMoney());
+        modifiedUser.setIsadmin(modification.getIsadmin());
 
         userRepo.save(modifiedUser);
     }
@@ -324,7 +322,7 @@ public class UserManager {
         if (prizeOp.isEmpty()) {
             throw new IllegalArgumentException("El prize introducido no existe");
         }
-        if(user.getInventory() == null){
+        if (user.getInventory() == null) {
             user.setInventory(new ArrayList<>());
         }
         Prize prize = prizeOp.get();
@@ -338,28 +336,30 @@ public class UserManager {
     public static boolean checkHashedPassword(String plainPassword, String hashedPassword) {
         return BCrypt.checkpw(plainPassword, hashedPassword);
     }
+
     public void saveUserDocument(long userId, MultipartFile document) throws IOException {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         String fileName = document.getOriginalFilename();
 
-        // Ruta absoluta basada en el directorio del proyecto
+        // Route based on the project's folders
         String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
         File directory = new File(uploadDir);
         if (!directory.exists()) {
-            directory.mkdirs();  // Crea directorio si no existe
+            directory.mkdirs();  // Creates de directory if it doesn't exist
         }
 
         File dest = new File(directory, fileName);
         document.transferTo(dest);
 
-        user.setDocumentPath(dest.getAbsolutePath()); // Guarda ruta absoluta si quieres acceder luego
+        user.setDocumentPath(dest.getAbsolutePath()); // Save the URL for future accesses
         userRepo.save(user);
     }
+
     public String getUserDocumentPath(long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return user.getDocumentPath(); // Ya es un String
+        return user.getDocumentPath(); // Already a String
     }
 }

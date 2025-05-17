@@ -1,8 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.mapper;
 
 import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
-import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
-import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.User;
@@ -13,10 +11,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class BetMapper {
@@ -61,7 +57,7 @@ public abstract class BetMapper {
     @Named("idToUser")
     public User idToUser(int id) {
         if (id == 0) return null;
-        Optional<User> user = userRepository.findById((long)id);
+        Optional<User> user = userRepository.findById((long) id);
         if (!user.isPresent()) return null;
         return user.get();
     }

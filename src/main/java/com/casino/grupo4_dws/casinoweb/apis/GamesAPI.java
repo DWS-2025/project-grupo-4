@@ -48,11 +48,11 @@ public class GamesAPI {
     public ResponseEntity<GameDTO> createPrize(
             @RequestHeader("Authorization") String jwtToken,
             @RequestPart("game") GameDTO gameDTO,
-            @RequestPart(value = "image", required = false) MultipartFile imageFile){
+            @RequestPart(value = "image", required = false) MultipartFile imageFile) {
         if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
             try {
                 Game game = gameMapper.toEntity(gameDTO);
-                GameDTO savedGameDTO = gameManager.saveGame(game,imageFile);
+                GameDTO savedGameDTO = gameManager.saveGame(game, imageFile);
                 return ResponseEntity.status(HttpStatus.CREATED).body(savedGameDTO);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().build();

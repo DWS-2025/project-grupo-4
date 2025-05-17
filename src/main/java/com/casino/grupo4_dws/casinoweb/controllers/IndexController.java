@@ -3,14 +3,10 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
-import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
-import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
-import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
-import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.managers.CSRFManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.jetbrains.annotations.ApiStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,10 +29,10 @@ public class IndexController {
 
     @GetMapping("/")
     public String inicio(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {

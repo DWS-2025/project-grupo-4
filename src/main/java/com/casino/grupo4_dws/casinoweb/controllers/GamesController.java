@@ -1,16 +1,12 @@
 package com.casino.grupo4_dws.casinoweb.controllers;
 
-import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
+
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
-import com.casino.grupo4_dws.casinoweb.managers.BetManager;
-import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
-import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
-import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
-import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.managers.CSRFManager;
 import com.casino.grupo4_dws.casinoweb.security.CSRFValidator;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +17,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class GamesController {
@@ -54,8 +42,6 @@ public class GamesController {
     private GameMapper gameMapper;
     @Autowired
     private UserManager userManager;
-    @Autowired
-    private BetManager betManager;
 
     @PostConstruct
     public void init() {
@@ -68,10 +54,10 @@ public class GamesController {
 
     @GetMapping("/NGames")
     public String showGames(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -92,10 +78,10 @@ public class GamesController {
 
     @GetMapping("/NGames/mostLiked")
     public String mostLiked(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -117,10 +103,10 @@ public class GamesController {
 
     @GetMapping("/NGames/liked")
     public String liked(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -144,10 +130,10 @@ public class GamesController {
 
     @GetMapping("/add")
     public String addGameForm(Model model, HttpSession session, HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
@@ -160,7 +146,7 @@ public class GamesController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if(!userManager.isAdmin(userOp.get())) {
+        if (!userManager.isAdmin(userOp.get())) {
             return "redirect:/login";
         }
         model.addAttribute("newGame", new Game());
@@ -187,7 +173,7 @@ public class GamesController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if(!userManager.isAdmin(userOp.get())) {
+        if (!userManager.isAdmin(userOp.get())) {
             return "redirect:/login";
         }
         try {
@@ -197,7 +183,7 @@ public class GamesController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/add";
         }
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         return "redirect:/NGames";
     }
 
@@ -219,7 +205,7 @@ public class GamesController {
         if (userManager.isAdmin(user)) {
             try {
                 gameManager.deleteGame(id);
-                CSRFService.regenerateCSRFToken(request);
+                CSRFManager.regenerateCSRFToken(request);
                 return "redirect:/NGames";
             } catch (Exception e) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Error al borrar el juego: " + e.getMessage());
@@ -259,7 +245,7 @@ public class GamesController {
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         return "redirect:/game/" + id;
     }
 
@@ -294,19 +280,18 @@ public class GamesController {
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        CSRFService.regenerateCSRFToken(request);
+        CSRFManager.regenerateCSRFToken(request);
         return "redirect:/game/" + id;
     }
-
 
     @Transactional
     @GetMapping("/game/{id}")
     public String showGameDetails(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes,
                                   HttpServletRequest request) {
-        String csrfToken = CSRFService.getCSRFToken(request);
+        String csrfToken = CSRFManager.getCSRFToken(request);
         if (csrfToken == null) {
-            CSRFService.setCSRFToken(request);
-            csrfToken = CSRFService.getCSRFToken(request);
+            CSRFManager.setCSRFToken(request);
+            csrfToken = CSRFManager.getCSRFToken(request);
         }
 
         model.addAttribute("csrfToken", csrfToken);
