@@ -408,7 +408,8 @@ public class SessionController {
             CSRFManager.regenerateCSRFToken(request);
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Error al subir el documento.");
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/updateUser/" + userId;
         }
         return "redirect:/user";
     }

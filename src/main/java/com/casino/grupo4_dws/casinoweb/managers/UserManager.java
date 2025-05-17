@@ -11,6 +11,7 @@ import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.transaction.Transactional;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.mindrot.jbcrypt.BCrypt;
@@ -341,20 +342,70 @@ public class UserManager {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String fileName = document.getOriginalFilename();
+        // Validate an empty file
+        if (document.isEmpty()) {
+            throw new IllegalArgumentException("El archivo está vacío");
+        }
 
-        // Route based on the project's folders
+        // Validate file size (max 10MB)
+        if (document.getSize() > 10 * 1024 * 1024) {
+            throw new IllegalArgumentException("El archivo es demasiado grande. Máximo 10MB permitido");
+        }
+
+        // Validate MIME type
+        String contentType = document.getContentType();
+        if (contentType == null || !contentType.equals("application/pdf")) {
+            throw new IllegalArgumentException("Solo se permiten archivos PDF");
+        }
+
+        // Validate empty names
+        String fileName = document.getOriginalFilename();
+        if (fileName == null || fileName.isEmpty()) {
+            throw new IllegalArgumentException("Nombre de archivo inválido");
+        }
+
+        // Validate extension = .pdf
+        if (!fileName.toLowerCase().endsWith(".pdf")) {
+            throw new IllegalArgumentException("El archivo debe ser un PDF");
+        }
+
+        // Create dir if it doesnt exist
         String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
         File directory = new File(uploadDir);
         if (!directory.exists()) {
-            directory.mkdirs();  // Creates de directory if it doesn't exist
+            if (!directory.mkdirs()) {
+                throw new IOException("No se pudo crear el directorio de uploads");
+            }
         }
 
+        // Create the file
         File dest = new File(directory, fileName);
+        
+        // Verify the name isn't repeated
+        if (dest.exists()) {
+            throw new IllegalArgumentException("Ya existe un archivo con ese nombre");
+        }
+
+        // Transfer the file
         document.transferTo(dest);
 
-        user.setDocumentPath(dest.getAbsolutePath()); // Save the URL for future accesses
+        // Validate PDF structure
+        if (!isValidPDF(dest)) {
+            dest.delete(); // Delete invalid file
+            throw new IllegalArgumentException("El archivo no es un PDF válido o está corrupto");
+        }
+
+        // Save the route to the user path
+        user.setDocumentPath("uploads" + File.separator + fileName);
         userRepo.save(user);
+    }
+
+    private boolean isValidPDF(File file) {
+        try (PDDocument document = PDDocument.load(file)) {
+            return !document.isEncrypted();
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public String getUserDocumentPath(long userId) {
