@@ -82,8 +82,12 @@ public class PrizeManager {
                 .orElseThrow(() -> new RuntimeException("Prize not found with id: " + id));
         Prize updatedPrize = prizeMapper.toEntity(updatedPrizeDTO);
 
-        prize.setTitle(updatedPrize.getTitle());
-        prize.setDescription(updatedPrize.getDescription());
+        if(updatedPrize.getTitle() != null){
+            prize.setTitle(updatedPrize.getTitle());
+        }
+        if(updatedPrize.getDescription() != null){
+            prize.setDescription(updatedPrize.getDescription());
+        }
         prize.setPrice(updatedPrize.getPrice());
 
         if (imageFile != null && !imageFile.isEmpty()) {

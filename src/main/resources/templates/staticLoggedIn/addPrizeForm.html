@@ -59,6 +59,7 @@
                     <span th:text="${errorMessage}"></span>
                 </div>
                 <div>
+                    <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                     <button type="submit" class="golden-button">Crear Recompensa</button>
                 </div>
             </form>

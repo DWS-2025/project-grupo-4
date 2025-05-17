@@ -6,7 +6,11 @@ import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.managers.PrizeManager;
+import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.security.CSRFValidator;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -44,7 +48,15 @@ public class PrizeController {
 
     //Done
     @GetMapping("/prizes")
-    public String showPrizes(Model model, HttpSession session) {
+    public String showPrizes(Model model, HttpSession session, HttpServletRequest request) {
+        String csrfToken = CSRFService.getCSRFToken(request);
+        if (csrfToken == null) {
+            CSRFService.setCSRFToken(request);
+            csrfToken = CSRFService.getCSRFToken(request);
+        }
+
+        model.addAttribute("csrfToken", csrfToken);
+
         model.addAttribute("prizes", prizeManager.findAllPrizes());
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
@@ -77,7 +89,15 @@ public class PrizeController {
     }
 
     @GetMapping("/addPrize")
-    public String addGameForm(Model model, HttpSession session) {
+    public String addGameForm(Model model, HttpSession session, HttpServletRequest request) {
+        String csrfToken = CSRFService.getCSRFToken(request);
+        if (csrfToken == null) {
+            CSRFService.setCSRFToken(request);
+            csrfToken = CSRFService.getCSRFToken(request);
+        }
+
+        model.addAttribute("csrfToken", csrfToken);
+
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             return "redirect:/login";
@@ -95,7 +115,14 @@ public class PrizeController {
 
     @PostMapping("/addPrize")
     public String addPrize(@ModelAttribute("newPrize") Prize newPrize, @RequestParam("imageFile") MultipartFile imageFile,
-                           HttpSession session) throws IOException, SQLException {
+                           HttpSession session, HttpServletRequest request, HttpServletResponse response,
+                           RedirectAttributes redirectAttributes) throws IOException, SQLException {
+
+        if (!CSRFValidator.validateCSRFToken(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            redirectAttributes.addFlashAttribute("errorMessage", "CSRF token invalid");
+            return "redirect:/addPrize";
+        }
 
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
@@ -109,11 +136,19 @@ public class PrizeController {
             return "redirect:/login";
         }
         prizeManager.savePrize(newPrize, imageFile);
+        CSRFService.regenerateCSRFToken(request);
         return "redirect:/prizes";
     }
 
     @PostMapping("/deletePrize/{id}")
-    public String deletePrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String deletePrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes,
+                              HttpServletRequest request, HttpServletResponse response) {
+        if (!CSRFValidator.validateCSRFToken(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            redirectAttributes.addFlashAttribute("errorMessage", "CSRF token invalid");
+            return "redirect:/prizes";
+        }
+
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             return "redirect:/login";
@@ -135,6 +170,7 @@ public class PrizeController {
             try{
                 prizeManager.deletePrize(id);
                 redirectAttributes.addFlashAttribute("errorMessage", "Prize eliminado correctamente");
+                CSRFService.regenerateCSRFToken(request);
                 return "redirect:/prizes";
             } catch (IllegalArgumentException e){
                 redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -147,7 +183,15 @@ public class PrizeController {
     }
 
     @GetMapping("/editPrize/{id}")
-    public String editPrize(Model model, @PathVariable int id, HttpSession session) {
+    public String editPrize(Model model, @PathVariable int id, HttpSession session, HttpServletRequest request) {
+        String csrfToken = CSRFService.getCSRFToken(request);
+        if (csrfToken == null) {
+            CSRFService.setCSRFToken(request);
+            csrfToken = CSRFService.getCSRFToken(request);
+        }
+
+        model.addAttribute("csrfToken", csrfToken);
+
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             return "redirect:/login";
@@ -171,7 +215,15 @@ public class PrizeController {
     @PostMapping("/updatePrize/{id}")
     public String updatePrize(@ModelAttribute("prize") PrizeDTO updatedPrize, @PathVariable int id,
                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-                              Model model, HttpSession session) throws IOException {
+                              Model model, HttpSession session,
+                              HttpServletRequest request, HttpServletResponse response,
+                              RedirectAttributes redirectAttributes) throws IOException {
+
+        if (!CSRFValidator.validateCSRFToken(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            redirectAttributes.addFlashAttribute("errorMessage", "CSRF token invalid");
+            return "redirect:/editPrize/" + id;
+        }
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             return "redirect:/login";
@@ -185,12 +237,19 @@ public class PrizeController {
         }
         prizeManager.updatePrizeDetails(updatedPrize, id, imageFile);
         model.addAttribute("prizes", prizeManager.findAllPrizes());
+        CSRFService.regenerateCSRFToken(request);
         return "redirect:/prizes";
     }
 
 
     @PostMapping("/buy/{id}")
-    public String buyPrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String buyPrize(@PathVariable int id, Model model, HttpSession session, RedirectAttributes redirectAttributes,
+                           HttpServletRequest request, HttpServletResponse response) {
+        if (!CSRFValidator.validateCSRFToken(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            redirectAttributes.addFlashAttribute("errorMessage", "CSRF token invalid");
+            return "redirect:/prizes";
+        }
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para comprar un premio.");
@@ -212,6 +271,7 @@ public class PrizeController {
         try {
             userManager.buyPrize(prize, userdto);
             redirectAttributes.addFlashAttribute("successMessage", "¡Compra realizada con éxito!");
+            CSRFService.regenerateCSRFToken(request);
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }

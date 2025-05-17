@@ -305,6 +305,7 @@
                     <span th:text="${errorMessage}"></span>
                 </div>
                 <center>
+                    <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                 <div>
                     <button type="submit">Crear Juego</button>
                 </div>

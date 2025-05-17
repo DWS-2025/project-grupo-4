@@ -31,8 +31,7 @@
   <header>
     <div id="GameTitles">
       <h1>Edita tu información</h1>
-      <p>Modifica el formulario para editar tus datos. Si no deseas modificar un campo
-      déjalo igual.</p>
+      <p>Modifica el formulario para editar tus datos. Si no deseas modificar un campo no lo modifiques.</p>
     </div>
   </header>
 
@@ -49,11 +48,18 @@
           <input type="password" id="password" th:field="*{password}">
         </div>
         <div>
+          <input type="hidden" name="csrfToken" th:value="${csrfToken}">
           <button type="submit" class="golden-button">Guardar Cambios</button>
         </div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+          <span th:text="${errorMessage}"></span>
+        </div>
       </form>
+      <br>
       <form th:action="@{/users/{id}/upload-document(id=${id})}" method="post" enctype="multipart/form-data">
-        <input type="file" name="document" accept="application/pdf"/>
+        <label for="dni">Carga tu DNI (PDF):</label>
+        <input type="file" id="dni" name="document" accept="application/pdf"/>
+        <input type="hidden" name="csrfToken" th:value="${csrfToken}">
         <button type="submit">Subir DNI</button>
       </form>
 

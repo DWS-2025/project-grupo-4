@@ -7,6 +7,11 @@ import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.managers.BetManager;
+import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import com.casino.grupo4_dws.casinoweb.security.CSRFValidator;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import com.casino.grupo4_dws.casinoweb.model.User;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
@@ -16,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -31,7 +37,14 @@ public class BetController {
 
     // ENDPOINT TO PLACE A BET
     @PostMapping("/playGame/{id}")
-    public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmount") int amout, RedirectAttributes redirectAttributes) {
+    public String playGame(@PathVariable int id, Model model, HttpSession session, @RequestParam("playedAmount") int amout, RedirectAttributes redirectAttributes,
+                           HttpServletRequest request, HttpServletResponse response) {
+        if (!CSRFValidator.validateCSRFToken(request)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            redirectAttributes.addFlashAttribute("errorMessage", "CSRF token invalid");
+            return "redirect:/game/" + id;
+        }
+
         Integer userId = (Integer) session.getAttribute("user");
         if (userId == null) {
             return "redirect:/login";
@@ -57,6 +70,7 @@ public class BetController {
                 }
                 // Update user in session
                 redirectAttributes.addFlashAttribute("status", betManager.getStatusDTO(bet));
+                CSRFService.regenerateCSRFToken(request);
 
             } catch (IllegalArgumentException e) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Ha ocurrido un error: " + e.getMessage());
@@ -69,57 +83,57 @@ public class BetController {
 
         return "redirect:/game/" + id;
     }
-
-
-    @PostMapping("/deleteBet/{id}")
-    public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        Integer userId = (Integer) session.getAttribute("user");
-        if (userId == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para realizar esta acción");
-            return "redirect:/login";
-        }
-        Optional<UserDTO> userOp = userManager.findById(userId);
-        if (userOp.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
-            return "redirect:/login";
-        }
-        Optional<BetDTO> bet = betManager.findById(id);
-        if (bet.isPresent()) {
-            try {
-                betManager.deleteBet(bet.get(), userOp.get());
-                redirectAttributes.addFlashAttribute("successMessage", "Apuesta eliminada correctamente");
-            } catch (IllegalArgumentException e) {
-                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "La apuesta no existe");
-        }
-        return "redirect:/user";
-    }
-
-    @PostMapping("/hideBet/{id}")
-    public String hideBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        Integer userId = (Integer) session.getAttribute("user");
-        if (userId == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para realizar esta acción");
-            return "redirect:/login";
-        }
-        Optional<UserDTO> userOp = userManager.findById(userId);
-        if (userOp.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
-            return "redirect:/login";
-        }
-        Optional<BetDTO> bet = betManager.findById(id);
-        if (bet.isPresent()) {
-            try {
-                betManager.hideBet(bet.get(), userOp.get());
-                redirectAttributes.addFlashAttribute("successMessage", "Apuesta eliminada correctamente");
-            } catch (IllegalArgumentException e) {
-                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "La apuesta no existe");
-        }
-        return "redirect:/user";
-    }
 }
+
+//    @PostMapping("/deleteBet/{id}")
+//    public String deleteBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
+//        Integer userId = (Integer) session.getAttribute("user");
+//        if (userId == null) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para realizar esta acción");
+//            return "redirect:/login";
+//        }
+//        Optional<UserDTO> userOp = userManager.findById(userId);
+//        if (userOp.isEmpty()) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
+//            return "redirect:/login";
+//        }
+//        Optional<BetDTO> bet = betManager.findById(id);
+//        if (bet.isPresent()) {
+//            try {
+//                betManager.deleteBet(bet.get(), userOp.get());
+//                redirectAttributes.addFlashAttribute("successMessage", "Apuesta eliminada correctamente");
+//            } catch (IllegalArgumentException e) {
+//                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+//            }
+//        } else {
+//            redirectAttributes.addFlashAttribute("errorMessage", "La apuesta no existe");
+//        }
+//        return "redirect:/user";
+//    }
+//
+//    @PostMapping("/hideBet/{id}")
+//    public String hideBet(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
+//        Integer userId = (Integer) session.getAttribute("user");
+//        if (userId == null) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Debes iniciar sesión para realizar esta acción");
+//            return "redirect:/login";
+//        }
+//        Optional<UserDTO> userOp = userManager.findById(userId);
+//        if (userOp.isEmpty()) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado");
+//            return "redirect:/login";
+//        }
+//        Optional<BetDTO> bet = betManager.findById(id);
+//        if (bet.isPresent()) {
+//            try {
+//                betManager.hideBet(bet.get(), userOp.get());
+//                redirectAttributes.addFlashAttribute("successMessage", "Apuesta eliminada correctamente");
+//            } catch (IllegalArgumentException e) {
+//                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+//            }
+//        } else {
+//            redirectAttributes.addFlashAttribute("errorMessage", "La apuesta no existe");
+//        }
+//        return "redirect:/user";
+//    }
+//}

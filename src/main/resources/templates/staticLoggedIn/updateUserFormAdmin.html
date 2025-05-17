@@ -75,7 +75,11 @@
           </div>
         </div>
         <div>
+          <input type="hidden" name="csrfToken" th:value="${csrfToken}">
           <button type="submit" class="golden-button">Guardar Cambios</button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+          <span th:text="${errorMessage}"></span>
         </div>
       </form>
     </div>

@@ -40,8 +40,10 @@
 
     <main>
         <div id="add-game-form">
-            <form th:action="@{/updatePrize/{id}(id=${prize.getId()})}" th:object="${prize}" method="post"
+            <form th:action="@{/updatePrize/{id}(id=${prize.id()})}" th:object="${prize}" method="post"
                   enctype="multipart/form-data">
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{owner}" />
                 <div>
                     <label for="name">Nombre:</label>
                     <input type="text" id="name" th:field="*{title}" required>
@@ -52,7 +54,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="imageFile">Imagen:</label>
-                    <img th:src="${prize.getImage()}" height="35%" width="35%">
+                    <img th:if="${prize.id() != null}" th:src="@{'/prize/' + ${prize.id()} + '/image'}" height="35%" width="35%">
                     <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
                 </div>
                 <div>
@@ -60,9 +62,13 @@
                     <input type="number" id="minAge" th:field="*{price}" required>
                 </div>
                 <div>
+                    <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                     <button type="submit" class="golden-button">Guardar Cambios</button>
                 </div>
             </form>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+                <span th:text="${errorMessage}"></span>
+            </div>
         </div>
     </main>
 

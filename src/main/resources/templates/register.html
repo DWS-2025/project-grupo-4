@@ -41,7 +41,7 @@
                     <label for="pass">Contraseña</label>
                     <input type="password" id="pass" name="loginPassword" required>
                 </div>
-
+                <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                 <button type="submit" class="golden-button login-button">Registrarse</button>
             </form>
             <center>

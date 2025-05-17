@@ -3,6 +3,8 @@ package com.casino.grupo4_dws.casinoweb.controllers;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.managers.UserManager;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
+import com.casino.grupo4_dws.casinoweb.security.CSRFService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,14 @@ public class AdminController {
     private UserMapper userMapper;
 
     @GetMapping("/admin")
-    public String showAdminPanel(Model model, HttpSession session) {
+    public String showAdminPanel(Model model, HttpSession session, HttpServletRequest request) {
+        String csrfToken = CSRFService.getCSRFToken(request);
+        if (csrfToken == null) {
+            CSRFService.setCSRFToken(request);
+            csrfToken = CSRFService.getCSRFToken(request);
+        }
+
+        model.addAttribute("csrfToken", csrfToken);
         Integer userId = (Integer) session.getAttribute("user");
 
         if (userId == null) {

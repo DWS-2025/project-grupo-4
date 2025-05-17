@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
+    <meta name="csrfToken" th:content="${csrfToken}" />
 </head>
 <body th:attr="data-is-admin=${user.isadmin()}">
 <div class="transparent-container">
@@ -108,12 +109,15 @@
                 <p class="prize-price" th:text="${prize.price() + ' $'}">Precio</p>
                 <form th:action="@{'/buy/' + ${prize.id()}}" method="post">
                     <button type="submit" class="golden-button">Comprar</button>
+                    <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                 </form>
                 <form th:if="${user.isadmin()}" th:action="@{'/editPrize/' + ${prize.id()}}" method="get">
                     <button type="submit" class="golden-button">Editar Recompensa</button>
+                    <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                 </form>
                 <form th:if="${user.isadmin()}" th:action="@{'/deletePrize/' + ${prize.id()}}" method="post">
                     <button type="submit" class="golden-button">Eliminar Recompensa</button>
+                    <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                 </form>
             </div>
         </div>
@@ -244,10 +248,18 @@
         const buttonsContainer = document.createElement('div');
         buttonsContainer.className = 'prize-buttons';
 
-        // Buy button (visible para todos)
+        // Obtener el token CSRF desde los meta tags
+        const csrfToken = document.querySelector('meta[name="csrfToken"]').getAttribute('content');
+
+        // Formulario de Comprar
         const buyForm = document.createElement('form');
         buyForm.action = `/buy/${prize.id}`;
         buyForm.method = 'post';
+        const buyInput = document.createElement('input');
+        buyInput.type = 'hidden';
+        buyInput.name = 'csrfToken';
+        buyInput.value = csrfToken;
+        buyForm.appendChild(buyInput);
         const buyButton = document.createElement('button');
         buyButton.type = 'submit';
         buyButton.className = 'golden-button';
@@ -255,14 +267,19 @@
         buyForm.appendChild(buyButton);
         buttonsContainer.appendChild(buyForm);
 
-        // Verificar si el usuario es admin (usando Thymeleaf)
+        // Verificar si el usuario es admin
         const isAdmin = document.body.getAttribute('data-is-admin') === 'true';
 
-        // Edit button (solo para admin)
+        // Formulario de Editar (solo para admin)
         if (isAdmin) {
             const editForm = document.createElement('form');
             editForm.action = `/editPrize/${prize.id}`;
             editForm.method = 'get';
+            const editInput = document.createElement('input');
+            editInput.type = 'hidden';
+            editInput.name = 'csrfToken';
+            editInput.value = csrfToken;
+            editForm.appendChild(editInput);
             const editButton = document.createElement('button');
             editButton.type = 'submit';
             editButton.className = 'golden-button';
@@ -271,11 +288,16 @@
             buttonsContainer.appendChild(editForm);
         }
 
-        // Delete button (solo para admin)
+        // Formulario de Eliminar (solo para admin)
         if (isAdmin) {
             const deleteForm = document.createElement('form');
             deleteForm.action = `/deletePrize/${prize.id}`;
             deleteForm.method = 'post';
+            const deleteInput = document.createElement('input');
+            deleteInput.type = 'hidden';
+            deleteInput.name = 'csrfToken';
+            deleteInput.value = csrfToken;
+            deleteForm.appendChild(deleteInput);
             const deleteButton = document.createElement('button');
             deleteButton.type = 'submit';
             deleteButton.className = 'golden-button';
@@ -288,6 +310,7 @@
 
         return section;
     }
+
 </script>
 <style>
     .text-center.mt-4.mb-4 {

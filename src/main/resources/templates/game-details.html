@@ -139,6 +139,7 @@
                         <!-- Form to ADD to favorites -->
                         <form th:if="${game != null and user != null and !isFavorite}"
                               th:action="@{/user/favourites/add/{id}(id=${game.id()})}" method="post">
+                            <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                             <label class="container">
                                 <input type="checkbox" th:value="${game.id()}" onchange="this.form.submit()">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -150,6 +151,7 @@
                         <!-- Form to REMOVE from favorites -->
                         <form th:if="${game != null and user != null and isFavorite}"
                               th:action="@{/user/favourites/remove/{id}(id=${game.id()})}" method="post">
+                            <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                             <label class="container">
                                 <input type="checkbox" th:value="${game.id()}" onchange="this.form.submit()" checked>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -171,6 +173,7 @@
         <center>
             <form th:if="${game != null and user != null and user.userName() != null}"
                   th:action="@{/playGame/{id}(id=${game.id()})}" method="post">
+                <input type="hidden" name="csrfToken" th:value="${csrfToken}">
             <label for="playedAmount"></label>
                 <input type="number" id="playedAmount" name="playedAmount" min="0" max="2147483647" oninput="validity.valid||(value='');" required>
                 <button class="golden-button" type="submit">Jugar</button>

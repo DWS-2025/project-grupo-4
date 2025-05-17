@@ -81,8 +81,11 @@
 </div>
 
 <div id="Welcome">
-  <h1 class="golden-subtitle">Hola, admin <span th:text="${user.userName()}"></span></h1>
+  <h1 class="golden-subtitle">Hola, admin: <span th:text="${user.userName()}"></span></h1>
   <p>Desde aquí puedes gestionar a los usuarios del sistema.</p>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+  <span th:text="${errorMessage}"></span>
 </div>
 
 <div class="backpack">
@@ -91,6 +94,7 @@
       <h2 th:text="${user.userName()}"></h2>
       <p>Saldo: <span th:text="${user.money()}"></span> $</p>
       <form th:action="@{'/deleteUser/' + ${user.id()}}" method="post">
+        <input type="hidden" name="csrfToken" th:value="${csrfToken}">
         <button type="submit" class="golden-button">Eliminar Usuario</button>
       </form>
       <form th:action="@{'/updateUserAdmin/' + ${user.id()}}" method="get">

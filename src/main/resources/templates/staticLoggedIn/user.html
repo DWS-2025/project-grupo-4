@@ -38,6 +38,7 @@
                         <button type="submit" class="button item">Actualizar Info</button>
                     </form>
                     <form th:action="@{'/autodeleteUser'}" method="post">
+                        <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                         <button type="submit" class="button item">Borrar Cuenta</button>
                     </form>
                     <li class="button item">
@@ -88,7 +89,7 @@
                 <button role="button"
                         class="golden-button"
                         th:onclick="|window.open('/users/${user.id}/view-document', '_blank')|">
-                    <span class="golden-text">Descargar Documento</span>
+                    <span class="golden-text">Ver mi DNI</span>
                 </button>
             </div>
         </ul>
@@ -114,6 +115,7 @@
             <p th:text="${item.description()}"></p>
             <img th:if="${item.image()}" th:src="@{/prize/{id}/image(id=${item.id()})}" alt="Prize Img" class="prize-image" width="230" height="230">
             <form th:action="@{'/deletePrize/' + ${item.id()}}" method="post">
+                <input type="hidden" name="csrfToken" th:value="${csrfToken}">
                 <button type="submit" class="golden-button">Eliminar Recompensa</button>
             </form>
         </section>
