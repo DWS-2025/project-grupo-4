@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 
 import java.sql.Blob;
 
-import java.sql.Blob;
-
 @Entity
 public class Prize {
     @Id

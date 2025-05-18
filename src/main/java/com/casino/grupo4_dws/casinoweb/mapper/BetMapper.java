@@ -34,6 +34,7 @@ public abstract class BetMapper {
     public abstract List<Bet> toEntityList(List<BetDTO> betDTOs);
 
     // --- Methods for mapping ---
+    // These are required due to the DTOs having only the IDs of their associated database relations to evade circular references
     @Named("gamesToId")
     public int gamesToId(Game game) {
         if (game == null) return 0;

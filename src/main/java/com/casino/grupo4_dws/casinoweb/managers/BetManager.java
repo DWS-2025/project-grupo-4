@@ -64,11 +64,22 @@ public class BetManager {
         boolean win = playGame(bet);
 
         if (win) {
-            int revenue = amount * game.getMultiplier();
-            bet.setRevenue(revenue);
-            if (player.getMoney() + revenue < 2147483647) {
-                player.setMoney(player.getMoney() + revenue);
+            int revenue;
+            try {
+                revenue = Math.multiplyExact(amount, game.getMultiplier());
+            } catch (ArithmeticException e) {
+                throw new IllegalArgumentException("La apuesta es demasiado alta y causa un overflow.");
             }
+
+            bet.setRevenue(revenue);
+
+            try {
+                int newBalance = Math.addExact(player.getMoney(), revenue);
+                player.setMoney(newBalance);
+            } catch (ArithmeticException e) {
+                throw new IllegalArgumentException("El balance resultante causaría un overflow.");
+            }
+
             bet.setStatus(true);
         } else {
             bet.setRevenue(0);
