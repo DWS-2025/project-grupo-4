@@ -44,7 +44,7 @@ public class PrizesAPI {
     private JWTManager jwtManager;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllPrizes(Pageable pageable, String title, int minPrice, int maxPrice) {
+    public ResponseEntity<?> getAllPrizes(Pageable pageable) {
 
         try {
             Page<Prize> prizePage = prizeManager.findAllPrizes(pageable);
