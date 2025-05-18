@@ -14,10 +14,15 @@ import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
 import io.jsonwebtoken.Claims;
 import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -197,5 +202,56 @@ public class SessionAPI {
         String token = jwtToken.replace("Bearer ", "");
         return ResponseEntity.ok(jwtManager.verifyToken(token));
     }
+    @PostMapping("/{id}/document")
+    public ResponseEntity<String> uploadDocument(@RequestHeader("Authorization") String jwtToken,
+                                                 @PathVariable("id") int userId,
+                                                 @RequestParam("document") MultipartFile document) {
+        String token = jwtManager.extractTokenFromHeader(jwtToken);
+
+        if (!jwtManager.tokenHasPermission(token, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para subir documentos para este usuario.");
+        }
+
+        try {
+            userManager.saveUserDocument(userId, document);
+            return ResponseEntity.ok("Documento subido con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir el documento: " + e.getMessage());
+        }
+    }
+    @GetMapping("/{id}/document")
+    public ResponseEntity<byte[]> viewDocument(@RequestHeader("Authorization") String jwtToken,
+                                               @PathVariable("id") int userId) {
+        String token = jwtManager.extractTokenFromHeader(jwtToken);
+
+        if (!jwtManager.tokenHasPermission(token, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        try {
+            String documentPath = userManager.getUserDocumentPath(userId);
+            File file = new File(documentPath);
+
+            if (!file.exists() || !file.canRead()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+
+            String contentType = Files.probeContentType(file.toPath());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"")
+                    .body(fileContent);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }
