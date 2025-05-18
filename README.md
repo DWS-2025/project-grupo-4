@@ -76,7 +76,14 @@ https://github.com/DWS-2025/project-grupo-4/commit/e953425ee30253e0bc2673e9288ab
 https://github.com/DWS-2025/project-grupo-4/commit/f18597611099773882efb05d129591e9be582098 (4) Version beta de admin panel
 https://github.com/DWS-2025/project-grupo-4/commit/7885488f16a28ae2b6d8015d377f9992287807fa (5) PreAlpha de admin panel
 
-# Saúl
+# Saúl entrega 3
+https://github.com/DWS-2025/project-grupo-4/commit/c121cd1321efaf783dfec70d53632e8f8a527963 (1) Mejoras de manejo y seguridad en el servicio para gestionar guardado de usuarios.
+https://github.com/DWS-2025/project-grupo-4/commit/188834307a302067cb97d6ab434eb49075d19bdd (2) Los propios usuarios (y admins) pueden modificar sus recursos desde la API.
+https://github.com/DWS-2025/project-grupo-4/commit/b6ac170c22555c369ea2ef1a44ee34138e70a9e9 (3) Uso de BCript para hashear las passwords en la BBDD. 
+https://github.com/DWS-2025/project-grupo-4/commit/80409282099a22dca6a1a68d5dad9e18bfc66887 (4) Acceso a API securizada por JWT.
+https://github.com/DWS-2025/project-grupo-4/commit/594adaaac3e45cb2116013021fafa1e23379b10e (5) Gestión de tokens JWT.
+
+# Saúl entrega 2
 [d9cd015](1) Desarrollo de todas las API en paralelo a la implementación de los DTO para asegurar una transmisión de entidades segura. 
 
 [24029b6](2) Primer paso en el desarrollo de los DTO, creación de las clases DTO y sus respectivos Mappers con mapStruct.
