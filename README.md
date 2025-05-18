@@ -47,7 +47,7 @@ Disclaimer: todos los integrantes hemos participado activamente en el desarrollo
 resumir todo en 5 commits. Muchos commits se han hecho varias veces para arreglar un pequeño error o optimizar algo. Cabe destacar
 que todos hemos participado activamente en la solucion de errores de todo el codigo, por ello 5 commits se hace demasiado corto
 como para englobar el trabajo individual de cada participante.
-# Andrés
+# Andrés: Top 5 commits entrega 2
 [1. Reforma del backend](https://github.com/DWS-2025/project-grupo-4/commit/50d87590183f5885da2915bf7eeab873558ea761) Reforma de la estructura de la aplicación debido a un mal diseño. 
 
 [2. DTOs y Mappers corregidos](https://github.com/DWS-2025/project-grupo-4/commit/10afaba9b00ea3636c356ee09307921107fbdc38) Elemento importante para garantizar la securización de la información y el manejo de entidades. 
@@ -57,6 +57,18 @@ como para englobar el trabajo individual de cada participante.
 [4. Implementación de la búsqueda dinámica](https://github.com/DWS-2025/project-grupo-4/commit/f781b186390b185e081cc4da499648b70cf003a7) Establece una de las funcionalidades extras para la entrega 2. 
 
 [5. Login y Logout](https://github.com/DWS-2025/project-grupo-4/commit/bdf73844db0a6fe94a1cc97d0905e84c456044a5) Establece sesiones de usuarios con Usuario y Contraseña, además de registros y un par de restricciones sencillas para evitar errores, como que no puede haber dos usuarios con nombre repetido. 
+
+# Andrés: Top 5 commits entrega 3
+[1. Tokens CSRF](https://github.com/DWS-2025/project-grupo-4/commit/ab18c1d622f7e80f6131268eb12e754be03206a0) Añadidos tokens anti-CSRF en los formularios gestionados por los controladores GET para los POST
+
+[2. Implementación de texto enriquecido](https://github.com/DWS-2025/project-grupo-4/commit/6bcc7a8ee6c4a4af6df1042639a0b8c4b6f24e82) Introducido texto enriquecido para las descripciones de los juegos. Se sanitiza con una librería al insertar en la base de datos.
+
+[3. HTTPS](https://github.com/DWS-2025/project-grupo-4/commit/2247338892e36bbc931e1bcecbcf6a5459860551) Integrado el certificado autofirmado para establecer una seguridad HTTPS, esencial para cifrar datos.
+
+[4. Arreglo búsqueda dinámica](https://github.com/DWS-2025/project-grupo-4/commit/8128521737235bea012e9305f3ebfdf7b9992418) Funcionalidad esencial y necesaria de la entrega anterior que no funcionaba debido a que chocaba el script de la paginación contra la llamada dinámica que debía ser también a la API.
+
+[5. Modificar Info de usuario](https://github.com/DWS-2025/project-grupo-4/commit/dc634939511bd2460575fc3414f4d7f54fc0748d) Funcionalidad para que un usuario logeado pueda modificar su contraseña y su usuario, que más adelante sirvió para el edit user del admin. En un principio este commit tenía errores por cómo actualizaba la información y cómo mostraba la información, pero fueron arreglados en actualizaciones posteriores.
+
 # Adrián
 [4de9f96548f6d873f38a6f597ab46d31cfe4c576](1) Solucion de errores en apartado de recompensas, para que la paginacion funcione y el mostrado de premios, a la vez que los gets funcionen tambien
 [b4644b64acdfa83a3e77960e5495df6833cc92a3](2) Solucion de errores haciendo el get en /api/Prizes
