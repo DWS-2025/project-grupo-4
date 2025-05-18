@@ -380,7 +380,7 @@ public class UserManager {
 
         // Create the file
         File dest = new File(directory, fileName);
-        
+
         // Verify the name isn't repeated
         if (dest.exists()) {
             throw new IllegalArgumentException("Ya existe un archivo con ese nombre");
@@ -414,7 +414,7 @@ public class UserManager {
         return user.getDocumentPath(); // Already a String
     }
 
-    public List<PrizeDTO> returnDTOInventory(UserDTO user){
+    public List<PrizeDTO> returnDTOInventory(UserDTO user) {
         return prizeMapper.toDTOList(userMapper.toEntity(user).getInventory());
     }
 }
