@@ -11,6 +11,9 @@ import com.casino.grupo4_dws.casinoweb.mapper.PrizeMapper;
 import com.casino.grupo4_dws.casinoweb.repos.PrizeRepository;
 import com.casino.grupo4_dws.casinoweb.managers.JWTManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,8 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.web.bind.annotation.RequestPart;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +47,12 @@ public class PrizesAPI {
 
     @Autowired
     private JWTManager jwtManager;
+
+    @Autowired
+    private UserManager userManager;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("")
     public ResponseEntity<?> getAllPrizes(Pageable pageable) {
@@ -184,19 +195,42 @@ public class PrizesAPI {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-/*
-    // Buy prize
-    @PostMapping("/{id}/buy")
-    public ResponseEntity<?> buyPrize(@PathVariable int id, @RequestBody User user) {
-        Optional<PrizeDTO> prizeOpt = prizeManager.getPrizeById(id);
-        if (!prizeOpt.isPresent()) {
-            return ResponseEntity.notFound().build();
+
+//    // Buy prize
+//    @PostMapping("/{id}/buy")
+//    public ResponseEntity<?> buyPrize(@PathVariable int id, @RequestBody User user) {
+//        Optional<PrizeDTO> prizeOpt = prizeManager.getPrizeById(id);
+//        if (!prizeOpt.isPresent()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        try {
+//            UserDTO boughtPrize = userManager.buyPrize(prizeOpt.get() , userMapper.toDTO(user));
+//            return ResponseEntity.ok(boughtPrize);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+    @GetMapping("/prize/{id}/image")
+    public ResponseEntity<Resource> downloadImage(@PathVariable int id) throws SQLException {
+    Optional<PrizeDTO> optionalPrizeDTO = prizeManager.getPrizeById(id);
+
+        if (optionalPrizeDTO.isPresent()) {
+        Prize prize = prizeMapper.toEntity(optionalPrizeDTO.get());
+        Blob imageBlob = prize.getImage();
+
+            if (imageBlob != null) {
+                InputStream inputStream = imageBlob.getBinaryStream();
+                Resource resource = new InputStreamResource(inputStream);
+
+                return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"prize_" + id + ".jpg\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                    .contentLength(imageBlob.length())
+                    .body(resource);
         }
-        try {
-            UserDTO boughtPrize = userManager.buyPrize(prizeOpt.get() , userMapper.toDTO(user));
-            return ResponseEntity.ok(boughtPrize);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }*/
+    }
+
+        return ResponseEntity.notFound().build();
+}
+
 }
