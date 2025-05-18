@@ -288,10 +288,10 @@ public class UserManager {
             throw new IllegalArgumentException("Ya existe un usuario con ese nombre");
         }
 
-        if (modification.getUserName() != null) {
+        if (modification.getUserName() != null && !modification.getUserName().isEmpty()) {
             modifiedUser.setUserName(modification.getUserName());
         }
-        if (modification.getPassword() != null) {
+        if (modification.getPassword() != null && !modification.getPassword().isEmpty()) {
             modifiedUser.setPassword(hashPassword(modification.getPassword()));
         }
         userRepo.save(modifiedUser);
@@ -301,10 +301,10 @@ public class UserManager {
         User modifiedUser = userRepo.getONEUserById(id).get();
         User modification = userMapper.toEntity(userDTO);
 
-        if (modification.getUserName() != null) {
+        if (modification.getUserName() != null && !modification.getUserName().isEmpty()) {
             modifiedUser.setUserName(modification.getUserName());
         }
-        if (modification.getPassword() != null) {
+        if (modification.getPassword() != null && !modification.getPassword().isEmpty()) {
             modifiedUser.setPassword(hashPassword(modification.getPassword()));
         }
         modifiedUser.setMoney(modification.getMoney());
@@ -412,5 +412,9 @@ public class UserManager {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return user.getDocumentPath(); // Already a String
+    }
+
+    public List<PrizeDTO> returnDTOInventory(UserDTO user){
+        return prizeMapper.toDTOList(userMapper.toEntity(user).getInventory());
     }
 }

@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.cdnfonts.com/css/casino" rel="stylesheet">
-    <title>Perfil de Usuario</title>
+    <title>Panel de Administrador</title>
 </head>
 <body>
 <div class="transparent-container">
@@ -16,34 +14,23 @@
                 tabindex="0"
                 class="popup button"
                 style="padding:0 0.225rem  0; border-top-right-radius: 1.2rem;
-    border-bottom-right-radius: 1.2rem;"
-        >
+    border-bottom-right-radius: 1.2rem;">
             <div class="popup-header">
                 <p
-                        style="letter-spacing: 1px; font-weight: 600;   padding: 0.625rem 0rem 0.625rem 0.825rem;"
-                        th:text="${user.userName()}"
+                        style="letter-spacing: 1px; font-weight: 600; padding: 0.625rem 0rem 0.625rem 0.825rem;"
+                        th:text="${activeUser.userName()}"
                 >
-                    User
+                    Admin
                 </p>
-
-                <img th:if="${user.isadmin() == false}" src="/images/casino-chip-sign-card-icon-simple-style-vector.jpg"
-                     alt="Foto de perfil"
-                     style="height: 32px; width: 32px; border-radius: 50%;">
-                <img th:if="${user.isadmin() == true}" src="/images/CasinoLaMielLogo.png" alt="Foto de perfil"
+                <img src="/images/CasinoLaMielLogo.png" alt="Foto admin"
                      style="height: 32px; width: 32px; border-radius: 50%;">
             </div>
 
             <div class="popup-main">
                 <ul class="list-box">
-                    <form th:action="@{'/updateUser/' + ${user.id()}}" method="get">
-                        <button type="submit" class="button item">Actualizar Info</button>
-                    </form>
-                    <form th:action="@{'/autodeleteUser'}" method="post">
-                        <input type="hidden" name="csrfToken" th:value="${csrfToken}">
-                        <button type="submit" class="button item">Borrar Cuenta</button>
-                    </form>
+                    <li class="button item" onclick="location.href='/user'">Mi zona</li>
                     <li class="button item">
-                        Saldo: <span th:text="${user.money()}"></span>
+                        Saldo: <span th:text="${activeUser.money()}"></span>
                     </li>
                 </ul>
             </div>
@@ -60,11 +47,13 @@
         <div class="text">Logout</div>
     </button>
 </div>
+
 <div class="gold-text-container">
     <div class="gold-text">
         <h1>Casino La Miel</h1>
     </div>
 </div>
+
 <div id="container">
     <nav class="navbar">
         <ul class="menu">
@@ -72,46 +61,31 @@
                 <button role="button" class="golden-button" onclick="location.href='/'">
                     <span class="golden-text">INICIO</span>
                 </button>
-
                 <button role="button" class="golden-button" onclick="location.href='/NGames'">
                     <span class="golden-text">NUESTROS JUEGOS</span>
                 </button>
-
                 <button role="button" class="golden-button" onclick="location.href='/prizes'">
                     <span class="golden-text">RECOMPENSAS</span>
                 </button>
-            </li>
-            <li th:if="${user.isadmin()}">
                 <button role="button" class="golden-button" onclick="location.href='/admin'">
                     <span class="golden-text">ADMIN PANEL</span>
                 </button>
             </li>
-            <div th:if="${user.documentPath() != null and !#strings.isEmpty(user.documentPath())}">
-                <button role="button"
-                        class="golden-button"
-                        th:onclick="|window.open('/users/${user.id}/view-document', '_blank')|">
-                    <span class="golden-text">Ver mi DNI</span>
-                </button>
-            </div>
         </ul>
     </nav>
 </div>
+
 <div id="Welcome">
-    <h1 class="golden-subtitle">Hola, <span th:text="${user.userName()}"></span></h1>
-    <p>Aquí podras acceder a la información relacionada con tu cuenta, ya sea un historial de apuestas o el balance en $
-        que tienes.</p>
-    <img src="/images/vanilla.jpeg" alt="vanilla" width=512 height=512 id="vanilla"/>
-    <h1 class="golden-subtitle"> Tienes un total de <span th:text="${user.money()}"></span>$</h1>
-    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
-        <span th:text="${errorMessage}"></span>
-    </div>
+    <h1 class="golden-subtitle">Hola, admin: <span th:text="${activeUser.userName()}"></span></h1>
+    <h2>Desde aquí puedes gestionar los productos comprados de <span th:text="${userCheckInfo.userName()}"></span></h2>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="color: crimson">
+    <span th:text="${errorMessage}"></span>
 </div>
 
 <div class="backpack">
-    <h1>Mochila:</h1>
-    <h2 th:if="${inventory.isEmpty()}">No tienes ninguna recompensa comprada</h2>
     <div id="grid-container">
-        <section class="game-section" th:each="item : ${inventory}">
+        <section class="game-section" th:each="item : ${userCheckInventory}">
             <h2 th:text="${item.title()}"></h2>
             <p th:text="${item.description()}"></p>
             <img th:if="${item.image()}" th:src="@{/prize/{id}/image(id=${item.id()})}" alt="Prize Img"
@@ -123,19 +97,8 @@
         </section>
     </div>
 </div>
-
-<div class="backpack" id="BetHistory">
-    <h1>Historial de apuestas:</h1>
-    <div id="grid-container2">
-        <h2 th:if="${betHistory.isEmpty()}">Historial de apuestas vacío. ¿A qué esperas para jugar?</h2>
-        <section class="game-section" th:each="bet : ${betHistory}">
-            <p th:text="'Apuesta a '+${bet.gameTitle()}"></p>
-            <p th:text="'Cantidad de dinero jugada: '+${bet.amount()}+' $'"></p>
-            <p th:if="${bet.revenue() != 0}" th:text="'Ganancia: '+${bet.revenue()}+' $'"></p>
-            <h2 th:if="${bet.status()}" style="color: #4caf50">Ganada</h2>
-            <h2 th:if="${!bet.status()}" style="color: red">Perdida</h2>
-        </section>
-    </div>
-</div>
 </body>
+<footer class="footer">
+    <p>Copyright &copy; Casino La Miel | Design by Rústico González</p>
+</footer>
 </html>

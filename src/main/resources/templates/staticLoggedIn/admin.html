@@ -96,6 +96,11 @@
           <span class="golden-text">Ver documento</span>
         </button>
       </div>
+      <form th:action="@{'/admin/userInventory/' + ${user.id()}}" th:if="${!user.inventory().isEmpty()}" method="get">
+        <button role="button" class="golden-button">
+          <span class="golden-text">Ver su inventario</span>
+        </button>
+      </form>
       <form th:action="@{'/updateUserAdmin/' + ${user.id()}}" method="get">
         <button role="button" class="golden-button">
           <span class="golden-text">Gestionar usuario</span>
