@@ -121,7 +121,7 @@ public class PrizesAPI {
             if (prize.isPresent() && prizeMapper.toEntity(prize.get()) != null) {
                 return ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_JPEG)
-                        .body(prizeMapper.toEntity(prize.get()));
+                        .body(prizeMapper.toEntity(prize.get()).getImage());
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {

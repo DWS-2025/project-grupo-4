@@ -152,7 +152,7 @@ public class BetManager {
         var possibleBet = findById(id);
 
         if (possibleBet.isPresent()) {
-            Bet bet = betMapper.toEntity(possibleBet.get());
+            Bet bet = betMapper.toEntity(betDTO);
             bet.setId(id);
             betRepo.save(bet);
         } else {
