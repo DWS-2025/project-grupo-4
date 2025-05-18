@@ -14,7 +14,7 @@ Se trata de una página web de un casino digital donde puedes jugar diferentes a
 
 ## Aspectos Principales
 
-### Entidades y Diagrama
+### Entidades y Diagrama 🏛️
 
 Lista de entidades principales y sus relaciones:
 
@@ -26,7 +26,7 @@ Lista de entidades principales y sus relaciones:
 - **Usuario** → Relación 1:N con **Apuesta**
 - **Juego** → Relación 1:N con **Apuesta**
 
-### Permisos de los Usuarios
+### Permisos de los Usuarios 🧍
 
 | Tipo de Usuario | Permisos |
 |----------------|----------|
@@ -34,7 +34,7 @@ Lista de entidades principales y sus relaciones:
 | **Usuario Registrado** | Creación de sus propios datos y modificación de estos mediante los resultados de las apuestas |
 | **Invitado** | Acceso solo a información pública. No se puede jugar sin registrarse |
 
-### Imágenes
+### Imágenes 🖼️
 
 | Entidad | Asociadas |
 |---------|----------|
@@ -42,7 +42,7 @@ Lista de entidades principales y sus relaciones:
 | **Recompensa** | 1 imágenen por registro |
 | **Apuesta** | Sin imágenes |
 
-## Diversificación del desarrollo
+## Diversificación del desarrollo ⌨️
 Disclaimer: todos los integrantes hemos participado activamente en el desarrollo de la entrega de la practica, y es muy difícil
 resumir todo en 5 commits. Muchos commits se han hecho varias veces para arreglar un pequeño error o optimizar algo. Cabe destacar
 que todos hemos participado activamente en la solucion de errores de todo el codigo, por ello 5 commits se hace demasiado corto
@@ -88,7 +88,7 @@ como para englobar el trabajo individual de cada participante.
 [92f71a4](4) Este commit permitió representar las imagenes en bases de datos utilizando MultipartFile y Blob.
 
 
-## Instalación y Ejecución
+## Instalación y Ejecución 💻
 
 ```sh
 # Clonar el repositorio
