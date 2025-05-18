@@ -58,11 +58,11 @@ como para englobar el trabajo individual de cada participante.
 
 [5. Login y Logout](https://github.com/DWS-2025/project-grupo-4/commit/bdf73844db0a6fe94a1cc97d0905e84c456044a5) Establece sesiones de usuarios con Usuario y Contraseña, además de registros y un par de restricciones sencillas para evitar errores, como que no puede haber dos usuarios con nombre repetido. 
 # Adrián
-[4de9f96548f6d873f38a6f597ab46d31cfe4c576](1) Solucion de errores en apartado de recompensas, para que la paginacion funcione y el mostrado de premios, a la vez que los gets funcionen tambien
-[b4644b64acdfa83a3e77960e5495df6833cc92a3](2) Solucion de errores haciendo el get en /api/Prizes
-[d36cd265258c2dbaf9b7c60982c5c8cae7494478](3) Implementacion de BetsAPI en su primera version
-[21bdba2820d68135b3eccfc1d7524406887c72b9](4) Implementacion de GamesAPI en su primera version
-[85c9062a6015c843229a92684fbdb40bdef1aea8](5) Implementacion de PrizesAPI en su primera version
+https://github.com/DWS-2025/project-grupo-4/commit/1e92b0bcf1087e564ab43c9f23a2705cecd93a2b (1) Subida de fichero pdf completamente funcional
+https://github.com/DWS-2025/project-grupo-4/commit/608c2407b4676d3806eaffe96a9931997cdb350c (2) Admin panel funcional para gestionar usuarios
+https://github.com/DWS-2025/project-grupo-4/commit/e953425ee30253e0bc2673e9288ab542bab92baa (3) Version final de GamesAPI y PrizesAPI
+https://github.com/DWS-2025/project-grupo-4/commit/f18597611099773882efb05d129591e9be582098 (4) Version beta de admin panel
+https://github.com/DWS-2025/project-grupo-4/commit/7885488f16a28ae2b6d8015d377f9992287807fa (5) PreAlpha de admin panel
 
 # Saúl
 [d9cd015](1) Desarrollo de todas las API en paralelo a la implementación de los DTO para asegurar una transmisión de entidades segura. 
