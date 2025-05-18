@@ -59,35 +59,35 @@ public class UserManager {
     public void postConstruct() {
         User user1 = new User();
         user1.setUserName("gigandres");
-        user1.setPassword(hashPassword("1234"));
+        user1.setPassword(hashPassword("gigandresContra1234"));
         user1.setMoney(5000);
         user1.setIsadmin(true);
         userRepo.save(user1);
 
         User user2 = new User();
         user2.setUserName("ralpi");
-        user2.setPassword(hashPassword("qwerty"));
+        user2.setPassword(hashPassword("ralpiContraqwerty"));
         user2.setMoney(10000);
         user2.setIsadmin(true);
         userRepo.save(user2);
 
         User user3 = new User();
         user3.setUserName("user");
-        user3.setPassword(hashPassword("aaaaa"));
+        user3.setPassword(hashPassword("userContra1234aaaaa"));
         user3.setMoney(500);
         user3.setIsadmin(false);
         userRepo.save(user3);
 
         User user4 = new User();
         user4.setUserName("userprize");
-        user4.setPassword(hashPassword("1234"));
+        user4.setPassword(hashPassword("userprizeContra12344321"));
         user4.setMoney(1500);
         user4.setIsadmin(false);
         userRepo.save(user4);
 
         User user5 = new User();
         user5.setUserName("saultj");
-        user5.setPassword(hashPassword("abc"));
+        user5.setPassword(hashPassword("saultjContra1234abc"));
         user5.setMoney(2147483647);
         user5.setIsadmin(true);
         userRepo.save(user5);

@@ -10,12 +10,18 @@ import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
 import com.casino.grupo4_dws.casinoweb.model.Prize;
 import com.casino.grupo4_dws.casinoweb.managers.JWTManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,4 +103,27 @@ public class GamesAPI {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+    @GetMapping("/game/{id}/image")
+    public ResponseEntity<Resource> downloadImage(@PathVariable int id) throws SQLException {
+        Optional<GameDTO> optionalGameDTO = gameManager.getGameById(id);
+
+        if (optionalGameDTO.isPresent()) {
+            Game game = gameMapper.toEntity(optionalGameDTO.get());
+            Blob imageBlob = game.getImage();
+
+            if (imageBlob != null) {
+                InputStream inputStream = imageBlob.getBinaryStream();
+                Resource resource = new InputStreamResource(inputStream);
+
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"game_" + id + ".jpg\"")
+                        .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                        .contentLength(imageBlob.length())
+                        .body(resource);
+            }
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 }

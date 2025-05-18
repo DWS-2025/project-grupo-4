@@ -15,6 +15,4 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     <S extends Game> List<S> findAll(Example<S> example);
 
     Optional<Game> findGameById(int id);
-
-    //List<Game> findByUsersLiked_Id(Long userId);
 }
