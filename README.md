@@ -69,7 +69,7 @@ como para englobar el trabajo individual de cada participante.
 
 [5. Modificar Info de usuario](https://github.com/DWS-2025/project-grupo-4/commit/dc634939511bd2460575fc3414f4d7f54fc0748d) Funcionalidad para que un usuario logeado pueda modificar su contraseña y su usuario, que más adelante sirvió para el edit user del admin. En un principio este commit tenía errores por cómo actualizaba la información y cómo mostraba la información, pero fueron arreglados en actualizaciones posteriores.
 
-# Adrián
+# Adrián entrega 3
 https://github.com/DWS-2025/project-grupo-4/commit/1e92b0bcf1087e564ab43c9f23a2705cecd93a2b (1) Subida de fichero pdf completamente funcional
 https://github.com/DWS-2025/project-grupo-4/commit/608c2407b4676d3806eaffe96a9931997cdb350c (2) Admin panel funcional para gestionar usuarios
 https://github.com/DWS-2025/project-grupo-4/commit/e953425ee30253e0bc2673e9288ab542bab92baa (3) Version final de GamesAPI y PrizesAPI
