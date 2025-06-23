@@ -48,12 +48,6 @@ public class PrizesAPI {
     @Autowired
     private JWTManager jwtManager;
 
-    @Autowired
-    private UserManager userManager;
-
-    @Autowired
-    private UserMapper userMapper;
-
     @GetMapping("")
     public ResponseEntity<?> getAllPrizes(Pageable pageable) {
 

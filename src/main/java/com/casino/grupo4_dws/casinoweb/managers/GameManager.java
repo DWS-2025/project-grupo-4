@@ -120,7 +120,9 @@ public class GameManager {
         return gameMapper.toDTOList(listaJuego);
     }
 
-    public GameDTO saveGame(Game game, MultipartFile imageFile) throws IOException {
+    public GameDTO saveGame(Game noSanitizado, MultipartFile imageFile) throws IOException {
+
+        Game game = sanitize(noSanitizado);
 
         if (imageFile != null && !imageFile.isEmpty()) {
             game.setImage(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
