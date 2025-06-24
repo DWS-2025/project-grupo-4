@@ -59,7 +59,7 @@ public class UserManager {
     public void postConstruct() {
         User user1 = new User();
         user1.setUserName("gigandres");
-        user1.setPassword(hashPassword("gigandresContra1234"));
+        user1.setPassword(hashPassword("1234"));
         user1.setMoney(5000);
         user1.setIsadmin(true);
         userRepo.save(user1);

@@ -70,23 +70,23 @@ public class PrizeController {
         return "staticLoggedIn/loggedPrizes";
     }
 
-    @PostMapping("/filterPrizes")
-    public String filterPrizes(Model model, HttpSession session, @RequestParam(required = false) String title,
-                               @RequestParam(required = false, defaultValue = "0") Integer minPrice,
-                               @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
-
-        model.addAttribute("prizes", prizeManager.findPrizesByFilters(title, minPrice, maxPrice));
-        Integer userId = (Integer) session.getAttribute("user");
-        if (userId == null) {
-            return "prizes";
-        }
-        Optional<UserDTO> userOp = userManager.findById(userId);
-        if (userOp.isEmpty()) {
-            return "prizes";
-        }
-        model.addAttribute("user", userOp.get());
-        return "staticLoggedIn/loggedPrizes";
-    }
+//    @PostMapping("/filterPrizes")
+//    public String filterPrizes(Model model, HttpSession session, @RequestParam(required = false) String title,
+//                               @RequestParam(required = false, defaultValue = "0") Integer minPrice,
+//                               @RequestParam(required = false, defaultValue = "999999") Integer maxPrice) {
+//
+//        model.addAttribute("prizes", prizeManager.findPrizesByFilters(title, minPrice, maxPrice));
+//        Integer userId = (Integer) session.getAttribute("user");
+//        if (userId == null) {
+//            return "prizes";
+//        }
+//        Optional<UserDTO> userOp = userManager.findById(userId);
+//        if (userOp.isEmpty()) {
+//            return "prizes";
+//        }
+//        model.addAttribute("user", userOp.get());
+//        return "staticLoggedIn/loggedPrizes";
+//    }
 
     @GetMapping("/addPrize")
     public String addGameForm(Model model, HttpSession session, HttpServletRequest request) {
