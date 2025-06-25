@@ -157,9 +157,6 @@ public class PrizeController {
         if (userOp.isEmpty()) {
             return "redirect:/login";
         }
-        if (!userManager.isAdmin(userOp.get())) {
-            return "redirect:/login";
-        }
         Optional<PrizeDTO> op = prizeManager.getPrizeById(id);
         if (op.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "El prize no existe");

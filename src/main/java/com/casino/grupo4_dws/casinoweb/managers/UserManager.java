@@ -319,15 +319,11 @@ public class UserManager {
             throw new IllegalArgumentException("El usuario introducido no existe");
         }
         User user = userOp.get();
-        Optional<Prize> prizeOp = prizeRepo.getPrizeById(prizeMapper.toEntity(prizedto).getId());
-        if (prizeOp.isEmpty()) {
-            throw new IllegalArgumentException("El prize introducido no existe");
-        }
+        int prizeId = prizeMapper.toEntity(prizedto).getId();
         if (user.getInventory() == null) {
-            user.setInventory(new ArrayList<>());
+            return false;
         }
-        Prize prize = prizeOp.get();
-        return user.getInventory().contains(prize);
+        return user.getInventory().stream().anyMatch(p -> p.getId() == prizeId);
     }
 
     public String hashPassword(String password) {

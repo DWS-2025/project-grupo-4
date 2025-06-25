@@ -171,6 +171,34 @@ public class SessionAPI {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+    @DeleteMapping("/{idUser}/deletePrize/{idPrize}")
+    public ResponseEntity<UserDTO> selfDeletePrize(
+            @RequestHeader("Authorization") String jwtToken,
+            @PathVariable int idUser,
+            @PathVariable int idPrize) {
+
+        String token = jwtManager.extractTokenFromHeader(jwtToken);
+
+        if (!jwtManager.tokenHasPermission(token, idUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Optional<UserDTO> userDTO = userManager.findById(idUser);
+        Optional<PrizeDTO> prizeDTO = prizeManager.findById(idPrize);
+
+        if (!userDTO.isPresent() || !prizeDTO.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (!userManager.isOwner(userDTO.get(), prizeDTO.get())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        prizeManager.deletePrize(idPrize);
+        UserDTO updatedUser = userManager.findById(idUser).get();
+        return ResponseEntity.ok(updatedUser);
+    }
+
     /*
     Methods Register and Login accept two user & pass strings because
     UserDTO does not contain a password field, so using a DTO would make
