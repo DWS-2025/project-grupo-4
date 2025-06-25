@@ -82,26 +82,27 @@ public class SessionAPI {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestHeader("Authorization") String jwtToken, @RequestBody Map<String, Object> data) {
-        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id) && jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
             try {
-                User user = userManager.findUserById(id).get();
+
                 String username = (String) data.get("username");
                 String password = (String) data.get("password");
                 Integer money = (Integer) data.get("money");
                 Boolean isAdmin = (Boolean) data.get("isAdmin");
-
-
-                if (username != null) user.setUserName(username);
-                if (password != null) user.setPassword(userManager.hashPassword(password));
-
-                if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
-                    if (money != null) user.setMoney(money);
-                    if (isAdmin != null) user.setIsadmin(isAdmin);
-                }
-                UserDTO userDTO = userMapper.toDTO(user);
-                userManager.updateUser(userDTO, id);
-                return ResponseEntity.ok(userDTO);
+                UserDTO updatedUser = new UserDTO(id,username,password,isAdmin,money,null,null,null,null);
+                userManager.updateUserAdmin(updatedUser, id);
+                return ResponseEntity.ok(updatedUser);
             } catch (Exception e) {
+                return ResponseEntity.badRequest().build();
+            }
+        } else if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)){
+            try{
+                String username = (String) data.get("username");
+                String password = (String) data.get("password");
+                UserDTO updatedUser = new UserDTO(id,username,password,null,null,null,null,null,null);
+                userManager.updateUser(updatedUser,id);
+                return ResponseEntity.ok(updatedUser);
+            } catch (Exception e){
                 return ResponseEntity.badRequest().build();
             }
         }
