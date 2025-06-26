@@ -130,13 +130,16 @@ public class SessionAPI {
     }
 
     @GetMapping("/{idUser}/favorite")
-    public ResponseEntity<List<GameDTO>> getFavoriteGames(@PathVariable int idUser) {
-        if (userManager.findById(idUser).isPresent()) {
-            UserDTO userDTO = userManager.findById(idUser).get();
-            List<GameDTO> favList = userManager.getFavGames(userDTO);
-            return ResponseEntity.ok(favList);
+    public ResponseEntity<List<GameDTO>> getFavoriteGames(@PathVariable int idUser, @RequestHeader("Authorization") String jwtToken) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+            if (userManager.findById(idUser).isPresent()) {
+                UserDTO userDTO = userManager.findById(idUser).get();
+                List<GameDTO> favList = userManager.getFavGames(userDTO);
+                return ResponseEntity.ok(favList);
+            }
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/{idUser}/favorite/{idGame}")
