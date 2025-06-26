@@ -5,8 +5,10 @@ import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.dto.UserDTO;
 import com.casino.grupo4_dws.casinoweb.mapper.GameMapper;
 import com.casino.grupo4_dws.casinoweb.mapper.UserMapper;
+import com.casino.grupo4_dws.casinoweb.model.Bet;
 import com.casino.grupo4_dws.casinoweb.model.Game;
 import com.casino.grupo4_dws.casinoweb.model.User;
+import com.casino.grupo4_dws.casinoweb.repos.BetRepository;
 import com.casino.grupo4_dws.casinoweb.repos.GameRepository;
 import com.casino.grupo4_dws.casinoweb.repos.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -46,6 +48,9 @@ public class GameManager {
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private BetRepository betRepo;
+
     public void deleteGame(long id) {
         if (!gameRepo.existsById(id)) {
             throw new IllegalArgumentException("El juego introducido no existe");
@@ -55,11 +60,11 @@ public class GameManager {
             user.getGamesLiked().remove(game);
             userManager.save(user);
         }
-//        List<Bet> bets = betMapper.toEntityList(betManager.findAll());
-//        for (Bet bet : bets) {
-//            bet.setGame(null);
-//            betManager.save(bet);
-//        }
+        List<Bet> bets = betRepo.findByGame(game);
+        for(Bet bet: bets){
+            bet.setGame(null);
+            betRepo.save(bet);
+        }
         gameRepo.deleteById(id);
     }
 

@@ -1,5 +1,6 @@
 package com.casino.grupo4_dws.casinoweb.repos;
 
+import com.casino.grupo4_dws.casinoweb.model.Game;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.casino.grupo4_dws.casinoweb.model.Bet;
@@ -16,4 +17,5 @@ public interface BetRepository extends JpaRepository<Bet, Long> {
 
     Optional<Bet> getONEBetById(long id);
 
+    List<Bet> findByGame(Game game);
 }
