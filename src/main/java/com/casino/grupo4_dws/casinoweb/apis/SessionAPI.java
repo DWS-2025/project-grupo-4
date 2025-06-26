@@ -1,6 +1,7 @@
 
 package com.casino.grupo4_dws.casinoweb.apis;
 
+import com.casino.grupo4_dws.casinoweb.dto.BetDTO;
 import com.casino.grupo4_dws.casinoweb.dto.GameDTO;
 import com.casino.grupo4_dws.casinoweb.dto.PrizeDTO;
 import com.casino.grupo4_dws.casinoweb.managers.GameManager;
@@ -153,6 +154,15 @@ public class SessionAPI {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @GetMapping("/user/{idUser}")
+    public ResponseEntity<List<Long>> getBetHistory(@PathVariable int idUser) {
+        Optional<UserDTO> possibleUser = userManager.findById(idUser);
+        if(possibleUser.isPresent()){
+            return ResponseEntity.ok(userManager.getBets(idUser));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/{idUser}/buy/{idPrize}")

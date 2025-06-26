@@ -263,6 +263,15 @@ public class UserManager {
         }
     }
 
+    public List<Long> getBets(int userId) {
+        Optional<User> userOp = userRepo.getONEUserById(userId);
+        if (userOp.isPresent()) {
+            UserDTO userdto = userMapper.toDTO(userOp.get());
+            return userdto.betHistory();
+        }
+        return null;
+    }
+
     public void deleteUser(UserDTO userdto, UserDTO activeUserdto) {
         Optional<User> userOp = userRepo.getONEUserById(userMapper.toEntity(userdto).getId());
         if (userOp.isEmpty()) {
