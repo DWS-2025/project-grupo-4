@@ -156,13 +156,16 @@ public class SessionAPI {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @GetMapping("/user/{idUser}")
-    public ResponseEntity<List<Long>> getBetHistory(@PathVariable int idUser) {
-        Optional<UserDTO> possibleUser = userManager.findById(idUser);
-        if(possibleUser.isPresent()){
-            return ResponseEntity.ok(userManager.getBets(idUser));
+    @GetMapping("/bets/{idUser}")
+    public ResponseEntity<List<Long>> getBetHistory(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser) {
+        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+            Optional<UserDTO> possibleUser = userManager.findById(idUser);
+            if(possibleUser.isPresent()){
+                return ResponseEntity.ok(userManager.getBets(idUser));
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/{idUser}/buy/{idPrize}")
