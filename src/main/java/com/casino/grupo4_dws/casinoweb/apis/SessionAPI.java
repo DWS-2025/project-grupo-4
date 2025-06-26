@@ -44,17 +44,24 @@ public class SessionAPI {
     private JWTManager jwtManager;
 
     @GetMapping("")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userManager.getUserList();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestHeader("Authorization") String jwtToken) {
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))){
+            List<UserDTO> users = userManager.getUserList();
+            return ResponseEntity.ok(users);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable int id) {
-        if (userManager.findById(id).isPresent()) {
-            return ResponseEntity.ok(userManager.findById(id).get());
+    public ResponseEntity<UserDTO> getUser(@PathVariable int id, @RequestHeader("Authorization") String jwtToken) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)){
+            if (userManager.findById(id).isPresent()) {
+                return ResponseEntity.ok(userManager.findById(id).get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("")
