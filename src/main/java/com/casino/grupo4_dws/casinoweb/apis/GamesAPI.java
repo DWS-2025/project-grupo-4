@@ -103,6 +103,7 @@ public class GamesAPI {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
     @GetMapping("/game/{id}/image")
     public ResponseEntity<Resource> downloadImage(@PathVariable int id) throws SQLException {
         Optional<GameDTO> optionalGameDTO = gameManager.getGameById(id);

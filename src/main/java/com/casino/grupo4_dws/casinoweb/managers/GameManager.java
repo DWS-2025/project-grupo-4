@@ -61,7 +61,7 @@ public class GameManager {
             userManager.save(user);
         }
         List<Bet> bets = betRepo.findByGame(game);
-        for(Bet bet: bets){
+        for (Bet bet : bets) {
             bet.setGame(null);
             betRepo.save(bet);
         }

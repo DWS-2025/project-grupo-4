@@ -45,7 +45,7 @@ public class SessionAPI {
 
     @GetMapping("")
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestHeader("Authorization") String jwtToken) {
-        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))){
+        if (jwtManager.tokenBelongsToAdmin(jwtManager.extractTokenFromHeader(jwtToken))) {
             List<UserDTO> users = userManager.getUserList();
             return ResponseEntity.ok(users);
         }
@@ -54,7 +54,7 @@ public class SessionAPI {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable int id, @RequestHeader("Authorization") String jwtToken) {
-        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)){
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
             if (userManager.findById(id).isPresent()) {
                 return ResponseEntity.ok(userManager.findById(id).get());
             } else {
@@ -97,20 +97,20 @@ public class SessionAPI {
                 String password = (String) data.get("password");
                 Integer money = (Integer) data.get("money");
                 Boolean isAdmin = (Boolean) data.get("isAdmin");
-                UserDTO updatedUser = new UserDTO(id,username,password,isAdmin,money,null,null,null,null);
+                UserDTO updatedUser = new UserDTO(id, username, password, isAdmin, money, null, null, null, null);
                 userManager.updateUserAdmin(updatedUser, id);
                 return ResponseEntity.ok(updatedUser);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().build();
             }
-        } else if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)){
-            try{
+        } else if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), id)) {
+            try {
                 String username = (String) data.get("username");
                 String password = (String) data.get("password");
-                UserDTO updatedUser = new UserDTO(id,username,password,null,null,null,null,null,null);
-                userManager.updateUser(updatedUser,id);
+                UserDTO updatedUser = new UserDTO(id, username, password, null, null, null, null, null, null);
+                userManager.updateUser(updatedUser, id);
                 return ResponseEntity.ok(updatedUser);
-            } catch (Exception e){
+            } catch (Exception e) {
                 return ResponseEntity.badRequest().build();
             }
         }
@@ -165,9 +165,9 @@ public class SessionAPI {
 
     @GetMapping("/bets/{idUser}")
     public ResponseEntity<List<Long>> getBetHistory(@RequestHeader("Authorization") String jwtToken, @PathVariable int idUser) {
-        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
+        if (jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken), idUser)) {
             Optional<UserDTO> possibleUser = userManager.findById(idUser);
-            if(possibleUser.isPresent()){
+            if (possibleUser.isPresent()) {
                 return ResponseEntity.ok(userManager.getBets(idUser));
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -251,6 +251,7 @@ public class SessionAPI {
         String token = jwtToken.replace("Bearer ", "");
         return ResponseEntity.ok(jwtManager.verifyToken(token));
     }
+
     @PostMapping("/{id}/document")
     public ResponseEntity<String> uploadDocument(@RequestHeader("Authorization") String jwtToken,
                                                  @PathVariable("id") int userId,
@@ -268,6 +269,7 @@ public class SessionAPI {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir el documento: " + e.getMessage());
         }
     }
+
     @GetMapping("/{id}/document")
     public ResponseEntity<byte[]> viewDocument(@RequestHeader("Authorization") String jwtToken,
                                                @PathVariable("id") int userId) {

@@ -190,7 +190,7 @@ public class PrizesAPI {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-//    // Buy prize
+    //    // Buy prize
 //    @PostMapping("/{id}/buy")
 //    public ResponseEntity<?> buyPrize(@PathVariable int id, @RequestBody User user) {
 //        Optional<PrizeDTO> prizeOpt = prizeManager.getPrizeById(id);
@@ -206,25 +206,25 @@ public class PrizesAPI {
 //    }
     @GetMapping("/prize/{id}/image")
     public ResponseEntity<Resource> downloadImage(@PathVariable int id) throws SQLException {
-    Optional<PrizeDTO> optionalPrizeDTO = prizeManager.getPrizeById(id);
+        Optional<PrizeDTO> optionalPrizeDTO = prizeManager.getPrizeById(id);
 
         if (optionalPrizeDTO.isPresent()) {
-        Prize prize = prizeMapper.toEntity(optionalPrizeDTO.get());
-        Blob imageBlob = prize.getImage();
+            Prize prize = prizeMapper.toEntity(optionalPrizeDTO.get());
+            Blob imageBlob = prize.getImage();
 
             if (imageBlob != null) {
                 InputStream inputStream = imageBlob.getBinaryStream();
                 Resource resource = new InputStreamResource(inputStream);
 
                 return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"prize_" + id + ".jpg\"")
-                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                    .contentLength(imageBlob.length())
-                    .body(resource);
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"prize_" + id + ".jpg\"")
+                        .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                        .contentLength(imageBlob.length())
+                        .body(resource);
+            }
         }
-    }
 
         return ResponseEntity.notFound().build();
-}
+    }
 
 }
