@@ -40,13 +40,10 @@ public class BetAPI {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BetDTO> getBet(@PathVariable int id, @RequestHeader("Authorization") String jwtToken){
-        if(jwtManager.tokenHasPermission(jwtManager.extractTokenFromHeader(jwtToken),id)){
-            Optional<BetDTO> bet = betManager.findById(id);
-            return bet.map(b -> ResponseEntity.ok(b))
-                    .orElseGet(() -> ResponseEntity.notFound().build());
-        }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    public ResponseEntity<BetDTO> getBet(@PathVariable int id) {
+        Optional<BetDTO> bet = betManager.findById(id);
+        return bet.map(b -> ResponseEntity.ok(b))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
